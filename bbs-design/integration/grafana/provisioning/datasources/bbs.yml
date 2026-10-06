@@ -1,0 +1,21 @@
+apiVersion: 1
+
+# Datasource a la base 'bbs' con el rol de solo lectura bbs_readonly (search_path = bi).
+# La contrasena se interpola desde la variable de entorno del contenedor (docker-compose.yml).
+datasources:
+  - name: BBS (PostgreSQL)
+    uid: bbs-pg
+    type: grafana-postgresql-datasource
+    access: proxy
+    url: db:5432
+    user: bbs_readonly
+    isDefault: true
+    editable: false
+    jsonData:
+      database: bbs
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: false
+      maxOpenConns: 5
+    secureJsonData:
+      password: ${BBS_READONLY_PASSWORD}
