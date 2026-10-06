@@ -1,0 +1,81 @@
+# Sistema BBS: postgres + migraciones/seeds + redis + api.   docker compose up --build
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bbs}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: ${POSTGRES_DB:-bbs}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Job de un solo uso: aplica db/migrations/*.sql (y db/seeds/*.sql si SEED=true). Idempotente
+  # (tabla schema_migrations), por lo que también aplica migraciones nuevas en cada `up`.
+  migrate:
+    image: postgres:16
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-bbs}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bbs}
+      SEED: ${SEED:-true}
+    volumes:
+      - ./db:/db:ro
+    entrypoint: ["bash", "-c", 'if [ "$$SEED" = "true" ]; then exec bash /db/migrate.sh --seed; else exec bash /db/migrate.sh; fi']
+    restart: "no"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgres://${POSTGRES_USER:-bbs}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bbs}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:?define JWT_SECRET en .env}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      ALLOW_SELF_REGISTER: ${ALLOW_SELF_REGISTER:-true}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      SCHEDULER_ENABLED: ${SCHEDULER_ENABLED:-true}
+      ALERT_DUE_SOON_DAYS: ${ALERT_DUE_SOON_DAYS:-3}
+      VERIFICATION_PENDING_DAYS: ${VERIFICATION_PENDING_DAYS:-3}
+      REPEAT_UNSAFE_THRESHOLD: ${REPEAT_UNSAFE_THRESHOLD:-3}
+      REPEAT_UNSAFE_WINDOW_DAYS: ${REPEAT_UNSAFE_WINDOW_DAYS:-30}
+      CAPA_MAX_EXTENSIONS: ${CAPA_MAX_EXTENSIONS:-2}
+    ports:
+      - "${API_PORT:-3000}:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+volumes:
+  pgdata:
+  redisdata:
