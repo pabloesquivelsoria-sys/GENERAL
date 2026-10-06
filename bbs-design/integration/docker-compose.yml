@@ -1,0 +1,140 @@
+# Entorno de integracion BBS: Postgres (bbs + traccar + metabase), Redis, Traccar, Grafana, Mailhog.
+# Perfiles opcionales:  bi   -> Metabase       full -> API NestJS del repo (bbs-system/api)
+# Uso:  cp .env.example .env && docker compose up -d
+#       docker compose --profile bi --profile full up -d --build
+name: bbs-integration
+
+x-restart: &restart
+  restart: unless-stopped
+
+services:
+  db:
+    <<: *restart
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_dev_pw}
+      BBS_DB_PASSWORD: ${BBS_DB_PASSWORD:-bbs_dev_pw}
+      BBS_READONLY_PASSWORD: ${BBS_READONLY_PASSWORD:-bbs_ro_dev_pw}
+      TRACCAR_DB_PASSWORD: ${TRACCAR_DB_PASSWORD:-traccar_dev_pw}
+      METABASE_DB_PASSWORD: ${METABASE_DB_PASSWORD:-metabase_dev_pw}
+      BBS_LOAD_SEEDS: ${BBS_LOAD_SEEDS:-true}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # scripts de primera inicializacion (solo corren con el volumen vacio)
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+      # migraciones y seeds del repo, aplicadas por db-init/02-bbs-schema.sh
+      - ../../bbs-system/db/migrations:/bbs-sql/migrations:ro
+      - ../../bbs-system/db/seeds:/bbs-sql/seeds:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bbs"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    <<: *restart
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailhog:
+    <<: *restart
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "127.0.0.1:1025:1025"   # SMTP
+      - "127.0.0.1:8025:8025"   # UI web
+
+  traccar:
+    <<: *restart
+    image: traccar/traccar:6.16-alpine
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Traccar lee traccar.xml y, con esta bandera, tambien variables de entorno
+      # (KEY_EN_MAYUSCULAS con '.' -> '_'); las de abajo tienen prioridad sobre el XML.
+      CONFIG_USE_ENVIRONMENT_VARIABLES: "true"
+      DATABASE_PASSWORD: ${TRACCAR_DB_PASSWORD:-traccar_dev_pw}
+      EVENT_FORWARD_URL: ${BBS_API_URL:-http://api:3000}/api/v1/webhooks/traccar
+      EVENT_FORWARD_HEADER: "X-BBS-Webhook-Token: ${BBS_WEBHOOK_TOKEN:-dev_webhook_token_change_me}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:8082:8082"   # UI web / API REST (admin inicial: crear al primer acceso)
+      - "5055:5055"             # OsmAnd / app Traccar Client (http)
+    volumes:
+      - ./traccar/traccar.xml:/opt/traccar/conf/traccar.xml:ro
+      - traccar-logs:/opt/traccar/logs
+
+  grafana:
+    <<: *restart
+    image: grafana/grafana-oss:11.2.0
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/bbs-kpis.json
+      # interpolado en provisioning/datasources/bbs.yml
+      BBS_READONLY_PASSWORD: ${BBS_READONLY_PASSWORD:-bbs_ro_dev_pw}
+    ports:
+      - "127.0.0.1:3001:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+
+  metabase:
+    <<: *restart
+    profiles: ["bi"]
+    image: metabase/metabase:v0.50.20
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: "5432"
+      MB_DB_USER: metabase
+      MB_DB_PASS: ${METABASE_DB_PASSWORD:-metabase_dev_pw}
+      MB_DB_HOST: db
+    ports:
+      - "127.0.0.1:3002:3000"
+    # En la UI: Admin > Databases > PostgreSQL  host=db  db=bbs  user=bbs_readonly  (esquema bi)
+
+  api:
+    <<: *restart
+    profiles: ["full"]
+    build:
+      context: ../../bbs-system/api
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      PORT: "3000"
+      DATABASE_URL: postgres://bbs:${BBS_DB_PASSWORD:-bbs_dev_pw}@db:5432/bbs
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-dev_only_change_me_to_a_long_random_string}
+      JWT_EXPIRES_IN: 8h
+      SCHEDULER_ENABLED: "true"
+      ALLOW_SELF_REGISTER: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+
+volumes:
+  pgdata:
+  traccar-logs:
+  grafana-data:

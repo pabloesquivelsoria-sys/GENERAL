@@ -1,0 +1,3198 @@
+openapi: 3.0.3
+info:
+  title: BBS API - Behavior-Based Safety
+  version: 1.0.0
+  description: |-
+    Contrato de la API del sistema BBS (EHS). Ciclo: Observacion -> Alerta -> CAPA -> Verificacion.
+
+    **Alineacion con la base de datos**: los nombres JSON son los nombres de columna (snake_case) de
+    `bbs-system/db/migrations/*.sql`; los enums son exactamente los tipos `CREATE TYPE` de la migracion 001.
+    Si el documento de diseno (UX.md/ARQUITECTURA.md) difiere (p. ej. `pending_verification`, `reopened`),
+    manda el esquema SQL: el estado CAPA es `verification` y una verificacion no efectiva devuelve la CAPA a `in_progress`.
+
+    Convenciones: fechas-hora ISO-8601 UTC (`date-time`), fechas de vencimiento `date`; listas paginadas con
+    `page`/`limit` (max 100) y envoltorio `{data, meta:{page,limit,total,pages}}`; errores con el formato estandar de NestJS.
+    Autenticacion: `Authorization: Bearer <JWT>` (access token corto) salvo rutas marcadas como publicas.
+    Los `reference` (`OBS-YYYY-000001`, `NM-...`, `CAPA-...`) los genera la base de datos.
+
+
+    **Estado de implementacion** (`x-implementation` en cada operacion): `implemented` = existe en `bbs-system/api` (auth, observations, near-misses, capa, alerts, kpi, health; verificado contra controllers y DTOs); `planned` = contrato de diseno aun sin implementar (webhooks de integracion y suscripciones salientes).
+    El esquema del cuerpo de `POST /webhooks/traccar` conserva los nombres camelCase de Traccar.
+  license:
+    name: Proprietary
+servers:
+- url: http://localhost:3000/api/v1
+  description: Desarrollo / integracion
+- url: https://bbs.example.com/api/v1
+  description: Produccion
+tags:
+- name: Auth
+  description: Sesion, registro y gestion de roles
+- name: Observations
+- name: Near-misses
+- name: CAPA
+- name: Alerts
+- name: KPI
+- name: Integrations
+  description: Webhooks entrantes y suscripciones salientes
+security:
+- bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      operationId: login
+      summary: Iniciar sesion
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Token emitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      description: JWT con claims `sub`, `email`, `roles[]`; expira segun `JWT_EXPIRES_IN` (defecto 8h). No hay
+        refresh token en esta version.
+      x-implementation: implemented
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      operationId: register
+      summary: Auto-registro
+      security: []
+      description: Publico salvo `ALLOW_SELF_REGISTER=false`. El **primer usuario** del sistema recibe el rol `admin`
+        (bootstrap); los siguientes entran como `observer`. Devuelve ya un token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400': &id001
+          $ref: '#/components/responses/BadRequest'
+        '403': &id003
+          $ref: '#/components/responses/Forbidden'
+        '409': &id006
+          $ref: '#/components/responses/Conflict'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-implementation: implemented
+  /auth/me:
+    get:
+      tags:
+      - Auth
+      operationId: getMe
+      summary: Usuario autenticado
+      responses:
+        '200':
+          description: Perfil con roles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /observations:
+    get:
+      tags:
+      - Observations
+      operationId: listObservations
+      summary: Listar observaciones
+      description: 'Filtros por sitio, area, observador, estado, rango y presencia de comportamientos de riesgo.
+        Orden: `observed_at` desc.'
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: site_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: area_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: observer_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/ObservationStatus'
+      - name: has_at_risk
+        in: query
+        description: Solo con algun item at_risk
+        schema:
+          type: boolean
+      - name: from
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Pagina de observaciones
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/PageMeta'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ObservationSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-implementation: implemented
+    post:
+      tags:
+      - Observations
+      operationId: createObservation
+      summary: Crear observacion
+      description: Crea observacion e items en una transaccion (actor registrado para auditoria). Si no es borrador,
+        genera por cada item `at_risk` una alerta `unsafe_behavior` (critica si el item es critico en el checklist)
+        y `repeat_unsafe_behavior` si se alcanza `REPEAT_UNSAFE_THRESHOLD` (3) en `REPEAT_UNSAFE_WINDOW_DAYS` (30)
+        para el mismo comportamiento y area.
+      x-roles:
+      - observer
+      - supervisor
+      - ehs_manager
+      - site_manager
+      responses:
+        '201':
+          description: Creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Observation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObservationCreate'
+      x-implementation: implemented
+  /observations/{id}:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    get:
+      tags:
+      - Observations
+      operationId: getObservation
+      summary: Detalle de observacion
+      responses:
+        '200':
+          description: Observacion con items y adjuntos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Observation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-implementation: implemented
+  /near-misses:
+    get:
+      tags:
+      - Near-misses
+      operationId: listNearMisses
+      summary: Listar near-misses
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: site_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: area_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/NearMissStatus'
+      - name: potential_severity
+        in: query
+        schema:
+          $ref: '#/components/schemas/SeverityLevel'
+      - name: from
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Pagina de near-misses
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/PageMeta'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/NearMissSummary'
+        '401': &id002
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+    post:
+      tags:
+      - Near-misses
+      operationId: createNearMiss
+      summary: Reportar near-miss
+      description: '`is_anonymous=true` => `reported_by=null`. `potential_severity` defecto `medium`. `risk_score`
+        lo calcula la BD (severidad 1..4 x likelihood 1..5). Genera alerta `near_miss_reported`.'
+      x-roles:
+      - observer
+      - supervisor
+      - ehs_manager
+      - site_manager
+      - capa_owner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NearMissCreate'
+      responses:
+        '201':
+          description: Reportado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearMiss'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+      x-implementation: implemented
+  /near-misses/{id}:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    get:
+      tags:
+      - Near-misses
+      operationId: getNearMiss
+      summary: Detalle (con factores, adjuntos y CAPAs vinculadas)
+      responses:
+        '200':
+          description: Near-miss
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearMiss'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-implementation: implemented
+    patch:
+      tags:
+      - Near-misses
+      operationId: updateNearMiss
+      summary: Triage / investigacion (causa raiz, severidad, likelihood, accion inmediata, factores)
+      x-roles:
+      - supervisor
+      - ehs_manager
+      - site_manager
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NearMissUpdate'
+      responses:
+        '200':
+          description: Actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearMiss'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      description: No se puede editar un near-miss `closed` (409). `factor_ids` reemplaza el conjunto.
+      x-implementation: implemented
+  /alerts:
+    get:
+      tags:
+      - Alerts
+      operationId: listAlerts
+      summary: Listar alertas
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/AlertStatus'
+      - name: type
+        in: query
+        schema:
+          $ref: '#/components/schemas/AlertType'
+      - name: site_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: mine
+        in: query
+        description: 'true (defecto): solo alertas dirigidas al usuario; false: todas (solo gerentes)'
+        schema:
+          type: boolean
+          default: true
+      - name: unread
+        in: query
+        description: Con mine, solo sin leer
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Pagina de alertas
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/PageMeta'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      description: 'Orden: no resueltas primero, luego mas recientes. Con `mine=true` incluye `read_at` del destinatario.'
+      x-implementation: implemented
+  /alerts/unread-count:
+    get:
+      tags:
+      - Alerts
+      operationId: getUnreadAlertCount
+      summary: Contador de alertas sin leer del usuario (badge)
+      responses:
+        '200':
+          description: Contador
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /alerts/{id}/acknowledge:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    post:
+      tags:
+      - Alerts
+      operationId: acknowledgeAlert
+      summary: Acusar recibo (open -> acknowledged)
+      description: Fija `acknowledgedBy/At`. Idempotente si ya esta `acknowledged` por el mismo usuario; 409 si
+        `resolved`.
+      responses:
+        '200':
+          description: Alerta acusada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+      x-implementation: implemented
+  /alerts/{id}/resolve:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    post:
+      tags:
+      - Alerts
+      operationId: resolveAlert
+      summary: Resolver (open|acknowledged -> resolved)
+      description: Libera la clave `dedupe_key` para futuras alertas. Las alertas ligadas a una CAPA tambien se
+        resuelven solas al cerrar/cancelar la CAPA.
+      x-roles:
+      - supervisor
+      - ehs_manager
+      - site_manager
+      responses:
+        '200':
+          description: Alerta resuelta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+      x-implementation: implemented
+  /alerts/{id}/read:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    post:
+      tags:
+      - Alerts
+      operationId: markAlertRead
+      summary: Marcar como leida para el usuario actual (`alert_recipients.read_at`)
+      responses:
+        '200':
+          description: Marcada como leida
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-implementation: implemented
+  /webhooks/traccar:
+    post:
+      tags:
+      - Integrations
+      operationId: receiveTraccarEvent
+      summary: Webhook de eventos de Traccar (event.forward.url)
+      description: |-
+        Traccar reenvia `geofenceEnter`, `geofenceExit`, `deviceOverspeed`, `alarm`, `deviceOffline`...
+        Se autentica con `X-BBS-Webhook-Token` (o `X-BBS-Signature: sha256=<hmac>` del cuerpo crudo si se configura un secreto).
+        Responde 202 de inmediato y encola el procesamiento. Deduplicacion por `traccar:{event.id}`
+        (o `traccar:{deviceId}:{type}:{eventTime}`). La velocidad de Traccar viene en **nudos**.
+
+        Resultado segun reglas: `near_miss` (se crea con `is_anonymous=true`, `reported_by=null`, descripcion con
+        dispositivo/geocerca y coordenadas en `location_detail`) y/o `alert` (`near_miss_reported` o `unsafe_behavior`).
+        El mapeo dispositivo->sitio/area es configuracion de integracion.
+
+
+        Columnas relevantes de `near_misses`: no existen `source` ni coordenadas; el origen y lat/lng viajan en `title`/`description`/`location_detail` hasta que se agregue una migracion (ver README).
+      security:
+      - webhookToken: []
+      - webhookSignature: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraccarWebhook'
+            example:
+              event:
+                id: 98213
+                type: geofenceEnter
+                eventTime: '2026-10-06T14:12:07.000+00:00'
+                deviceId: 17
+                positionId: 5521307
+                geofenceId: 4
+                attributes: {}
+              device:
+                id: 17
+                name: Montacargas MC-03
+                uniqueId: '865432109876543'
+                category: truck
+                attributes:
+                  siteCode: PLANTA-01
+              position:
+                id: 5521307
+                deviceId: 17
+                fixTime: '2026-10-06T14:12:05.000+00:00'
+                latitude: -33.44891
+                longitude: -70.66927
+                speed: 9.7
+                course: 184
+                accuracy: 4
+                attributes:
+                  ignition: true
+              geofence:
+                id: 4
+                name: Zona peatonal - Pasillo B
+                description: pedestrian_zone
+      responses:
+        '202':
+          description: Aceptado y encolado
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - accepted
+                - deduplicated
+                properties:
+                  accepted:
+                    type: boolean
+                  deduplicated:
+                    type: boolean
+              example:
+                accepted: true
+                deduplicated: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      x-implementation: planned
+  /webhook-subscriptions:
+    get:
+      tags:
+      - Integrations
+      operationId: listWebhookSubscriptions
+      summary: Suscripciones de webhooks salientes
+      x-roles:
+      - admin
+      responses:
+        '200':
+          description: Suscripciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebhookSubscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-implementation: planned
+    post:
+      tags:
+      - Integrations
+      operationId: createWebhookSubscription
+      summary: Crear suscripcion
+      description: 'Entrega `POST` con `X-BBS-Event`, `X-BBS-Delivery` y `X-BBS-Signature: sha256=<hmac(body, secret)>`.
+        Reintentos exponenciales.'
+      x-roles:
+      - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookSubscriptionCreate'
+      responses:
+        '201':
+          description: Creada (el `secret` se muestra solo aqui)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscription'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-implementation: planned
+  /webhook-subscriptions/{id}:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    delete:
+      tags:
+      - Integrations
+      operationId: deleteWebhookSubscription
+      summary: Eliminar suscripcion
+      x-roles:
+      - admin
+      responses:
+        '204':
+          description: Eliminada
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-implementation: planned
+  /health:
+    get:
+      tags:
+      - Auth
+      operationId: health
+      summary: Healthcheck (publico)
+      security: []
+      responses:
+        '200':
+          description: Servicio arriba
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+      x-implementation: implemented
+  /auth/users:
+    get:
+      tags:
+      - Auth
+      operationId: listUsers
+      summary: Buscar usuarios (selectores de responsable/verificador)
+      x-roles:
+      - ehs_manager
+      - site_manager
+      - supervisor
+      parameters:
+      - name: q
+        in: query
+        description: Busca en nombre y email (maximo 200 resultados, sin paginar)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserListItem'
+        '401': *id002
+        '403': *id003
+      x-implementation: implemented
+  /auth/users/{id}/roles:
+    post:
+      tags:
+      - Auth
+      operationId: assignRole
+      summary: Asignar rol (opcionalmente acotado a un sitio)
+      x-roles:
+      - admin
+      parameters:
+      - &id004
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignRoleRequest'
+      responses:
+        '201':
+          description: Roles vigentes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoles'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': &id005
+          $ref: '#/components/responses/NotFound'
+      x-implementation: implemented
+  /auth/users/{id}/roles/{role}:
+    delete:
+      tags:
+      - Auth
+      operationId: revokeRole
+      summary: Revocar rol
+      x-roles:
+      - admin
+      parameters:
+      - *id004
+      - name: role
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/RoleCode'
+      - name: site_id
+        in: query
+        description: Omitir para el rol global
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Roles vigentes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoles'
+        '401': *id002
+        '403': *id003
+      x-implementation: implemented
+  /observations/catalog:
+    get:
+      tags:
+      - Observations
+      operationId: getObservationCatalog
+      summary: Catalogos para el formulario de captura (cachear en cliente)
+      description: Comportamientos activos con categoria, checklists activos con sus items, factores causales y
+        sitios activos con sus areas.
+      responses:
+        '200':
+          description: Catalogos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationCatalog'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /observations/{id}/status:
+    patch:
+      tags:
+      - Observations
+      operationId: changeObservationStatus
+      summary: Cambiar estado de la observacion
+      description: 'Transiciones: `draft -> submitted` (observador dueno o supervisor/gerente; dispara alertas),
+        `submitted -> reviewed|archived`, `reviewed -> archived` (solo supervisor/ehs_manager/site_manager/admin).
+        `archived` es terminal. Otra combinacion: 409.'
+      x-roles:
+      - observer
+      - supervisor
+      - ehs_manager
+      - site_manager
+      parameters:
+      - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - status
+              properties:
+                status:
+                  $ref: '#/components/schemas/ObservationStatus'
+      responses:
+        '200':
+          description: Observacion actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Observation'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+        '409': *id006
+      x-implementation: implemented
+  /near-misses/{id}/status:
+    post:
+      tags:
+      - Near-misses
+      operationId: changeNearMissStatus
+      summary: Cambiar estado del near-miss
+      description: |-
+        Transiciones (mismas que el servicio):
+
+        ```mermaid
+        stateDiagram-v2
+          [*] --> reported
+          reported --> under_investigation
+          under_investigation --> capa_assigned: requiere CAPA con source=near_miss
+          under_investigation --> closed
+          capa_assigned --> under_investigation
+          capa_assigned --> closed
+          closed --> [*]
+        ```
+
+        Cerrar exige `root_cause` registrada y que no queden CAPA vinculadas en `open/in_progress/verification` (409). Al cerrar se fija `closed_at` y se resuelven sus alertas. Cada cambio queda en `audit_log` como `TRANSITION`.
+      x-roles:
+      - supervisor
+      - ehs_manager
+      - site_manager
+      parameters:
+      - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - status
+              properties:
+                status:
+                  $ref: '#/components/schemas/NearMissStatus'
+                comment:
+                  type: string
+                  maxLength: 2000
+      responses:
+        '200':
+          description: Near-miss actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearMiss'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+      x-implementation: implemented
+  /alerts/escalation/run:
+    post:
+      tags:
+      - Alerts
+      operationId: runEscalation
+      summary: Ejecutar el job de escalamiento ahora
+      description: Genera alertas `capa_due_soon`, `capa_overdue`/`capa_escalated` (segun `escalation_rules`) y
+        `verification_pending`. Normalmente lo ejecuta el scheduler interno (`SCHEDULER_ENABLED`).
+      x-roles:
+      - ehs_manager
+      responses:
+        '200':
+          description: Resumen de la corrida
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-implementation: implemented
+  /capa:
+    get:
+      tags:
+      - CAPA
+      operationId: listCapas
+      summary: Listar CAPAs
+      description: 'Orden: activas primero, por `due_date`. Una tabla kanban se arma agrupando por `status`.'
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: site_id
+        in: query
+        schema: &id007
+          type: string
+          format: uuid
+      - name: area_id
+        in: query
+        schema: *id007
+      - name: owner_id
+        in: query
+        schema: *id007
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/CapaStatus'
+      - name: priority
+        in: query
+        schema:
+          $ref: '#/components/schemas/PriorityLevel'
+      - name: source
+        in: query
+        schema:
+          $ref: '#/components/schemas/CapaSource'
+      - name: overdue
+        in: query
+        description: 'Solo vencidas: due_date < hoy y status open/in_progress/verification'
+        schema:
+          type: boolean
+      - name: mine
+        in: query
+        description: Solo donde el usuario es owner o verifier
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Pagina de CAPAs
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/PageMeta'
+                - type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CapaListItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+    post:
+      tags:
+      - CAPA
+      operationId: createCapa
+      summary: Crear CAPA
+      x-roles:
+      - supervisor
+      - ehs_manager
+      - site_manager
+      description: Nace en `open`. Si se omite `source` se infiere de `source_observation_id`/`source_near_miss_id`.
+        `source=observation` exige `source_observation_id` o `source_observation_item_id`; `source=near_miss` exige
+        `source_near_miss_id`. `verifier_id` distinto de `owner_id`; `owner_id`/`verifier_id` deben ser usuarios
+        activos; `due_date` no puede estar en el pasado; `original_due_date = due_date`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapaCreate'
+      responses:
+        '201':
+          description: Creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+      x-implementation: implemented
+  /capa/extensions/{ext_id}/decision:
+    post:
+      tags:
+      - CAPA
+      operationId: decideCapaExtension
+      summary: Aprobar o rechazar una solicitud de extension
+      x-roles:
+      - ehs_manager
+      - site_manager
+      description: 'No se puede decidir la propia solicitud (403). Al aprobar: `due_date = new_due_date`, `extension_count
+        += 1` y se reinicia `escalation_level` si la nueva fecha no esta vencida. Solicitud ya resuelta: 409.'
+      parameters:
+      - name: ext_id
+        in: path
+        required: true
+        schema: *id007
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - approved
+              properties:
+                approved:
+                  type: boolean
+      responses:
+        '200':
+          description: CAPA actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+        '409': *id006
+      x-implementation: implemented
+  /capa/{id}:
+    get:
+      tags:
+      - CAPA
+      operationId: getCapa
+      summary: Detalle con bitacora, verificaciones y extensiones
+      parameters: &id008
+      - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: CAPA
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '401': *id002
+        '404': *id005
+      x-implementation: implemented
+    patch:
+      tags:
+      - CAPA
+      operationId: updateCapa
+      summary: Editar campos (no estado ni plazo)
+      x-roles:
+      - supervisor
+      - ehs_manager
+      - site_manager
+      parameters: *id008
+      description: No editable en `closed`/`cancelled` (409). El estado se cambia con `/transition`, el plazo con
+        `/extensions`. `verifier_id` distinto de `owner_id`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapaUpdate'
+      responses:
+        '200':
+          description: Actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+        '409': *id006
+      x-implementation: implemented
+  /capa/{id}/history:
+    get:
+      tags:
+      - CAPA
+      operationId: getCapaHistory
+      summary: Historial de auditoria inmutable (audit_log) de la CAPA y sus verificaciones
+      parameters: *id008
+      responses:
+        '200':
+          description: Eventos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditEntry'
+        '401': *id002
+        '404': *id005
+      x-implementation: implemented
+  /capa/{id}/transition:
+    post:
+      tags:
+      - CAPA
+      operationId: transitionCapa
+      summary: Cambiar estado de la CAPA
+      description: |-
+        Maquina de estados (enum SQL `capa_status`; ver `capa.state-machine.ts`):
+
+        ```mermaid
+        stateDiagram-v2
+          [*] --> open
+          open --> in_progress
+          in_progress --> verification
+          verification --> closed: POST /verifications is_effective=true
+          verification --> in_progress: rechazo o verificacion no efectiva
+          open --> cancelled
+          in_progress --> cancelled
+          verification --> cancelled
+          closed --> [*]
+          cancelled --> [*]
+        ```
+
+        | Desde | Hacia | Quien | Reglas |
+        |---|---|---|---|
+        | open | in_progress | owner, creador o gerente | fija `started_at` |
+        | in_progress | verification | owner o gerente | `comment` obligatorio (evidencia de implementacion); exige `verifier_id` asignado (400); fija `submitted_for_verification_at`; alerta `verification_pending` |
+        | verification | in_progress | verificador o gerente | `comment` obligatorio (rechazo) |
+        | open, in_progress, verification | cancelled | gerente (`ehs_manager`/`site_manager`/`admin`) | `comment` obligatorio (motivo, se guarda en `cancelled_reason`) |
+        | verification | closed | **solo** `POST /capa/{id}/verifications` | `to=closed` aqui devuelve 400 |
+
+        Otra combinacion: 409 `Transicion invalida`. Cada transicion crea una fila en `capa_updates` y una auditoria `TRANSITION`; al cerrar/cancelar se resuelven las alertas de la CAPA.
+      x-roles:
+      - capa_owner
+      - supervisor
+      - ehs_manager
+      - site_manager
+      parameters: *id008
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapaTransitionRequest'
+      responses:
+        '200':
+          description: Estado actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+      x-implementation: implemented
+  /capa/{id}/verifications:
+    post:
+      tags:
+      - CAPA
+      operationId: verifyCapa
+      summary: Registrar verificacion de eficacia (unica via para cerrar)
+      description: Solo con la CAPA en `verification` (409 si no). El `owner_id` nunca puede verificar (403); debe
+        ser el `verifier_id` asignado o un gerente. `is_effective=true` => `closed` (`closed_at`, se resuelven las
+        alertas); `false` => vuelve a `in_progress` y queda el registro con sus `findings`. `findings` obligatorio.
+      x-roles:
+      - supervisor
+      - ehs_manager
+      - site_manager
+      - capa_owner
+      - observer
+      parameters: *id008
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapaVerificationCreate'
+      responses:
+        '201':
+          description: CAPA con la verificacion registrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+        '409': *id006
+      x-implementation: implemented
+  /capa/{id}/comments:
+    post:
+      tags:
+      - CAPA
+      operationId: addCapaComment
+      summary: Agregar comentario a la bitacora (sin cambio de estado)
+      x-roles:
+      - capa_owner
+      - supervisor
+      - ehs_manager
+      - site_manager
+      - observer
+      parameters: *id008
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - comment
+              properties:
+                comment:
+                  type: string
+                  minLength: 1
+                  maxLength: 4000
+      responses:
+        '201':
+          description: CAPA con la bitacora actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+      x-implementation: implemented
+  /capa/{id}/extensions:
+    post:
+      tags:
+      - CAPA
+      operationId: requestCapaExtension
+      summary: Solicitar extension de plazo (requiere aprobacion)
+      x-roles:
+      - capa_owner
+      - supervisor
+      - ehs_manager
+      - site_manager
+      parameters: *id008
+      description: Solo owner o gerente, CAPA activa, sin otra solicitud pendiente y hasta `CAPA_MAX_EXTENSIONS`
+        (defecto 2) aprobadas. `new_due_date` posterior al `due_date` vigente. Si se aprueba, `original_due_date`
+        no cambia.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - new_due_date
+              - reason
+              properties:
+                new_due_date:
+                  type: string
+                  format: date
+                reason:
+                  type: string
+                  minLength: 10
+                  maxLength: 2000
+      responses:
+        '201':
+          description: CAPA con la solicitud pendiente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapaDetail'
+        '400': *id001
+        '401': *id002
+        '403': *id003
+        '404': *id005
+        '409': *id006
+      x-implementation: implemented
+  /kpi/summary:
+    get:
+      tags:
+      - KPI
+      operationId: getKpiSummary
+      summary: KPIs agregados del periodo (fn_kpi_summary)
+      description: Respuesta cacheada en Redis (clave por hora). Porcentajes en 0-100; `null` si no hay datos.
+      parameters:
+      - &id009
+        name: site_id
+        in: query
+        description: Omitir = todos los sitios
+        schema: *id007
+      - &id010
+        name: from
+        in: query
+        description: ISO-8601; defecto hace 30 dias
+        schema:
+          type: string
+          format: date-time
+      - &id011
+        name: to
+        in: query
+        description: ISO-8601 exclusivo; defecto ahora
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KpiSummary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /kpi/top-at-risk-behaviors:
+    get:
+      tags:
+      - KPI
+      operationId: getTopAtRiskBehaviors
+      summary: Top comportamientos en riesgo (fn_top_at_risk_behaviors)
+      parameters:
+      - *id009
+      - *id010
+      - *id011
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TopAtRiskBehavior'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /kpi/safe-rate-trend:
+    get:
+      tags:
+      - KPI
+      operationId: getSafeRateTrend
+      summary: Tendencia del % de comportamiento seguro (v_safe_behavior_daily)
+      parameters:
+      - *id009
+      - *id010
+      - *id011
+      - name: bucket
+        in: query
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: week
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SafeBehaviorPoint'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /kpi/capa-summary:
+    get:
+      tags:
+      - KPI
+      operationId: getCapaSummary
+      summary: Resumen de CAPA por sitio (v_capa_summary)
+      parameters:
+      - *id009
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CapaSummary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /kpi/snapshots:
+    get:
+      tags:
+      - KPI
+      operationId: getKpiSnapshots
+      summary: Serie desde kpi_snapshots (llenada por job nocturno)
+      parameters:
+      - *id009
+      - name: metric
+        in: query
+        schema:
+          type: string
+          enum:
+          - safe_behavior_rate_pct
+          - avg_capa_close_days
+          - capa_on_time_close_pct
+          - capa_overdue_now
+          - observations_count
+          - near_miss_count
+      - name: days
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 730
+          default: 90
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KpiSnapshot'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-implementation: implemented
+  /kpi/snapshots/run:
+    post:
+      tags:
+      - KPI
+      operationId: runKpiSnapshots
+      summary: Tomar snapshots ahora (KPI de 30 dias por sitio, upsert por dia)
+      x-roles:
+      - ehs_manager
+      responses:
+        '200':
+          description: Resumen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sites:
+                    type: integer
+                  metrics:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-implementation: implemented
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT con claims `sub` (userId), `email`, `roles[]` (RoleCode). `admin` pasa siempre los chequeos
+        de rol.
+    webhookToken:
+      type: apiKey
+      in: header
+      name: X-BBS-Webhook-Token
+      description: Token compartido para webhooks entrantes
+    webhookSignature:
+      type: apiKey
+      in: header
+      name: X-BBS-Signature
+      description: HMAC SHA-256 del cuerpo crudo, formato `sha256=<hex>`
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSize:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+  requestBodies: {}
+  responses:
+    BadRequest:
+      description: Peticion mal formada o validacion de DTO fallida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status_code: 400
+            error: Bad Request
+            message:
+            - email must be an email
+    Unauthorized:
+      description: Token ausente, invalido o expirado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status_code: 401
+            error: Unauthorized
+            message: Token requerido
+    Forbidden:
+      description: Rol insuficiente o fuera de alcance de sitio
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status_code: 403
+            error: Forbidden
+            message: Rol insuficiente
+    NotFound:
+      description: Recurso inexistente (o fuera de alcance)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflicto (duplicado, estado incompatible)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InvalidTransition:
+      description: Transicion de estado no permitida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status_code: 409
+            error: Conflict
+            code: INVALID_TRANSITION
+            message: No se puede pasar de open a verification
+    Unprocessable:
+      description: Regla de negocio o restriccion de datos violada (CHECK de SQL)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status_code: 422
+            error: Unprocessable Entity
+            code: BUSINESS_RULE
+            message: El verificador debe ser distinto del responsable
+    PayloadTooLarge:
+      description: Cuerpo o archivo demasiado grande
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Limite de tasa excedido
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    BehaviorResult:
+      type: string
+      enum:
+      - safe
+      - at_risk
+      - not_applicable
+    ObservationStatus:
+      type: string
+      enum:
+      - draft
+      - submitted
+      - reviewed
+      - archived
+    SeverityLevel:
+      type: string
+      enum:
+      - low
+      - medium
+      - high
+      - critical
+    PriorityLevel:
+      type: string
+      enum:
+      - low
+      - medium
+      - high
+      - critical
+    NearMissStatus:
+      type: string
+      enum:
+      - reported
+      - under_investigation
+      - capa_assigned
+      - closed
+    CapaType:
+      type: string
+      enum:
+      - corrective
+      - preventive
+      - containment
+    CapaStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - verification
+      - closed
+      - cancelled
+    CapaSource:
+      type: string
+      enum:
+      - observation
+      - near_miss
+      - audit
+      - other
+    HierarchyControl:
+      type: string
+      enum:
+      - elimination
+      - substitution
+      - engineering
+      - administrative
+      - ppe
+    AlertStatus:
+      type: string
+      enum:
+      - open
+      - acknowledged
+      - resolved
+    AlertType:
+      type: string
+      enum:
+      - unsafe_behavior
+      - repeat_unsafe_behavior
+      - near_miss_reported
+      - capa_due_soon
+      - capa_overdue
+      - capa_escalated
+      - verification_pending
+    AlertEntityType:
+      type: string
+      enum:
+      - observation
+      - near_miss
+      - capa
+    RoleCode:
+      type: string
+      enum:
+      - admin
+      - ehs_manager
+      - site_manager
+      - supervisor
+      - observer
+      - capa_owner
+      - viewer
+    Error:
+      type: object
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+        error:
+          type: string
+        code:
+          type: string
+          description: Codigo de negocio estable (INVALID_TRANSITION, BUSINESS_RULE, ...)
+        message:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+    PageMeta:
+      type: object
+      required:
+      - meta
+      properties:
+        meta:
+          type: object
+          required:
+          - page
+          - limit
+          - total
+          - pages
+          properties:
+            page:
+              type: integer
+            limit:
+              type: integer
+            total:
+              type: integer
+            pages:
+              type: integer
+    UserRef:
+      type: object
+      required:
+      - id
+      - full_name
+      properties:
+        id:
+          type: string
+          format: uuid
+        full_name:
+          type: string
+    LoginRequest:
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    RegisterRequest:
+      type: object
+      required:
+      - email
+      - password
+      - full_name
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 10
+          maxLength: 128
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        employee_code:
+          type: string
+          maxLength: 50
+        job_title:
+          type: string
+          maxLength: 100
+        supervisor_id:
+          type: string
+          format: uuid
+        home_site_id:
+          type: string
+          format: uuid
+        home_area_id:
+          type: string
+          format: uuid
+    User:
+      type: object
+      description: Respuesta de GET /auth/me
+      required:
+      - id
+      - email
+      - full_name
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        employee_code:
+          type: string
+          nullable: true
+        job_title:
+          type: string
+          nullable: true
+        supervisor_id:
+          type: string
+          format: uuid
+          nullable: true
+        home_site_id:
+          type: string
+          format: uuid
+          nullable: true
+        home_area_id:
+          type: string
+          format: uuid
+          nullable: true
+        last_login_at:
+          type: string
+          format: date-time
+          nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleCode'
+    ObservationItemInput:
+      type: object
+      required:
+      - behavior_id
+      - result
+      properties:
+        behavior_id:
+          type: string
+          format: uuid
+        result:
+          $ref: '#/components/schemas/BehaviorResult'
+        severity:
+          allOf:
+          - $ref: '#/components/schemas/SeverityLevel'
+          description: Solo permitido si result = at_risk (CHECK en BD). Por defecto la severidad por defecto del
+            comportamiento.
+        comment:
+          type: string
+        corrected_on_spot:
+          type: boolean
+          default: false
+          description: Solo con result=at_risk
+        factor_ids:
+          type: array
+          items:
+            type: integer
+          description: ids de causal_factors
+    ObservationItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        observation_id:
+          type: string
+          format: uuid
+        behavior_id:
+          type: string
+          format: uuid
+        behavior_code:
+          type: string
+        behavior_name:
+          type: string
+        result:
+          $ref: '#/components/schemas/BehaviorResult'
+        severity:
+          allOf:
+          - $ref: '#/components/schemas/SeverityLevel'
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        corrected_on_spot:
+          type: boolean
+        factors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              code:
+                type: string
+              name:
+                type: string
+    ObservationCreate:
+      type: object
+      required:
+      - site_id
+      - items
+      properties:
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+        location_detail:
+          type: string
+          maxLength: 500
+        checklist_id:
+          type: string
+          format: uuid
+        observed_user_id:
+          type: string
+          format: uuid
+        observed_name:
+          type: string
+        observed_company:
+          type: string
+          description: Contratista
+        is_anonymous_observed:
+          type: boolean
+          default: true
+          description: Si true, observedUserId y observedName deben omitirse
+        observed_at:
+          type: string
+          format: date-time
+          description: Por defecto ahora
+        shift:
+          type: string
+          example: morning
+        task_observed:
+          type: string
+        duration_minutes:
+          type: integer
+          minimum: 0
+        people_observed:
+          type: integer
+          minimum: 1
+          default: 1
+        positive_feedback_given:
+          type: boolean
+          default: false
+        coaching_notes:
+          type: string
+        immediate_action:
+          type: string
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ObservationItemInput'
+          maxItems: 100
+        save_as_draft:
+          type: boolean
+          default: false
+          description: true guarda como draft (sin alertas hasta enviarla via PATCH /observations/{id}/status)
+      description: Observacion con sus items. `severity` y `corrected_on_spot` solo con `result=at_risk`; `behavior_id`
+        unico por observacion; `area_id` debe pertenecer al `site_id`.
+    ObservationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+          example: OBS-2026-000123
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        area_name:
+          type: string
+          nullable: true
+        observer_id:
+          type: string
+          format: uuid
+        observer_name:
+          type: string
+        observed_at:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ObservationStatus'
+        shift:
+          type: string
+          nullable: true
+        task_observed:
+          type: string
+          nullable: true
+        safe_count:
+          type: integer
+        at_risk_count:
+          type: integer
+    Observation:
+      type: object
+      description: Fila de `observations` + observador/area + items + CAPAs originadas
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        area_name:
+          type: string
+          nullable: true
+        location_detail:
+          type: string
+          nullable: true
+        checklist_id:
+          type: string
+          format: uuid
+          nullable: true
+        observer_id:
+          type: string
+          format: uuid
+        observer_name:
+          type: string
+        observed_user_id:
+          type: string
+          format: uuid
+          nullable: true
+        observed_name:
+          type: string
+          nullable: true
+        observed_company:
+          type: string
+          nullable: true
+        is_anonymous_observed:
+          type: boolean
+        observed_at:
+          type: string
+          format: date-time
+        shift:
+          type: string
+          nullable: true
+        task_observed:
+          type: string
+          nullable: true
+        duration_minutes:
+          type: integer
+          nullable: true
+        people_observed:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ObservationStatus'
+        positive_feedback_given:
+          type: boolean
+        coaching_notes:
+          type: string
+          nullable: true
+        immediate_action:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObservationItem'
+        capas:
+          type: array
+          items:
+            $ref: '#/components/schemas/CapaRef'
+    NearMissCreate:
+      type: object
+      required:
+      - site_id
+      - title
+      - description
+      properties:
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+        location_detail:
+          type: string
+        is_anonymous:
+          type: boolean
+          default: false
+        occurred_at:
+          type: string
+          format: date-time
+        title:
+          type: string
+          minLength: 5
+          maxLength: 200
+        description:
+          type: string
+          minLength: 10
+          maxLength: 5000
+        potential_severity:
+          $ref: '#/components/schemas/SeverityLevel'
+        likelihood:
+          type: integer
+          minimum: 1
+          maximum: 5
+        related_observation_id:
+          type: string
+          format: uuid
+        related_behavior_id:
+          type: string
+          format: uuid
+        immediate_action:
+          type: string
+        factor_ids:
+          type: array
+          items:
+            type: integer
+    NearMissUpdate:
+      type: object
+      properties:
+        root_cause:
+          type: string
+          maxLength: 5000
+        potential_severity:
+          $ref: '#/components/schemas/SeverityLevel'
+        likelihood:
+          type: integer
+          minimum: 1
+          maximum: 5
+        immediate_action:
+          type: string
+          maxLength: 2000
+        factor_ids:
+          type: array
+          items:
+            type: integer
+    NearMiss:
+      type: object
+      required:
+      - id
+      - reference
+      - site_id
+      - title
+      - description
+      - potential_severity
+      - status
+      - occurred_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+          example: NM-2026-000031
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        location_detail:
+          type: string
+          nullable: true
+        reported_by:
+          type: string
+          format: uuid
+          nullable: true
+          description: null si isAnonymous
+        is_anonymous:
+          type: boolean
+        occurred_at:
+          type: string
+          format: date-time
+        title:
+          type: string
+        description:
+          type: string
+        potential_severity:
+          $ref: '#/components/schemas/SeverityLevel'
+        likelihood:
+          type: integer
+          nullable: true
+          minimum: 1
+          maximum: 5
+        risk_score:
+          type: integer
+          readOnly: true
+          description: severidad(1-4) x likelihood(1-5, defecto 1); calculado en BD
+        related_observation_id:
+          type: string
+          format: uuid
+          nullable: true
+        related_behavior_id:
+          type: string
+          format: uuid
+          nullable: true
+        immediate_action:
+          type: string
+          nullable: true
+        root_cause:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/NearMissStatus'
+        closed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        reporter_name:
+          type: string
+          nullable: true
+          description: null si anonimo
+        area_name:
+          type: string
+          nullable: true
+        factors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              code:
+                type: string
+              name:
+                type: string
+        capas:
+          type: array
+          items:
+            $ref: '#/components/schemas/CapaRef'
+    CapaCreate:
+      type: object
+      required:
+      - site_id
+      - title
+      - description
+      - owner_id
+      - due_date
+      properties:
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          minLength: 5
+          maxLength: 200
+        description:
+          type: string
+          minLength: 10
+          maxLength: 5000
+        type:
+          $ref: '#/components/schemas/CapaType'
+        control_level:
+          $ref: '#/components/schemas/HierarchyControl'
+        source:
+          $ref: '#/components/schemas/CapaSource'
+        source_observation_id:
+          type: string
+          format: uuid
+        source_observation_item_id:
+          type: string
+          format: uuid
+        source_near_miss_id:
+          type: string
+          format: uuid
+        root_cause:
+          type: string
+        priority:
+          $ref: '#/components/schemas/PriorityLevel'
+        owner_id:
+          type: string
+          format: uuid
+        verifier_id:
+          type: string
+          format: uuid
+          description: Distinto de ownerId
+        due_date:
+          type: string
+          format: date
+    CapaUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        control_level:
+          $ref: '#/components/schemas/HierarchyControl'
+        root_cause:
+          type: string
+        priority:
+          $ref: '#/components/schemas/PriorityLevel'
+        owner_id:
+          type: string
+          format: uuid
+        verifier_id:
+          type: string
+          format: uuid
+          nullable: true
+    Capa:
+      type: object
+      required:
+      - id
+      - reference
+      - site_id
+      - title
+      - description
+      - type
+      - source
+      - priority
+      - status
+      - owner_id
+      - created_by
+      - due_date
+      - original_due_date
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+          example: CAPA-2026-000112
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          $ref: '#/components/schemas/CapaType'
+        control_level:
+          allOf:
+          - $ref: '#/components/schemas/HierarchyControl'
+          nullable: true
+        source:
+          $ref: '#/components/schemas/CapaSource'
+        source_observation_id:
+          type: string
+          format: uuid
+          nullable: true
+        source_observation_item_id:
+          type: string
+          format: uuid
+          nullable: true
+        source_near_miss_id:
+          type: string
+          format: uuid
+          nullable: true
+        root_cause:
+          type: string
+          nullable: true
+        priority:
+          $ref: '#/components/schemas/PriorityLevel'
+        status:
+          $ref: '#/components/schemas/CapaStatus'
+        owner_id:
+          type: string
+          format: uuid
+        verifier_id:
+          type: string
+          format: uuid
+          nullable: true
+        created_by:
+          type: string
+          format: uuid
+        due_date:
+          type: string
+          format: date
+        original_due_date:
+          type: string
+          format: date
+        extension_count:
+          type: integer
+        escalation_level:
+          type: integer
+          minimum: 0
+          maximum: 3
+        last_escalated_at:
+          type: string
+          format: date-time
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        submitted_for_verification_at:
+          type: string
+          format: date-time
+          nullable: true
+        closed_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancelled_reason:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CapaDetail:
+      allOf:
+      - $ref: '#/components/schemas/Capa'
+      - type: object
+        properties:
+          owner_name:
+            type: string
+          verifier_name:
+            type: string
+            nullable: true
+          is_overdue:
+            type: boolean
+            description: 'Derivado: due_date < hoy y status activo'
+          updates:
+            type: array
+            items:
+              $ref: '#/components/schemas/CapaUpdate_Log'
+          verifications:
+            type: array
+            items:
+              $ref: '#/components/schemas/CapaVerification'
+          extensions:
+            type: array
+            items:
+              $ref: '#/components/schemas/CapaExtension'
+    CapaTransitionRequest:
+      type: object
+      required:
+      - to
+      properties:
+        to:
+          allOf:
+          - $ref: '#/components/schemas/CapaStatus'
+          description: in_progress | verification | cancelled. `closed` -> 400 (usar /verifications)
+        comment:
+          type: string
+          maxLength: 4000
+          description: Obligatorio para verification, rechazo (verification->in_progress) y cancelled
+    CapaExtension:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        capa_id:
+          type: string
+          format: uuid
+        requested_by:
+          type: string
+          format: uuid
+        approved_by:
+          type: string
+          format: uuid
+          nullable: true
+        old_due_date:
+          type: string
+          format: date
+        new_due_date:
+          type: string
+          format: date
+        reason:
+          type: string
+        approved:
+          type: boolean
+          nullable: true
+          description: null = pendiente
+        created_at:
+          type: string
+          format: date-time
+        decided_at:
+          type: string
+          format: date-time
+          nullable: true
+    CapaVerificationCreate:
+      type: object
+      required:
+      - is_effective
+      - findings
+      properties:
+        is_effective:
+          type: boolean
+        method:
+          type: string
+          example: observacion de seguimiento
+          maxLength: 500
+        findings:
+          type: string
+          description: Obligatorio
+          minLength: 5
+        follow_up_observation_id:
+          type: string
+          format: uuid
+    CapaVerification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        capa_id:
+          type: string
+          format: uuid
+        verifier_id:
+          type: string
+          format: uuid
+        is_effective:
+          type: boolean
+        method:
+          type: string
+          nullable: true
+        findings:
+          type: string
+          nullable: true
+        follow_up_observation_id:
+          type: string
+          format: uuid
+          nullable: true
+        verified_at:
+          type: string
+          format: date-time
+        verifier_name:
+          type: string
+    Alert:
+      type: object
+      required:
+      - id
+      - type
+      - severity
+      - status
+      - title
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/AlertType'
+        severity:
+          $ref: '#/components/schemas/SeverityLevel'
+        site_id:
+          type: string
+          format: uuid
+          nullable: true
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        title:
+          type: string
+        message:
+          type: string
+          nullable: true
+        entity_type:
+          allOf:
+          - $ref: '#/components/schemas/AlertEntityType'
+          nullable: true
+        entity_id:
+          type: string
+          format: uuid
+          nullable: true
+        escalation_level:
+          type: integer
+        status:
+          $ref: '#/components/schemas/AlertStatus'
+        dedupe_key:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        acknowledged_by:
+          type: string
+          format: uuid
+          nullable: true
+        acknowledged_at:
+          type: string
+          format: date-time
+          nullable: true
+        resolved_at:
+          type: string
+          format: date-time
+          nullable: true
+        read_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Solo con mine=true
+    KpiSummary:
+      type: object
+      description: site_id/from/to + columnas de fn_kpi_summary
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          nullable: true
+        from:
+          type: string
+          format: date-time
+        to:
+          type: string
+          format: date-time
+        observations_count:
+          type: number
+          nullable: true
+        behaviors_evaluated:
+          type: number
+          nullable: true
+        safe_behavior_rate_pct:
+          type: number
+          nullable: true
+        at_risk_count:
+          type: number
+          nullable: true
+        near_miss_count:
+          type: number
+          nullable: true
+        observations_per_observer:
+          type: number
+          nullable: true
+        capa_opened:
+          type: number
+          nullable: true
+        capa_closed:
+          type: number
+          nullable: true
+        capa_overdue_now:
+          type: number
+          nullable: true
+        avg_capa_close_days:
+          type: number
+          nullable: true
+        capa_on_time_close_pct:
+          type: number
+          nullable: true
+        near_miss_to_capa_pct:
+          type: number
+          nullable: true
+    TopAtRiskBehavior:
+      type: object
+      properties:
+        behavior_id:
+          type: string
+          format: uuid
+        behavior_code:
+          type: string
+        behavior_name:
+          type: string
+        category_name:
+          type: string
+        at_risk_count:
+          type: integer
+        total_count:
+          type: integer
+        at_risk_pct:
+          type: number
+    SafeBehaviorPoint:
+      type: object
+      properties:
+        period:
+          type: string
+          format: date
+          description: Inicio del bucket
+        safe_count:
+          type: integer
+        at_risk_count:
+          type: integer
+        safe_rate_pct:
+          type: number
+          nullable: true
+    CapaSummary:
+      type: object
+      properties:
+        site_id:
+          type: string
+          format: uuid
+        open_count:
+          type: integer
+        overdue_count:
+          type: integer
+        closed_count:
+          type: integer
+        avg_days_to_close:
+          type: number
+          nullable: true
+        on_time_close_pct:
+          type: number
+          nullable: true
+    KpiSnapshot:
+      type: object
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          nullable: true
+        snapshot_date:
+          type: string
+          format: date
+        metric:
+          type: string
+        value:
+          type: number
+          nullable: true
+    TraccarWebhook:
+      type: object
+      description: Sobre de Traccar; tambien se acepta el objeto `event` plano.
+      required:
+      - event
+      properties:
+        event:
+          type: object
+          required:
+          - type
+          - deviceId
+          properties:
+            id:
+              type: integer
+            type:
+              type: string
+              example: geofenceEnter
+              description: geofenceEnter, geofenceExit, deviceOverspeed, alarm, deviceOffline, ...
+            eventTime:
+              type: string
+              format: date-time
+            deviceId:
+              type: integer
+            positionId:
+              type: integer
+            geofenceId:
+              type: integer
+            attributes:
+              type: object
+              additionalProperties: true
+        device:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            uniqueId:
+              type: string
+            category:
+              type: string
+            attributes:
+              type: object
+              additionalProperties: true
+        position:
+          type: object
+          properties:
+            id:
+              type: integer
+            deviceId:
+              type: integer
+            fixTime:
+              type: string
+              format: date-time
+            latitude:
+              type: number
+            longitude:
+              type: number
+            speed:
+              type: number
+              description: Nudos
+            course:
+              type: number
+            accuracy:
+              type: number
+            attributes:
+              type: object
+              additionalProperties: true
+        geofence:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            description:
+              type: string
+    WebhookEventType:
+      type: string
+      enum:
+      - observation.created
+      - observation.at_risk_flagged
+      - nearmiss.reported
+      - nearmiss.status_changed
+      - alert.raised
+      - alert.acknowledged
+      - capa.created
+      - capa.status_changed
+      - capa.overdue
+      - capa.verified
+      - kpi.snapshot_updated
+    WebhookSubscriptionCreate:
+      type: object
+      required:
+      - url
+      - events
+      properties:
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/WebhookEventType'
+        secret:
+          type: string
+          minLength: 16
+          description: Si se omite el servidor genera uno
+        site_id:
+          type: string
+          format: uuid
+          description: Limitar a un sitio
+        is_active:
+          type: boolean
+          default: true
+    WebhookSubscription:
+      allOf:
+      - $ref: '#/components/schemas/WebhookSubscriptionCreate'
+      - type: object
+        required:
+        - id
+        properties:
+          id:
+            type: string
+            format: uuid
+          created_at:
+            type: string
+            format: date-time
+    AuthResponse:
+      type: object
+      required:
+      - access_token
+      - roles
+      - user
+      properties:
+        access_token:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleCode'
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            full_name:
+              type: string
+    AssignRoleRequest:
+      type: object
+      required:
+      - role
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleCode'
+        site_id:
+          type: string
+          format: uuid
+          description: Omitir = rol global
+    UserRoles:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleCode'
+    UserListItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        job_title:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        home_site_id:
+          type: string
+          format: uuid
+          nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleCode'
+    ObservationCatalog:
+      type: object
+      properties:
+        behaviors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              code:
+                type: string
+              name:
+                type: string
+              safe_description:
+                type: string
+                nullable: true
+              at_risk_description:
+                type: string
+                nullable: true
+              default_severity:
+                $ref: '#/components/schemas/SeverityLevel'
+              category_id:
+                type: string
+                format: uuid
+              category:
+                type: string
+        checklists:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              code:
+                type: string
+              name:
+                type: string
+              site_id:
+                type: string
+                format: uuid
+                nullable: true
+              area_id:
+                type: string
+                format: uuid
+                nullable: true
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    behavior_id:
+                      type: string
+                      format: uuid
+                    is_critical:
+                      type: boolean
+        causal_factors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              code:
+                type: string
+              name:
+                type: string
+              group_name:
+                type: string
+        sites:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              code:
+                type: string
+              name:
+                type: string
+              areas:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    code:
+                      type: string
+                    name:
+                      type: string
+    CapaRef:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+        title:
+          type: string
+        status:
+          $ref: '#/components/schemas/CapaStatus'
+        due_date:
+          type: string
+          format: date
+        priority:
+          $ref: '#/components/schemas/PriorityLevel'
+    NearMissSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+        site_id:
+          type: string
+          format: uuid
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        area_name:
+          type: string
+          nullable: true
+        title:
+          type: string
+        occurred_at:
+          type: string
+          format: date-time
+        potential_severity:
+          $ref: '#/components/schemas/SeverityLevel'
+        likelihood:
+          type: integer
+          nullable: true
+        risk_score:
+          type: integer
+        status:
+          $ref: '#/components/schemas/NearMissStatus'
+        is_anonymous:
+          type: boolean
+    CapaUpdate_Log:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        capa_id:
+          type: string
+          format: uuid
+        author_id:
+          type: string
+          format: uuid
+          nullable: true
+        author:
+          $ref: '#/components/schemas/UserRef'
+        from_status:
+          allOf:
+          - $ref: '#/components/schemas/CapaStatus'
+          nullable: true
+        to_status:
+          allOf:
+          - $ref: '#/components/schemas/CapaStatus'
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        author_name:
+          type: string
+          nullable: true
+    CapaListItem:
+      type: object
+      properties:
+        id: *id007
+        reference:
+          type: string
+          example: CAPA-2026-000112
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CapaType'
+        source:
+          $ref: '#/components/schemas/CapaSource'
+        priority:
+          $ref: '#/components/schemas/PriorityLevel'
+        status:
+          $ref: '#/components/schemas/CapaStatus'
+        site_id: *id007
+        area_id:
+          type: string
+          format: uuid
+          nullable: true
+        owner_id: *id007
+        owner_name:
+          type: string
+        verifier_id:
+          type: string
+          format: uuid
+          nullable: true
+        due_date:
+          type: string
+          format: date
+        escalation_level:
+          type: integer
+        extension_count:
+          type: integer
+        is_overdue:
+          type: boolean
+        days_overdue:
+          type: integer
+    AuditEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        table_name:
+          type: string
+        action:
+          type: string
+          enum:
+          - INSERT
+          - UPDATE
+          - DELETE
+          - TRANSITION
+        actor_id:
+          type: string
+          format: uuid
+          nullable: true
+        actor_name:
+          type: string
+          nullable: true
+        old_data:
+          type: object
+          nullable: true
+          additionalProperties: true
+        new_data:
+          type: object
+          nullable: true
+          additionalProperties: true
+        changed_at:
+          type: string
+          format: date-time

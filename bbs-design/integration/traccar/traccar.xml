@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
+<!--
+  Configuracion de Traccar para el entorno de integracion BBS.
+  - Secretos y URL de reenvio llegan por variables de entorno del compose
+    (CONFIG_USE_ENVIRONMENT_VARIABLES=true): DATABASE_PASSWORD, EVENT_FORWARD_URL, EVENT_FORWARD_HEADER.
+  - Los nombres de claves cambian entre versiones de Traccar: verifica contra la documentacion
+    de la version que uses (https://www.traccar.org/configuration-file/).
+-->
+<properties>
+  <!-- Base de datos (Postgres compartido, base 'traccar') -->
+  <entry key='database.driver'>org.postgresql.Driver</entry>
+  <entry key='database.url'>jdbc:postgresql://db:5432/traccar</entry>
+  <entry key='database.user'>traccar</entry>
+  <!-- database.password: via DATABASE_PASSWORD -->
+
+  <!-- Web / API REST -->
+  <entry key='web.port'>8082</entry>
+  <entry key='web.origin'>http://localhost:3001,http://localhost:5173</entry>
+
+  <!-- Reenvio de eventos a BBS: POST JSON a /api/v1/webhooks/traccar
+       (event.forward.url y event.forward.header se inyectan por entorno) -->
+  <entry key='event.forward.enable'>true</entry>
+  <entry key='event.forward.json'>true</entry>
+
+  <!-- Eventos de interes. Los tipos que se reenvian dependen de las Notificaciones de Traccar:
+       crear en la UI (Configuracion > Notificaciones) una de tipo 'Web' para
+       geofenceEnter, geofenceExit, deviceOverspeed, alarm, deviceOffline. -->
+  <entry key='event.ignoreDuplicateAlerts'>true</entry>
+
+  <!-- Privacidad: retencion de posiciones (historial) acotada -->
+  <entry key='database.historyDays'>60</entry>
+</properties>
