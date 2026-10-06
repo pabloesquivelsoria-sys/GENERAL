@@ -111,3 +111,18 @@ npm test              # pruebas de la máquina de estados (node:test)
 - Canales `websocket` y `email` de `notification_channel` están en el esquema, pero hoy solo se entregan alertas `in_app` (consulta por API).
 - No hay subida de archivos: la tabla `attachments` existe sin endpoints.
 - Alcance por sitio: los roles pueden acotarse a un sitio (`user_roles.site_id`) para destinatarios de alertas, pero los endpoints de lectura no filtran por sitio del usuario.
+
+## Importar datos de Benchmark (tablero OK)
+
+Las acciones que la empresa sube a Benchmark se absorben como CAPAs (`source=other`, trazadas con `external_source='benchmark'` + `external_id`). La importación es **idempotente**: reimportar el mismo archivo actualiza (estatus, prioridad, responsable, fecha, causa raíz) en vez de duplicar, y cada corrida queda en `import_runs`.
+
+```bash
+# 1) Prueba sin escribir (dry_run) con el CSV exportado (separador , o ; autodetectado)
+curl -X POST $API/api/v1/imports/benchmark/capa -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d "$(python3 -c 'import json,sys;print(json.dumps({"csv":open(sys.argv[1],encoding="utf-8-sig").read(),"dry_run":True}))' export.csv)"
+# 2) Real: quitar dry_run. También acepta {"rows":[{...}]} en JSON.
+# Historial: GET /api/v1/imports/runs  y  /imports/runs/:id (errores y avisos por fila)
+```
+
+Requiere rol `admin` o `ehs_manager`. Cabeceras reconocidas (alias ES/EN en `api/src/imports/benchmark.mapping.ts`): id/folio, título, descripción, responsable (email, código o nombre), fecha compromiso, estatus, prioridad, planta/sitio, área, causa raíz, fecha creación/cierre. Fechas: `yyyy-mm-dd`, `dd/mm/yyyy` o serial de Excel. Para ajustar a la exportación real sin tocar código: `BENCHMARK_MAPPING_FILE=/ruta/mapping.json` (se fusiona con los valores por defecto). Variables opcionales: `BENCHMARK_DEFAULT_SITE`, `BENCHMARK_DEFAULT_OWNER_EMAIL`, `BENCHMARK_DEFAULT_DUE_DAYS` (30).
+Las filas que fallan no abortan el lote; se reportan con su número de fila. Los estatus de Benchmark se mapean: abierto→open, en proceso/atrasado→in_progress, verificación→verification, cerrado/completado→closed, cancelado→cancelled.

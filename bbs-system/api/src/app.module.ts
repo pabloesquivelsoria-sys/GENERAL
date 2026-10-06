@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { CapaModule } from './capa/capa.module';
 import { DatabaseModule } from './database/database.module';
 import { HealthController } from './health.controller';
+import { ImportsModule } from './imports/imports.module';
 import { KpiModule } from './kpi/kpi.module';
 import { NearMissesModule } from './near-misses/near-misses.module';
 import { ObservationsModule } from './observations/observations.module';
@@ -21,6 +22,7 @@ import { ObservationsModule } from './observations/observations.module';
     NearMissesModule,
     CapaModule,
     KpiModule,
+    ImportsModule,
   ],
   controllers: [HealthController],
 })
