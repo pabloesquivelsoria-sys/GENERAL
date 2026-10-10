@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Normas de dibujo técnico: NOM, ISO y ANSI</title>
+<style>
+@page { size: Letter; margin: 13mm 14mm 12mm 14mm; }
+:root { --ink:#1d2430; --muted:#5b6575; --accent:#1f4e79; --tint:#eaf1f8; --line:#c9d3df; }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; }
+body { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; color:var(--ink); font-size:9.6pt; line-height:1.38; background:#fff; }
+header { border-bottom:2.5px solid var(--accent); padding-bottom:5px; margin-bottom:8px; }
+.course { font-size:7.8pt; letter-spacing:.09em; text-transform:uppercase; color:var(--accent); font-weight:700; }
+h1 { font-size:17pt; margin:2px 0 3px; color:var(--accent); line-height:1.15; }
+.meta { font-size:8pt; color:var(--muted); }
+h2 { font-size:10.2pt; color:var(--accent); margin:9px 0 4px; padding-bottom:2px; border-bottom:1px solid var(--line); }
+p { margin:0 0 4px; text-align:justify; }
+table { width:100%; border-collapse:collapse; font-size:8.4pt; }
+th { background:var(--accent); color:#fff; text-align:left; padding:3.5px 5px; font-weight:600; }
+td { border-bottom:1px solid var(--line); padding:3.5px 5px; vertical-align:top; }
+tbody tr:nth-child(even) td { background:var(--tint); }
+td.org { font-weight:700; color:var(--accent); white-space:nowrap; }
+.cite { font-size:7.4pt; color:var(--muted); }
+.callout { background:var(--tint); border-left:3px solid var(--accent); padding:5px 8px; margin:5px 0 6px; }
+ul { margin:2px 0 0 15px; padding:0; }
+li { margin-bottom:2px; }
+.caption { font-size:7.6pt; color:var(--muted); margin:3px 0 0; font-style:italic; }
+.sources { font-size:7.7pt; color:var(--muted); margin:0; padding:0; list-style:none; column-count:2; column-gap:16px; }
+.sources li { margin:0 0 2px; break-inside:avoid; padding-left:20px; text-indent:-20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="course">CAD2026 · Unidad de análisis</div>
+  <h1>Normas de dibujo técnico: NOM, ISO y ANSI</h1>
+  <div class="meta">Alumno(a): ______________________________ &nbsp;·&nbsp; Matrícula: ______________ &nbsp;·&nbsp; Fecha: 10 de octubre de 2026</div>
+</header>
+
+<h2>1. Introducción</h2>
+<p>Las normas de dibujo técnico son acuerdos que fijan cómo representar, acotar y tolerar las piezas. Existen para que cualquier persona, en cualquier taller o país, interprete el mismo plano sin ambigüedad, y para que una pieza pueda fabricarse y verificarse sin depender de quien la dibujó. Cada región tiene su propio marco: en México, las NOM y NMX; a nivel internacional, ISO; y en Estados Unidos, ANSI junto con las normas ASME.</p>
+
+<h2>2. Comparativa de organismos y normas</h2>
+<table>
+  <thead>
+    <tr><th>Organismo</th><th>Nombre completo</th><th>País o ámbito</th><th>Propósito</th><th>Ejemplo de aplicación en dibujo o manufactura</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="org">NOM / NMX</td>
+      <td>Norma Oficial Mexicana (NOM) y Norma Mexicana (NMX)</td>
+      <td>México. Las NOM son de observancia obligatoria; las NMX son voluntarias.</td>
+      <td>Establecer requisitos técnicos obligatorios (NOM) y referencias voluntarias (NMX). La Secretaría de Economía las coordina y se publican en el Diario Oficial de la Federación. <span class="cite">[1]</span></td>
+      <td>NOM-008-SE-2021, sistema general de unidades de medida, que cancela a la NOM-008-SCFI-2002. <span class="cite">[1]</span> NMX-DT-128-30-IMNC-2010, convenciones básicas para vistas. <span class="cite">[2]</span> No se encontró una NOM específica para dibujo técnico.</td>
+    </tr>
+    <tr>
+      <td class="org">ISO</td>
+      <td>International Organization for Standardization (Organización Internacional de Normalización)</td>
+      <td>Internacional. Sede en Ginebra, Suiza; fundada en 1947.</td>
+      <td>Crear normas internacionales por consenso para productos y documentación técnica, de modo que un plano sea válido en cualquier país.</td>
+      <td>ISO 128-1, principios generales de representación. <span class="cite">[3]</span> ISO 129-1, acotación. <span class="cite">[4]</span> ISO 1101, tolerancias geométricas. <span class="cite">[5]</span> ISO 216, formatos de papel A0 a A4. <span class="cite">[6]</span></td>
+    </tr>
+    <tr>
+      <td class="org">ANSI</td>
+      <td>American National Standards Institute (Instituto Nacional Estadounidense de Estándares)</td>
+      <td>Estados Unidos. Organismo privado sin fines de lucro. <span class="cite">[7]</span></td>
+      <td>Aprobar como normas nacionales los estándares que desarrollan otros organismos. En dibujo, aprueba las normas Y14 que desarrolla ASME.</td>
+      <td>ASME Y14.5-2018, dimensionamiento y tolerancias GD&amp;T. <span class="cite">[8]</span> ASME Y14.3, vistas ortográficas y pictóricas. <span class="cite">[9]</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3. Diferencia principal entre ISO y ANSI</h2>
+<div class="callout">
+  <b>Método de proyección.</b> ISO usa el <b>primer diedro</b>: la vista superior queda debajo de la vista frontal. ANSI/ASME usa el <b>tercer diedro</b>: la vista superior queda encima de la frontal. <span class="cite">[10][11]</span> Confundir ambos métodos invierte la posición de las vistas y puede llevar a fabricar la pieza de forma incorrecta, por eso conviene identificar el método antes de leer el plano.
+</div>
+
+<table>
+  <thead>
+    <tr><th style="width:21%">Aspecto</th><th style="width:39%">ISO</th><th>ANSI / ASME</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Ámbito</b></td><td>Internacional, sede en Ginebra</td><td>Estados Unidos; las Y14 las desarrolla ASME</td></tr>
+    <tr><td><b>Unidades habituales</b></td><td>Milímetros (mm)</td><td>Pulgadas (in)</td></tr>
+    <tr><td><b>Método de proyección</b></td><td>Primer diedro</td><td>Tercer diedro</td></tr>
+    <tr><td><b>Tolerancias geométricas por defecto</b></td><td>Independencia: cada requisito se verifica por separado (ISO 8015). <span class="cite">[12]</span></td><td>Regla #1 (envolvente) para elementos de tamaño (Y14.5-2018). <span class="cite">[8]</span></td></tr>
+    <tr><td><b>Formatos de hoja</b></td><td>Serie A: A0 841 × 1189 mm; A4 210 × 297 mm. <span class="cite">[6]</span></td><td>Serie en pulgadas: A 8.5 × 11 in hasta E 34 × 44 in. El tamaño ANSI B no equivale al ISO B. <span class="cite">[13]</span></td></tr>
+  </tbody>
+</table>
+
+<h2>4. Importancia de utilizar normas en planos de ingeniería</h2>
+<ul>
+  <li><b>Intercambiabilidad:</b> piezas fabricadas en talleres distintos encajan si las tolerancias y ajustes se definen con normas comunes, como ISO 286-1 para ajustes. <span class="cite">[14]</span></li>
+  <li><b>Comunicación sin ambigüedad:</b> los símbolos normalizados, como los de ISO 1101, tienen una sola interpretación en cualquier país y taller. <span class="cite">[5]</span> Según ASEE, la mala lectura de los dibujos es una causa habitual de problemas técnicos (argumento, no estudio medido). <span class="cite">[16]</span></li>
+  <li><b>Menos errores de fabricación:</b> reglas claras reducen el retrabajo. Ejemplo ilustrativo: una tolerancia de posición Ø0.2 respecto a los datums A y B ubica el agujero de un pasador.</li>
+  <li><b>Requisitos contractuales y legales:</b> contratos y licitaciones suelen exigir una norma específica, y el plano debe declarar cuál aplica. En trámites oficiales, las unidades se rigen por la NOM-008-SE-2021. <span class="cite">[1]</span></li>
+  <li><b>Referencia industrial:</b> según ASME, Y14.5 es el sistema de tolerancias predominante en Estados Unidos. <span class="cite">[15]</span></li>
+</ul>
+
+<h2>5. Conclusión</h2>
+<p>ISO y ANSI/ASME resuelven el mismo problema con reglas distintas, por eso un plano debe declarar la norma que aplica. En México, el dibujo técnico se apoya en NMX voluntarias, mientras que las NOM son de cumplimiento obligatorio. Saber qué norma rige un plano es el primer paso para leerlo o fabricarlo.</p>
+
+<h2>Fuentes</h2>
+<ol class="sources">
+  <li>[1] Secretaría de Economía, “NOM-008-SE-2021, Sistema general de unidades de medida,” Diario Oficial de la Federación, 2023. [En línea]. Disponible: https://www.dof.gob.mx/nota_detalle.php?codigo=5713228&amp;fecha=29%2F12%2F2023</li>
+  <li>[2] IMNC, “NMX-DT-128-30-IMNC-2010. Dibujo técnico. Principios generales de presentación. Parte 30,” 2010. [En línea]. Disponible: https://platiica.economia.gob.mx/normalizacion/nmx-dt-128-30-imnc-2010/</li>
+  <li>[3] ISO, “ISO 128-1:2020. Technical product documentation (TPD). General principles of representation. Part 1,” 2020. [En línea]. Disponible: https://www.iso.org/standard/65296.html</li>
+  <li>[4] ISO, “ISO 129-1:2018. Technical product documentation (TPD). Presentation of dimensions and tolerances. Part 1,” 2018. [En línea]. Disponible: https://www.iso.org/standard/64007.html</li>
+  <li>[5] ISO, “ISO 1101:2017. Geometrical product specifications (GPS). Geometrical tolerancing,” 2017. Fuente secundaria: https://genorma.com/en/standards/iso-1101-2017</li>
+  <li>[6] ISO, “ISO 216:2007. Writing paper and certain classes of printed matter. Trimmed sizes. A and B series,” 2007. [En línea]. Disponible: https://www.iso.org/standard/36631.html</li>
+  <li>[7] ANSI, “History.” [En línea]. Disponible: https://www.ansi.org/about/history</li>
+  <li>[8] ASME, “Y14.5-2018. Dimensioning and Tolerancing.” [En línea]. Disponible: https://www.asme.org/codes-standards/find-codes-standards/y14-5-dimensioning-tolerancing/2018</li>
+  <li>[9] ASME, “Y14.3. Orthographic and Pictorial Views.” [En línea]. Disponible: https://www.asme.org/codes-standards/find-codes-standards/y14-3-orthographic-pictorial-views</li>
+  <li>[10] Autodesk, “Métodos de proyección,” Autodesk Help. [En línea]. Disponible: https://help.autodesk.com/cloudhelp/ENU/FDOC-Core/files/GUID-0DB05CD9-BE99-4E45-9FBD-8B8AF1F297BF.htm</li>
+  <li>[11] ISO, “ISO 128-3:2022.” Ficha de catálogo. [En línea]. Disponible: https://iteh.es/catalog/standards/iso/75d888a5-6e9a-4fac-9120-8f2dffc20899/iso-128-3-2022</li>
+  <li>[12] ISO, “ISO 8015:2011. Geometrical product specifications (GPS). Fundamentals. Concepts, principles and rules,” 2011. [En línea]. Disponible: https://www.iso.org/standard/55979.html</li>
+  <li>[13] ANSI, “Standard paper sizes: ISO &amp; ANSI A/A4,” blog de ANSI. [En línea]. Disponible: https://blog.ansi.org/ansi/standard-paper-sizes-iso-ansi-a-a4/</li>
+  <li>[14] ISO, “ISO 286-1:2010. Geometrical product specifications (GPS). ISO code system for tolerances on linear sizes. Part 1,” 2010. [En línea]. Disponible: https://www.iso.org/standard/45975.html</li>
+  <li>[15] ASME, “Workforce blog: engineering education falls short on GD&amp;T.” [En línea]. Disponible: https://www.asme.org/topics-resources/content/workforce-blog-engineering-education-falls-short-on-gd-t</li>
+  <li>[16] ASEE, “Modifying CAD courses to improve proficiency in interpretation of engineering drawings.” [En línea]. Disponible: https://peer.asee.org/modifying-cad-courses-to-improve-proficiency-in-interpretation-of-engineering-drawings-using-modified-constructivism-approach.pdf</li>
+</ol>
+
+</body>
+</html>
