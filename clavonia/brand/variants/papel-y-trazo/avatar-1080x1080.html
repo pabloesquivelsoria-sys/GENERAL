@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia avatar 1080x1080</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#2E4A3E;width:1080px;height:1080px;overflow:hidden}
+.root{position:relative;width:1080px;height:1080px;overflow:hidden;background:#2E4A3E;color:#F7F7F2;font-family:'DM Sans',sans-serif}
+.mk{position:absolute;left:340px;top:270px;width:400px;height:400px}
+.word{position:absolute;left:0;right:0;top:668px;text-align:center;font-weight:700;font-size:100px;line-height:1;letter-spacing:-.025em;color:#F7F7F2}
+.grain{position:absolute;left:0;top:0;width:1080px;height:1080px;opacity:.09;mix-blend-mode:multiply;pointer-events:none;z-index:60}
+</style>
+</head>
+<body>
+<div class="root">
+  <svg class="mk" viewBox="0 0 120 120" role="img" aria-label="Marca Clavonia">
+    <path d="M94 36C84 20 62 12 44 18C24 25 16 46 18 66C20 88 40 104 66 100C80 98 90 92 98 82" fill="none" stroke="#F7F7F2" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M84 50V72" stroke="#E8B04B" stroke-width="9" stroke-linecap="round"/>
+  </svg>
+  <div class="word">clavonia</div>
+  <svg class="grain" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+</div>
+</body>
+</html>
