@@ -60,6 +60,8 @@ Cada pieza tiene su HTML fuente (mismo nombre) y su PNG renderizado al tamaño e
 | `instagram-story-1080x1920.png` | 1080 × 1920 | Historia |
 | `highlight-1-1080x1080.png` | 1080 × 1080 | Destacado "Planes" |
 | `highlight-2-1080x1080.png` | 1080 × 1080 | Destacado "Cómo funciona" |
+| `brand-guide-1600x1200.png` | 1600 × 1200 | Lámina de guía de marca (8 secciones) |
+| `social-preview-1500x1150.png` | 1500 × 1150 | Vista previa de Facebook e Instagram |
 
 Cada `.html` tiene un contenedor de medida fija. Para regenerar un PNG:
 
