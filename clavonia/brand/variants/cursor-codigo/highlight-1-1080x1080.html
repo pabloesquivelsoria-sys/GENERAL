@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia destacado Planes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0B0F14;--panel:#151B23;--panel2:#10161E;--line:#263142;--cyan:#38BDF8;--lilac:#C4B5FD;--text:#E6EDF3;--muted:#8B98A9}
+html,body{background:#0B0F14;color:#E6EDF3}
+body{overflow:hidden}
+.canvas{position:relative;overflow:hidden;background:var(--bg);font-family:'Sora',system-ui,sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.lbl,.blk{font-family:'JetBrains Mono',ui-monospace,monospace}
+.lbl{color:var(--lilac);font-size:38px}
+.h{font-weight:700;letter-spacing:-.04em;line-height:1;font-size:200px;margin-top:20px}
+.caret{display:inline-block;width:.09em;height:.86em;background:var(--cyan);margin-left:.04em;vertical-align:-.04em}
+.rows{display:flex;flex-direction:column;gap:18px;margin-top:56px;width:560px}
+.blk{display:flex;align-items:center;gap:18px;height:84px;padding:0 26px;background:var(--panel);border:2px solid var(--line);border-radius:18px;color:var(--muted);font-size:30px;text-align:left;position:relative}
+.blk b{font-weight:500;color:var(--lilac)}
+.blk.on{color:var(--text)}
+.blk.on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--cyan);border-radius:18px 0 0 18px}
+</style>
+</head>
+<body>
+  <div class="lbl">// elige tu plan</div>
+  <h1 class="h">Planes<span class="caret"></span></h1>
+  <div class="rows">
+    <div class="blk"><b>01</b> bloque · plan</div>
+    <div class="blk on"><b>02</b> bloque · plan</div>
+    <div class="blk"><b>03</b> bloque · plan</div>
+  </div>
+</body>
+</html>
