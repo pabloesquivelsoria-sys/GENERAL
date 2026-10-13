@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de marca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=Figtree:wght@500..800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1B1464;--pink:#FF5C8A;--butter:#FFE66D;--mint:#2BD4A3;--white:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;background:#fff}
+.root{position:relative;overflow:hidden;width:1600px;height:1200px;background:var(--white);color:var(--ink);font-family:Figtree,system-ui,sans-serif;padding:40px 48px 0}
+.bri{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;letter-spacing:-.03em}
+.wm{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1}
+.logo{display:flex;align-items:center}
+.logo svg{display:block}
+
+/* Cabecera */
+.head{display:flex;justify-content:space-between;align-items:flex-end;height:92px}
+.head h1{font-size:54px;line-height:1}
+.head p{font-size:19px;font-weight:600;margin-top:8px}
+.meta{display:flex;align-items:center;gap:14px}
+.meta .name{font-size:28px;line-height:1}
+.pill{display:inline-block;background:var(--pink);color:var(--ink);border:3px solid var(--ink);border-radius:999px;padding:5px 16px;font-size:16px;font-weight:800;transform:rotate(-4deg)}
+.meta .ed{font-size:16px;font-weight:700;border-left:2px solid var(--ink);padding-left:14px}
+.rule{height:2px;background:var(--ink);margin:18px 0 22px}
+
+/* Retícula */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:352px 300px 300px;gap:22px}
+.card{background:var(--white);border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink);padding:20px 22px;overflow:hidden;display:flex;flex-direction:column}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex:0 0 auto}
+.sh .n{background:var(--butter);border:2.5px solid var(--ink);border-radius:999px;padding:2px 10px;font-size:14px;font-weight:800}
+.sh h2{font-size:22px;line-height:1}
+.cap{font-size:13px;font-weight:600;line-height:1.35}
+.label{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+
+/* 01 */
+.c1{grid-column:span 5}
+.c1 .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.clear{position:relative;border:2px dashed var(--ink);border-radius:14px;padding:40px}
+.x{position:absolute;font-size:20px;font-weight:800;line-height:1;color:var(--pink);-webkit-text-stroke:.6px var(--ink)}
+.c1 .cap{font-size:15px;text-align:center}
+
+/* 02 */
+.c2{grid-column:span 3}
+.attrs{display:flex;flex-wrap:wrap;gap:8px 8px;margin-bottom:16px}
+.attrs span{border:2.5px solid var(--ink);border-radius:999px;padding:4px 13px;font-size:15px;font-weight:800}
+.quote{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:700;font-size:19px;line-height:1.2;letter-spacing:-.01em;margin-bottom:10px}
+.ctas{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.btn{border:3px solid var(--ink);border-radius:999px;padding:7px 16px;font-size:15px;font-weight:800;box-shadow:3px 3px 0 var(--ink)}
+
+/* 03 */
+.c3{grid-column:span 4}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.tile{height:86px;border:2.5px solid var(--ink);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+
+/* 04 */
+.c4{grid-column:span 6}
+.sw{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.chip{height:84px;border:3px solid var(--ink);border-radius:16px;margin-bottom:10px}
+.sw b{display:block;font-size:15px;font-weight:800}
+.sw code{display:block;font-family:Figtree,sans-serif;font-size:14px;font-weight:600;margin:2px 0 4px}
+
+/* 05 */
+.c5{grid-column:span 6}
+.dos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;flex:1}
+.do{border:2.5px solid var(--ink);border-radius:16px;padding:14px 14px;display:flex;flex-direction:column}
+.ex{margin-top:auto;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative}
+.ex .t{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:22px;letter-spacing:-.02em}
+.ex .strike{position:absolute;left:8px;right:8px;top:50%;height:4px;background:var(--ink);border-radius:2px;transform:rotate(-12deg)}
+.ex .c{width:34px;height:34px;border-radius:50%;background:var(--white);border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:19px}
+.do .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.do .top b{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:22px;font-weight:800}
+.do p{font-size:14px;font-weight:600;line-height:1.35}
+
+/* 06 */
+.c6{grid-column:span 5}
+.type{display:grid;grid-template-columns:250px 1fr;gap:22px;flex:1}
+.aa{font-size:150px;line-height:.9}
+.tname{font-size:18px;font-weight:800;margin-top:8px}
+.body{font-size:16.5px;font-weight:500;line-height:1.5;margin-top:12px}
+
+/* 07 */
+.c7{grid-column:span 4}
+.motifs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.mo{height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.rules{font-size:14px;font-weight:600;line-height:1.4;margin-top:14px;border-top:2px dashed var(--ink);padding-top:10px}
+
+/* 08 */
+.c8{grid-column:span 3;background:var(--butter)}
+</style>
+</head>
+<body>
+<div class="root">
+
+  <header class="head">
+    <div>
+      <h1 class="bri">Guía de marca</h1>
+      <p>Landing pages y sitios web para emprendedores</p>
+    </div>
+    <div class="meta">
+      <span class="bri name">Clavonia</span>
+      <span class="pill">Stickers Pop</span>
+      <span class="ed">Edición 1</span>
+    </div>
+  </header>
+  <div class="rule"></div>
+
+  <div class="grid">
+
+    <!-- 01 -->
+    <section class="card c1">
+      <div class="sh"><span class="n">01</span><h2 class="bri">Logo principal</h2></div>
+      <div class="stage">
+        <div class="clear">
+          <span class="x" style="left:14px;top:12px">×</span>
+          <span class="x" style="right:14px;top:12px">×</span>
+          <span class="x" style="left:14px;bottom:12px">×</span>
+          <span class="x" style="right:14px;bottom:12px">×</span>
+          <span class="x" style="left:50%;top:12px;margin-left:-6px">×</span>
+          <span class="x" style="left:50%;bottom:12px;margin-left:-6px">×</span>
+          <div class="logo" style="gap:16px">
+            <svg width="92" height="92" viewBox="1 4 56 56" role="img" aria-label="Marca clavonia">
+              <rect x="6" y="6" width="46" height="13" rx="5" fill="#1B1464"/>
+              <rect x="6" y="6" width="13" height="52" rx="5" fill="#1B1464"/>
+              <rect x="6" y="45" width="46" height="13" rx="5" fill="#1B1464"/>
+              <rect x="42" y="23" width="9" height="18" rx="3" fill="#FF5C8A"/>
+            </svg>
+            <span class="wm" style="font-size:82px">clavonia</span>
+          </div>
+        </div>
+        <p class="cap">Deja libre al menos 1/10 del ancho del logo. &nbsp;× = espacio libre</p>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="card c2">
+      <div class="sh"><span class="n">02</span><h2 class="bri">Voz</h2></div>
+      <div class="attrs">
+        <span style="background:var(--butter)">Directa</span>
+        <span style="background:var(--mint)">Cercana</span>
+        <span style="background:var(--pink)">Alegre</span>
+        <span style="background:var(--white)">Clara</span>
+      </div>
+      <p class="quote">“Tu página, lista en minutos.”</p>
+      <p class="quote">“Edita por bloques, sin complicarte.”</p>
+      <p class="label" style="margin-top:6px">Llamadas a la acción</p>
+      <div class="ctas">
+        <span class="btn" style="background:var(--ink);color:var(--white)">Empieza hoy</span>
+        <span class="btn" style="background:var(--pink)">Crear mi página</span>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="card c3">
+      <div class="sh"><span class="n">03</span><h2 class="bri">Versiones del logo</h2></div>
+      <div class="tiles">
+        <div>
+          <div class="tile" style="background:var(--white)">
+            <div class="logo" style="gap:9px">
+              <svg width="42" height="42" viewBox="1 4 56 56" aria-hidden="true"><rect x="6" y="6" width="46" height="13" rx="5" fill="#1B1464"/><rect x="6" y="6" width="13" height="52" rx="5" fill="#1B1464"/><rect x="6" y="45" width="46" height="13" rx="5" fill="#1B1464"/><rect x="42" y="23" width="9" height="18" rx="3" fill="#FF5C8A"/></svg>
+              <span class="wm" style="font-size:36px">clavonia</span>
+            </div>
+          </div>
+          <p class="cap">Principal · sobre claro</p>
+        </div>
+        <div>
+          <div class="tile" style="background:var(--white)">
+            <img src="avatar-1080x1080.png" alt="Foto de perfil" width="70" height="70" style="border-radius:50%;border:2.5px solid var(--ink);display:block">
+          </div>
+          <p class="cap">Foto de perfil · recorte redondo</p>
+        </div>
+        <div>
+          <div class="tile" style="background:var(--butter)">
+            <span class="wm" style="font-size:42px">clavonia</span>
+          </div>
+          <p class="cap">Solo nombre · espacios cortos</p>
+        </div>
+        <div>
+          <div class="tile" style="background:var(--ink)">
+            <div class="logo" style="gap:9px">
+              <svg width="42" height="42" viewBox="1 4 56 56" aria-hidden="true"><rect x="6" y="6" width="46" height="13" rx="5" fill="#FFFFFF"/><rect x="6" y="6" width="13" height="52" rx="5" fill="#FFFFFF"/><rect x="6" y="45" width="46" height="13" rx="5" fill="#FFFFFF"/><rect x="42" y="23" width="9" height="18" rx="3" fill="#FFFFFF"/></svg>
+              <span class="wm" style="font-size:36px;color:var(--white)">clavonia</span>
+            </div>
+          </div>
+          <p class="cap">Una tinta · sobre oscuro</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="card c4">
+      <div class="sh"><span class="n">04</span><h2 class="bri">Paleta</h2></div>
+      <div class="sw">
+        <div><div class="chip" style="background:#1B1464"></div><b>Tinta</b><code>#1B1464</code><p class="cap">Texto, contornos y fondos oscuros</p></div>
+        <div><div class="chip" style="background:#FF5C8A"></div><b>Rosa pop</b><code>#FF5C8A</code><p class="cap">Pegatinas y cursor del logo</p></div>
+        <div><div class="chip" style="background:#FFE66D"></div><b>Mantequilla</b><code>#FFE66D</code><p class="cap">Fondos claros</p></div>
+        <div><div class="chip" style="background:#2BD4A3"></div><b>Menta</b><code>#2BD4A3</code><p class="cap">Bloques de acento sobre blanco</p></div>
+        <div><div class="chip" style="background:#FFFFFF"></div><b>Blanco</b><code>#FFFFFF</code><p class="cap">Texto sobre tinta y tarjetas</p></div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="card c5">
+      <div class="sh"><span class="n">05</span><h2 class="bri">Sí y no</h2></div>
+      <div class="dos">
+        <div class="do">
+          <div class="top">
+            <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="#2BD4A3" stroke="#1B1464" stroke-width="3"/><path d="M12 20.5l5.5 5.5L28.5 14" fill="none" stroke="#1B1464" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <b>Sí</b>
+          </div>
+          <p>Texto en tinta sobre fondos claros, o en blanco sobre tinta.</p>
+          <div class="ex" style="background:var(--butter);border:2.5px solid var(--ink)"><span class="t">Tu página</span></div>
+        </div>
+        <div class="do">
+          <div class="top">
+            <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="#2BD4A3" stroke="#1B1464" stroke-width="3"/><path d="M12 20.5l5.5 5.5L28.5 14" fill="none" stroke="#1B1464" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <b>Sí</b>
+          </div>
+          <p>Números grandes solo para pasos que van en orden.</p>
+          <div class="ex" style="background:var(--mint);border:2.5px solid var(--ink)"><span class="c">1</span><span class="c">2</span><span class="c">3</span></div>
+        </div>
+        <div class="do">
+          <div class="top">
+            <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="#FF5C8A" stroke="#1B1464" stroke-width="3"/><path d="M14 14l12 12M26 14L14 26" fill="none" stroke="#1B1464" stroke-width="4" stroke-linecap="round"/></svg>
+            <b>No</b>
+          </div>
+          <p>Texto blanco sobre rosa: no alcanza el contraste.</p>
+          <div class="ex" style="background:var(--pink);border:2.5px solid var(--ink)"><span class="t" style="color:#fff">Tu página</span><span class="strike"></span></div>
+        </div>
+        <div class="do">
+          <div class="top">
+            <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="#FF5C8A" stroke="#1B1464" stroke-width="3"/><path d="M14 14l12 12M26 14L14 26" fill="none" stroke="#1B1464" stroke-width="4" stroke-linecap="round"/></svg>
+            <b>No</b>
+          </div>
+          <p>Degradados, brillos o sombras difusas.</p>
+          <div class="ex" style="background:var(--white);border:2.5px dashed var(--ink)"><span style="width:70px;height:34px;border-radius:10px;background:var(--pink);box-shadow:0 8px 16px rgba(27,20,100,.45)"></span><span class="strike"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="card c6">
+      <div class="sh"><span class="n">06</span><h2 class="bri">Tipografía</h2></div>
+      <div class="type">
+        <div>
+          <div class="bri aa">Aa</div>
+          <p class="tname">Bricolage Grotesque</p>
+          <p class="cap">Titulares y números · 700 a 800</p>
+        </div>
+        <div>
+          <p class="tname" style="margin-top:0">Figtree</p>
+          <p class="cap">Texto, botones y pies · 500 a 800</p>
+          <p class="body">Elige una plantilla, edita por bloques y publica cuando quieras. Frases cortas y sin jerga técnica, pensadas para leerse rápido en el móvil.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="card c7">
+      <div class="sh"><span class="n">07</span><h2 class="bri">Elementos gráficos</h2></div>
+      <div class="motifs">
+        <div>
+          <div class="mo"><div style="width:74px;height:44px;background:var(--pink);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);transform:rotate(-8deg)"></div></div>
+          <p class="cap">Pegatina inclinada</p>
+        </div>
+        <div>
+          <div class="mo">
+            <div style="width:78px;height:64px;background:var(--white);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);display:flex;flex-direction:column;overflow:hidden">
+              <div style="height:12px;border-bottom:3px solid var(--ink)"></div>
+              <div style="flex:1.3;margin:5px 6px 4px;background:var(--pink);border:2.5px solid var(--ink);border-radius:5px"></div>
+              <div style="flex:1;display:flex;gap:4px;margin:0 6px 6px"><span style="flex:1;border:2.5px solid var(--ink);border-radius:4px"></span><span style="flex:1;border:2.5px solid var(--ink);border-radius:4px"></span></div>
+            </div>
+          </div>
+          <p class="cap">Bloques de página</p>
+        </div>
+        <div>
+          <div class="mo"><div class="bri" style="width:58px;height:58px;border-radius:50%;background:var(--white);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);display:flex;align-items:center;justify-content:center;font-size:34px;line-height:1">1</div></div>
+          <p class="cap">Número de paso</p>
+        </div>
+        <div>
+          <div class="mo"><span class="bri" style="display:inline-block;background:var(--pink);border:3px solid var(--ink);border-radius:10px;padding:2px 9px 0;font-size:22px;line-height:1.1;transform:rotate(-4deg)">minutos.</span></div>
+          <p class="cap">Etiqueta de titular</p>
+        </div>
+      </div>
+      <p class="rules">Rellenos planos, borde de tinta y sombra sólida desplazada. Sin degradados ni brillos, y máximo tres colores por pieza.</p>
+    </section>
+
+    <!-- 08 -->
+    <section class="card c8">
+      <div class="sh"><span class="n" style="background:var(--white)">08</span><h2 class="bri">Nombre y frase</h2></div>
+      <div class="logo" style="gap:10px;margin-top:4px">
+        <svg width="54" height="54" viewBox="1 4 56 56" aria-hidden="true"><rect x="6" y="6" width="46" height="13" rx="5" fill="#1B1464"/><rect x="6" y="6" width="13" height="52" rx="5" fill="#1B1464"/><rect x="6" y="45" width="46" height="13" rx="5" fill="#1B1464"/><rect x="42" y="23" width="9" height="18" rx="3" fill="#FF5C8A"/></svg>
+        <span class="wm" style="font-size:52px">clavonia</span>
+      </div>
+      <p class="bri" style="font-size:30px;line-height:1.02;margin-top:18px">Tu página, lista en minutos.</p>
+      <p style="font-size:15px;font-weight:700;line-height:1.35;margin-top:12px">Landing pages y sitios web para emprendedores</p>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

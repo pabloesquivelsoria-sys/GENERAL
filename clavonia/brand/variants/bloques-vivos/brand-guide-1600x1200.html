@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia guía de marca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2F5BFF;--yellow:#FFD23F;--ink:#111111;--white:#FFFFFF}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#FFFFFF}
+.frame{width:1600px;height:1200px;position:relative;overflow:hidden;background:var(--white);color:var(--ink);font-family:Archivo,sans-serif}
+.black{font-family:"Archivo Black",Archivo,sans-serif;font-weight:400}
+svg.mk{display:block}
+
+/* Encabezado */
+header{position:absolute;left:48px;right:48px;top:40px;height:96px;display:flex;justify-content:space-between;align-items:flex-end}
+header h1{margin:0;font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;font-size:58px;line-height:1;letter-spacing:-1.5px}
+header p{margin:10px 0 0;font-size:21px;font-weight:500}
+.meta{text-align:right}
+.meta .name{font-family:"Archivo Black",Archivo,sans-serif;font-size:28px;line-height:1}
+.meta .concept{margin-top:6px;font-size:18px;font-weight:800;color:var(--blue)}
+.meta .ed{display:inline-block;margin-top:8px;padding:5px 10px;background:var(--yellow);font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.divider{position:absolute;left:48px;right:48px;top:150px;height:2px;background:var(--ink)}
+
+/* Filas y secciones */
+.row{position:absolute;left:48px;width:1504px;height:300px;display:flex;gap:32px}
+.r1{top:176px}.r2{top:504px}.r3{top:832px}
+.s{height:300px;border-top:3px solid var(--ink);padding-top:12px;position:relative}
+.hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.num{background:var(--yellow);font-family:"Archivo Black",Archivo,sans-serif;font-size:16px;padding:4px 8px;line-height:1}
+.hd h2{margin:0;font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;font-size:20px;letter-spacing:-0.2px}
+.cap{font-size:15px;font-weight:500;line-height:1.35;margin:0}
+
+/* 01 Logo */
+.clear{position:relative;margin:16px auto 0;padding:34px;width:max-content;border:2px dashed var(--ink);display:flex;align-items:center;justify-content:center}
+.logo{display:flex;align-items:center;gap:12px}
+.logo span{font-family:"Archivo Black",Archivo,sans-serif;font-size:44px;line-height:1;letter-spacing:-0.4px}
+.x{position:absolute;width:22px;height:22px;background:var(--blue);color:var(--white);font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1}
+.x.t{top:6px;left:50%;transform:translateX(-50%)}
+.x.b{bottom:6px;left:50%;transform:translateX(-50%)}
+.x.l{left:6px;top:50%;transform:translateY(-50%)}
+.x.r{right:6px;top:50%;transform:translateY(-50%)}
+.s1 .cap{margin-top:22px;text-align:center}
+
+/* 02 Voz */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{border:2px solid var(--ink);padding:5px 10px;font-size:14px;font-weight:800;line-height:1}
+.quote{margin:14px 0 0;font-size:17px;font-weight:700;line-height:1.3}
+.label{margin-top:16px;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.ctas{display:flex;gap:10px;margin-top:8px}
+.ctas span{padding:10px 14px;font-family:"Archivo Black",Archivo,sans-serif;font-size:16px;line-height:1}
+.c1{background:var(--ink);color:var(--yellow)}
+.c2{background:var(--blue);color:var(--white)}
+
+/* 03 Versiones */
+.tiles{display:flex;gap:16px}
+.tile{width:146px}
+.tbox{width:146px;height:140px;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);margin-bottom:10px}
+.tbox.dark{background:var(--ink)}
+.mini{display:flex;align-items:center;gap:6px}
+.mini span{font-family:"Archivo Black",Archivo,sans-serif;font-size:20px;line-height:1}
+.tbox img{width:116px;height:116px;border-radius:50%;display:block}
+.word{font-family:"Archivo Black",Archivo,sans-serif;font-size:27px;line-height:1}
+.tile .cap{font-size:14px}
+
+/* 04 Paleta */
+.sw{display:flex;gap:16px}
+.sw div.c{width:143px}
+.chip{width:143px;height:110px;margin-bottom:10px}
+.chip.w{border:2px solid var(--ink)}
+.sw b{display:block;font-size:15px;font-weight:800}
+.sw code{display:block;font-family:Archivo,sans-serif;font-size:14px;font-weight:700;margin:2px 0 4px}
+.sw .cap{font-size:14px}
+
+/* 05 Sí y no */
+.cards{display:flex;gap:16px}
+.card{width:201px;height:228px;border:2px solid var(--ink)}
+.vis{height:118px;display:flex;align-items:center;justify-content:center;gap:8px;border-bottom:2px solid var(--ink)}
+.verd{display:flex;gap:10px;padding:12px 12px 0;align-items:flex-start}
+.verd svg{flex:0 0 28px}
+.verd p{margin:0;font-size:14px;font-weight:500;line-height:1.3}
+.verd p b{display:block;font-weight:800;font-size:15px;margin-bottom:2px}
+.sq{width:34px;height:34px}
+
+/* 06 Tipografía */
+.spec{display:flex;gap:22px;align-items:center}
+.aa{font-family:"Archivo Black",Archivo,sans-serif;font-size:118px;line-height:0.9;letter-spacing:-4px}
+.fname{font-family:"Archivo Black",Archivo,sans-serif;font-size:24px;line-height:1.1}
+.body-name{font-size:20px;font-weight:800;margin:0}
+.rule{height:2px;background:var(--ink);margin:16px 0 12px}
+.para{margin:6px 0 0;font-size:16px;font-weight:500;line-height:1.4}
+
+/* 07 Elementos */
+.motifs{display:flex;gap:12px}
+.m{width:116px}
+.mv{height:96px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.m .cap{font-size:14px;font-weight:700;text-align:center}
+.cursor{width:30px;height:64px;background:var(--blue)}
+.sticker{width:66px;height:66px;background:var(--ink);transform:rotate(-6deg);display:flex;align-items:center;justify-content:center;font-family:"Archivo Black",Archivo,sans-serif;font-size:22px;color:var(--yellow)}
+.nums{display:flex;gap:4px}
+.nums span{width:30px;height:30px;background:var(--ink);color:var(--yellow);font-family:"Archivo Black",Archivo,sans-serif;font-size:17px;display:flex;align-items:center;justify-content:center;line-height:1}
+.s7 .cap.rulez{margin-top:14px;font-size:15px;text-align:left;font-weight:500}
+
+/* 08 Nombre y frase */
+.blue{background:var(--blue);color:var(--white);height:226px;padding:24px 24px}
+.wm{display:flex;align-items:center;gap:12px}
+.wm span{font-family:"Archivo Black",Archivo,sans-serif;font-size:46px;line-height:1;letter-spacing:-0.4px}
+.tag{margin:22px 0 0;font-family:"Archivo Black",Archivo,sans-serif;font-size:27px;line-height:1.1;letter-spacing:-0.4px}
+.desc{margin:12px 0 0;font-size:16px;font-weight:700;line-height:1.35}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mk" viewBox="0 0 64 64">
+      <rect x="4" y="4" width="50" height="14" style="fill:var(--c,#111111)"/>
+      <rect x="4" y="4" width="14" height="56" style="fill:var(--c,#111111)"/>
+      <rect x="4" y="46" width="50" height="14" style="fill:var(--c,#111111)"/>
+      <rect x="46" y="24" width="14" height="16" style="fill:var(--k,#2F5BFF)"/>
+    </symbol>
+  </defs>
+</svg>
+<div class="frame">
+  <header>
+    <div>
+      <h1>Guía de marca</h1>
+      <p>Landing pages y sitios web para emprendedores</p>
+    </div>
+    <div class="meta">
+      <div class="name">Clavonia</div>
+      <div class="concept">Bloques vivos</div>
+      <div class="ed">Edición 1</div>
+    </div>
+  </header>
+  <div class="divider"></div>
+
+  <div class="row r1">
+    <section class="s s1" style="width:430px">
+      <div class="hd"><span class="num">01</span><h2>Logo principal</h2></div>
+      <div class="clear">
+        <span class="x t">x</span><span class="x b">x</span><span class="x l">x</span><span class="x r">x</span>
+        <div class="logo">
+          <svg class="mk" width="56" height="56" style="--c:#111111;--k:#2F5BFF" role="img" aria-label="Clavonia"><use href="#mk"/></svg>
+          <span>clavonia</span>
+        </div>
+      </div>
+      <p class="cap">Deja libre al menos 1/10 del ancho del logo.</p>
+    </section>
+
+    <section class="s s2" style="width:380px">
+      <div class="hd"><span class="num">02</span><h2>Voz</h2></div>
+      <div class="chips"><span>Directa</span><span>Cercana</span><span>Enérgica</span><span>Clara</span></div>
+      <p class="quote">“Tu página, lista en minutos.”</p>
+      <p class="quote" style="margin-top:6px">“Elige una plantilla y publícala hoy.”</p>
+      <div class="label">Llamadas a la acción</div>
+      <div class="ctas"><span class="c1">Empieza ya</span><span class="c2">Crear mi página</span></div>
+    </section>
+
+    <section class="s s3" style="width:630px">
+      <div class="hd"><span class="num">03</span><h2>Versiones del logo</h2></div>
+      <div class="tiles">
+        <div class="tile">
+          <div class="tbox"><div class="mini"><svg class="mk" width="24" height="24" style="--c:#111111;--k:#2F5BFF"><use href="#mk"/></svg><span>clavonia</span></div></div>
+          <p class="cap">Completo: uso principal sobre claro.</p>
+        </div>
+        <div class="tile">
+          <div class="tbox"><img src="avatar-1080x1080.png" alt="Foto de perfil de Clavonia"></div>
+          <p class="cap">Foto de perfil: solo la C, recorte redondo.</p>
+        </div>
+        <div class="tile">
+          <div class="tbox"><span class="word">clavonia</span></div>
+          <p class="cap">Solo nombre: espacios angostos y textos.</p>
+        </div>
+        <div class="tile">
+          <div class="tbox dark"><div class="mini" style="color:#FFFFFF"><svg class="mk" width="24" height="24" style="--c:#FFFFFF;--k:#FFFFFF"><use href="#mk"/></svg><span>clavonia</span></div></div>
+          <p class="cap">Una tinta: en blanco sobre fondos oscuros.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="row r2">
+    <section class="s s4" style="width:620px">
+      <div class="hd"><span class="num">04</span><h2>Paleta</h2></div>
+      <div class="sw">
+        <div class="c"><div class="chip" style="background:#2F5BFF"></div><b>Azul eléctrico</b><code>#2F5BFF</code><p class="cap">Fondos, bloques y acentos grandes.</p></div>
+        <div class="c"><div class="chip" style="background:#FFD23F"></div><b>Amarillo sol</b><code>#FFD23F</code><p class="cap">Bloques, tarjetas y texto sobre azul o tinta.</p></div>
+        <div class="c"><div class="chip" style="background:#111111"></div><b>Tinta</b><code>#111111</code><p class="cap">Texto principal y bloques oscuros.</p></div>
+        <div class="c"><div class="chip w" style="background:#FFFFFF"></div><b>Blanco</b><code>#FFFFFF</code><p class="cap">Fondos claros y texto sobre tinta o azul.</p></div>
+      </div>
+    </section>
+
+    <section class="s s5" style="width:852px">
+      <div class="hd"><span class="num">05</span><h2>Sí y no</h2></div>
+      <div class="cards">
+        <div class="card">
+          <div class="vis"><div class="sq" style="background:#2F5BFF"></div><div class="sq" style="background:#FFD23F"></div><div class="sq" style="background:#111111"></div></div>
+          <div class="verd">
+            <svg width="28" height="28" viewBox="0 0 28 28" aria-label="Sí"><rect width="28" height="28" fill="#2F5BFF"/><path d="M7 14.5l4.5 4.5L21 9.5" fill="none" stroke="#FFFFFF" stroke-width="3.2"/></svg>
+            <p><b>Sí</b>Máximo tres colores por pieza.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="vis" style="background:#FFD23F"><span class="black" style="font-size:46px;line-height:1">Aa</span></div>
+          <div class="verd">
+            <svg width="28" height="28" viewBox="0 0 28 28" aria-label="Sí"><rect width="28" height="28" fill="#2F5BFF"/><path d="M7 14.5l4.5 4.5L21 9.5" fill="none" stroke="#FFFFFF" stroke-width="3.2"/></svg>
+            <p><b>Sí</b>Texto pequeño en tinta sobre amarillo o blanco.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="vis"><div class="mini" style="transform:scaleX(1.6) scaleY(0.7)"><svg class="mk" width="22" height="22" style="--c:#111111;--k:#2F5BFF"><use href="#mk"/></svg><span style="font-size:18px">clavonia</span></div></div>
+          <div class="verd">
+            <svg width="28" height="28" viewBox="0 0 28 28" aria-label="No"><rect width="28" height="28" fill="#111111"/><path d="M8.5 8.5l11 11M19.5 8.5l-11 11" stroke="#FFD23F" stroke-width="3.2"/></svg>
+            <p><b>No</b>No estires ni deformes el logo.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="vis"><div class="sq" style="background:#2F5BFF"></div><div class="sq" style="background:#FFD23F"></div><div class="sq" style="background:#111111"></div><div class="sq" style="background:#FFFFFF;border:2px solid #111111"></div></div>
+          <div class="verd">
+            <svg width="28" height="28" viewBox="0 0 28 28" aria-label="No"><rect width="28" height="28" fill="#111111"/><path d="M8.5 8.5l11 11M19.5 8.5l-11 11" stroke="#FFD23F" stroke-width="3.2"/></svg>
+            <p><b>No</b>No uses los cuatro colores en una misma pieza.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="row r3">
+    <section class="s s6" style="width:560px">
+      <div class="hd"><span class="num">06</span><h2>Tipografía</h2></div>
+      <div class="spec">
+        <div class="aa">Aa</div>
+        <div>
+          <div class="fname">Archivo Black</div>
+          <p class="cap" style="margin-top:6px">Títulos, cifras y nombre de marca. Interlineado apretado.</p>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <p class="body-name">Archivo <span style="font-weight:500;font-size:15px">· 500, 700, 800 · texto, botones y etiquetas</span></p>
+      <p class="para">Elige una plantilla, edita por bloques y publica cuando quieras. Frases cortas y claras, sin jerga técnica.</p>
+    </section>
+
+    <section class="s s7" style="width:500px">
+      <div class="hd"><span class="num">07</span><h2>Elementos gráficos</h2></div>
+      <div class="motifs">
+        <div class="m"><div class="mv"><svg class="mk" width="72" height="72" style="--c:#111111;--k:#FFD23F"><use href="#mk"/></svg></div><p class="cap">C de bloques</p></div>
+        <div class="m"><div class="mv"><div class="cursor"></div></div><p class="cap">Bloque cursor</p></div>
+        <div class="m"><div class="mv"><div class="sticker">Sí</div></div><p class="cap">Sticker girado</p></div>
+        <div class="m"><div class="mv"><div class="nums"><span>1</span><span>2</span><span>3</span></div></div><p class="cap">Pasos en bloques</p></div>
+      </div>
+      <p class="cap rulez">Colores planos, sin degradados ni sombras. Bordes rectos, bloques grandes y máximo tres colores por pieza.</p>
+    </section>
+
+    <section class="s s8" style="width:380px">
+      <div class="hd"><span class="num">08</span><h2>Nombre y frase</h2></div>
+      <div class="blue">
+        <div class="wm"><svg class="mk" width="50" height="50" style="--c:#FFD23F;--k:#111111" role="img" aria-label="Clavonia"><use href="#mk"/></svg><span>clavonia</span></div>
+        <p class="tag">Tu página, lista en minutos.</p>
+        <p class="desc">Landing pages y sitios web para emprendedores</p>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia guía de marca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0B0F14;--panel:#151B23;--panel2:#10161E;--line:#263142;--cyan:#38BDF8;--lilac:#C4B5FD;--text:#E6EDF3;--muted:#8B98A9}
+html,body{background:#0B0F14;color:#E6EDF3}
+body{overflow:hidden}
+.canvas{position:relative;overflow:hidden;background:var(--bg);font-family:'Sora',system-ui,sans-serif;color:var(--text);width:1600px;height:1200px;padding:36px 48px}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.lilac{color:var(--lilac)}
+.muted{color:var(--muted)}
+.caret{display:inline-block;width:.09em;height:.86em;background:var(--cyan);margin-left:.05em;vertical-align:-.04em}
+.wm{display:flex;align-items:center;font-weight:700;letter-spacing:-.03em;color:var(--text);white-space:nowrap}
+
+.hd{display:flex;justify-content:space-between;align-items:flex-end;height:76px;padding-bottom:14px;border-bottom:2px solid var(--line)}
+.hd h1{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.hd .s{font-size:18px;color:var(--muted);margin-top:10px}
+.hd .r{text-align:right;line-height:1.3}
+
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:370px 370px 222px;gap:24px;margin-top:22px}
+.sec{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:22px 24px;min-width:0}
+.sh{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;white-space:nowrap}
+.sn{font-family:'JetBrains Mono',monospace;color:var(--lilac);font-size:15px;font-weight:500}
+.st{font-size:19px;font-weight:600;letter-spacing:-.01em}
+.cap{font-size:14px;color:var(--muted);margin-top:14px;line-height:1.4}
+
+/* 01 */
+.stage{background:var(--panel2);border-radius:14px;height:222px;display:flex;align-items:center;justify-content:center}
+.clear{position:relative;border:2px dashed #3A4658;border-radius:6px;padding:40px}
+.x{position:absolute;font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--lilac);line-height:1}
+/* 02 */
+.chips{display:flex;gap:8px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text);background:var(--panel2);border:2px solid var(--line);border-radius:10px;padding:6px 12px}
+.q{font-size:16px;font-weight:600;line-height:1.4;border-left:3px solid var(--lilac);padding-left:12px;margin-top:12px}
+.lb{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin-top:18px}
+.ctas{display:flex;gap:8px;margin-top:8px}
+.btn{display:inline-block;background:var(--cyan);color:var(--bg);font-weight:600;border-radius:10px;white-space:nowrap;font-size:14px;padding:9px 14px}
+.btn2{display:inline-block;border:2px solid var(--line);color:var(--text);font-weight:600;border-radius:10px;white-space:nowrap;font-size:14px;padding:7px 14px}
+/* 03 */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{height:100px;border-radius:12px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cap2{font-size:13px;color:var(--muted);margin-top:7px;white-space:nowrap}
+/* 04 */
+.pal{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.sw{display:flex;gap:12px;align-items:center}
+.chipc{width:44px;height:44px;border-radius:10px;border:2px solid var(--line);flex:none}
+.sw .n{font-size:14px;font-weight:600;line-height:1.2}
+.sw .hx{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--lilac);line-height:1.3}
+.sw .u{font-size:13px;color:var(--muted);line-height:1.3;white-space:nowrap}
+/* 05 */
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ync{background:var(--panel2);border:2px solid var(--line);border-radius:14px;padding:14px 16px;height:126px}
+.ync .t{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600}
+.ync p{font-size:14px;line-height:1.45;margin-top:10px}
+/* 06 */
+.spec{display:flex;align-items:center;gap:22px}
+.aa{font-size:92px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.rule{height:2px;background:var(--line);margin:16px 0 14px}
+.body{font-size:15px;line-height:1.55;color:var(--text)}
+.meta{font-size:13px;color:var(--muted);margin-top:6px}
+/* 07 */
+.mos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.draw{height:84px;background:var(--panel2);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.ml{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin-top:8px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <header class="hd">
+    <div>
+      <h1>Guía de marca</h1>
+      <div class="s">Landing pages y sitios web para emprendedores</div>
+    </div>
+    <div class="r">
+      <div style="font-size:22px;font-weight:700;letter-spacing:-.02em">Clavonia</div>
+      <div class="muted" style="font-size:15px">Variante Cursor · código</div>
+      <div class="mono lilac" style="font-size:13px">Edición 1</div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- 01 -->
+    <section class="sec" style="grid-column:span 5">
+      <div class="sh"><span class="sn">01</span><span class="st">Logo principal</span></div>
+      <div class="stage">
+        <div class="clear">
+          <div class="wm" style="font-size:64px;gap:18px">
+            <svg width="88" height="88" viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="2" y="2" width="60" height="60" rx="14" fill="#151B23" stroke="#263142" stroke-width="2"/>
+              <rect x="14" y="14" width="30" height="8" rx="3" fill="#E6EDF3"/>
+              <rect x="14" y="14" width="8" height="36" rx="3" fill="#E6EDF3"/>
+              <rect x="14" y="42" width="30" height="8" rx="3" fill="#E6EDF3"/>
+              <rect x="44" y="24" width="6" height="16" rx="2" fill="#38BDF8"/>
+            </svg>
+            <span>clavonia</span>
+          </div>
+          <span class="x" style="top:12px;left:50%;transform:translateX(-50%)">x</span>
+          <span class="x" style="bottom:12px;left:50%;transform:translateX(-50%)">x</span>
+          <span class="x" style="left:14px;top:50%;transform:translateY(-50%)">x</span>
+          <span class="x" style="right:14px;top:50%;transform:translateY(-50%)">x</span>
+        </div>
+      </div>
+      <p class="cap">Deja libre al menos 1/10 del ancho del logo. <span class="mono lilac">x = 1/10</span></p>
+    </section>
+
+    <!-- 02 -->
+    <section class="sec" style="grid-column:span 3">
+      <div class="sh"><span class="sn">02</span><span class="st">Voz</span></div>
+      <div class="chips"><span class="chip">directa</span><span class="chip">cercana</span><span class="chip">clara</span></div>
+      <p class="muted" style="font-size:14px;margin-top:10px">Frases cortas, sin jerga técnica.</p>
+      <div class="q">“Tu página, lista en minutos.”</div>
+      <div class="q">“Elige una plantilla y publica cuando quieras.”</div>
+      <div class="lb">// llamados a la acción</div>
+      <div class="ctas"><span class="btn">Crear mi página</span><span class="btn2">Empieza hoy</span></div>
+    </section>
+
+    <!-- 03 -->
+    <section class="sec" style="grid-column:span 4">
+      <div class="sh"><span class="sn">03</span><span class="st">Versiones del logo</span></div>
+      <div class="tiles">
+        <div>
+          <div class="tile" style="background:#0B0F14">
+            <div class="wm" style="font-size:28px;gap:10px">
+              <svg width="38" height="38" viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="2" y="2" width="60" height="60" rx="14" fill="#151B23" stroke="#263142" stroke-width="2"/>
+                <rect x="14" y="14" width="30" height="8" rx="3" fill="#E6EDF3"/>
+                <rect x="14" y="14" width="8" height="36" rx="3" fill="#E6EDF3"/>
+                <rect x="14" y="42" width="30" height="8" rx="3" fill="#E6EDF3"/>
+                <rect x="44" y="24" width="6" height="16" rx="2" fill="#38BDF8"/>
+              </svg>
+              <span>clavonia</span>
+            </div>
+          </div>
+          <p class="cap2">Completo · sobre oscuro</p>
+        </div>
+        <div>
+          <div class="tile" style="background:var(--panel2)">
+            <img src="avatar-1080x1080.png" alt="" style="width:80px;height:80px;border-radius:50%;display:block">
+          </div>
+          <p class="cap2">Foto de perfil · redes</p>
+        </div>
+        <div>
+          <div class="tile" style="background:#0B0F14">
+            <div class="wm" style="font-size:32px">clavonia</div>
+          </div>
+          <p class="cap2">Solo nombre · espacios angostos</p>
+        </div>
+        <div>
+          <div class="tile" style="background:#E6EDF3;border-color:#E6EDF3">
+            <div class="wm" style="font-size:28px;gap:10px;color:#0B0F14">
+              <svg width="34" height="34" viewBox="12 12 40 40" aria-hidden="true">
+                <rect x="14" y="14" width="30" height="8" rx="3" fill="#0B0F14"/>
+                <rect x="14" y="14" width="8" height="36" rx="3" fill="#0B0F14"/>
+                <rect x="14" y="42" width="30" height="8" rx="3" fill="#0B0F14"/>
+                <rect x="44" y="24" width="6" height="16" rx="2" fill="#0B0F14"/>
+              </svg>
+              <span>clavonia</span>
+            </div>
+          </div>
+          <p class="cap2">Una tinta · sobre claro</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="sec" style="grid-column:span 4">
+      <div class="sh"><span class="sn">04</span><span class="st">Paleta</span></div>
+      <div class="pal">
+        <div class="sw"><span class="chipc" style="background:#0B0F14"></span><div><div class="n">Fondo</div><div class="hx">#0B0F14</div><div class="u">Fondo de piezas</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#38BDF8;border-color:#38BDF8"></span><div><div class="n">Cian</div><div class="hx">#38BDF8</div><div class="u">Cursor y botones</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#151B23"></span><div><div class="n">Panel</div><div class="hx">#151B23</div><div class="u">Ventanas, bloques</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#C4B5FD;border-color:#C4B5FD"></span><div><div class="n">Lila</div><div class="hx">#C4B5FD</div><div class="u">Etiquetas e índices</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#10161E"></span><div><div class="n">Panel oscuro</div><div class="hx">#10161E</div><div class="u">Barras del editor</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#E6EDF3;border-color:#E6EDF3"></span><div><div class="n">Texto</div><div class="hx">#E6EDF3</div><div class="u">Titulares y texto</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#263142;border-color:#3A4658"></span><div><div class="n">Línea</div><div class="hx">#263142</div><div class="u">Bordes</div></div></div>
+        <div class="sw"><span class="chipc" style="background:#8B98A9;border-color:#8B98A9"></span><div><div class="n">Gris</div><div class="hx">#8B98A9</div><div class="u">Texto secundario</div></div></div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="sec" style="grid-column:span 4">
+      <div class="sh"><span class="sn">05</span><span class="st">Sí y no</span></div>
+      <div class="yn">
+        <div class="ync">
+          <div class="t"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="13" fill="#38BDF8"/><path d="M7.5 13.5l3.6 3.6 7.4-7.6" fill="none" stroke="#0B0F14" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Sí</div>
+          <p>Un solo acento cian por pieza: el cursor.</p>
+        </div>
+        <div class="ync">
+          <div class="t"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="13" fill="#38BDF8"/><path d="M7.5 13.5l3.6 3.6 7.4-7.6" fill="none" stroke="#0B0F14" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Sí</div>
+          <p>Etiquetas cortas en monoespaciada.</p>
+        </div>
+        <div class="ync">
+          <div class="t"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#C4B5FD" stroke-width="2"/><path d="M9 9l8 8M17 9l-8 8" stroke="#C4B5FD" stroke-width="2.4" stroke-linecap="round"/></svg>No</div>
+          <p>Degradados, brillos o sombras.</p>
+        </div>
+        <div class="ync">
+          <div class="t"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#C4B5FD" stroke-width="2"/><path d="M9 9l8 8M17 9l-8 8" stroke="#C4B5FD" stroke-width="2.4" stroke-linecap="round"/></svg>No</div>
+          <p>Inventar precios, usuario o dominio.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="sec" style="grid-column:span 4">
+      <div class="sh"><span class="sn">06</span><span class="st">Tipografía</span></div>
+      <div class="spec">
+        <div class="aa">Aa</div>
+        <div>
+          <div style="font-size:26px;font-weight:700;letter-spacing:-.02em">Sora</div>
+          <div class="mono lilac" style="font-size:13px;margin-top:4px">600 · 700</div>
+          <div class="muted" style="font-size:13px;margin-top:4px">Titulares, marca y botones</div>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <p class="body">Elige una plantilla, edita por bloques y publica cuando quieras. Cada bloque se cambia en su lugar, sin ser diseñador.</p>
+      <div class="meta">Sora 400 · texto corrido</div>
+      <div class="mono" style="font-size:14px;margin-top:14px">JetBrains Mono <span class="lilac">// bloque 01</span></div>
+      <div class="meta">Etiquetas de interfaz y detalles</div>
+    </section>
+
+    <!-- 07 -->
+    <section class="sec" style="grid-column:span 7">
+      <div class="sh" style="justify-content:space-between">
+        <div style="display:flex;gap:12px;align-items:baseline"><span class="sn">07</span><span class="st">Elementos gráficos</span></div>
+        <span class="muted" style="font-size:14px">Planos sólidos: sin degradados, brillos ni sombras.</span>
+      </div>
+      <div class="mos">
+        <div>
+          <div class="draw"><span style="font-size:40px;font-weight:700;letter-spacing:-.03em">Aa<span class="caret"></span></span></div>
+          <div class="ml">Cursor fijo</div>
+        </div>
+        <div>
+          <div class="draw">
+            <div style="width:116px;height:64px;background:#151B23;border:2px solid #263142;border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+              <div style="height:13px;background:#10161E;border-bottom:2px solid #263142;display:flex;gap:3px;align-items:center;padding-left:5px"><i style="width:4px;height:4px;border-radius:50%;background:#3A4658;display:block"></i><i style="width:4px;height:4px;border-radius:50%;background:#3A4658;display:block"></i><i style="width:4px;height:4px;border-radius:50%;background:#3A4658;display:block"></i></div>
+              <div style="flex:1;display:flex">
+                <div style="width:28px;background:#10161E;border-right:2px solid #263142"><div style="height:9px;margin-top:5px;border-left:3px solid #38BDF8;background:#151B23"></div></div>
+                <div style="flex:1;padding:7px 8px">
+                  <div style="height:6px;width:70%;background:#E6EDF3;border-radius:2px"></div>
+                  <div style="height:4px;width:88%;background:#3A4658;border-radius:2px;margin-top:5px"></div>
+                  <div style="height:8px;width:36%;background:#38BDF8;border-radius:3px;margin-top:6px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ml">Ventana de editor</div>
+        </div>
+        <div>
+          <div class="draw"><div class="mono" style="font-size:14px;background:#151B23;border-left:4px solid #38BDF8;padding:9px 14px;color:#E6EDF3">encabezado</div></div>
+          <div class="ml">Bloque activo</div>
+        </div>
+        <div>
+          <div class="draw"><span class="mono lilac" style="font-size:15px">// bloque 01</span></div>
+          <div class="ml">Etiqueta mono</div>
+        </div>
+        <div>
+          <div class="draw"><span class="btn" style="font-size:12px;padding:8px 12px">Crear mi página</span></div>
+          <div class="ml">Botón cian</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section class="sec" style="grid-column:span 5">
+      <div class="sh"><span class="sn">08</span><span class="st">Nombre y frase</span></div>
+      <div class="wm" style="font-size:36px;gap:12px">
+        <svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="14" fill="#0B0F14" stroke="#263142" stroke-width="2"/>
+          <rect x="14" y="14" width="30" height="8" rx="3" fill="#E6EDF3"/>
+          <rect x="14" y="14" width="8" height="36" rx="3" fill="#E6EDF3"/>
+          <rect x="14" y="42" width="30" height="8" rx="3" fill="#E6EDF3"/>
+          <rect x="44" y="24" width="6" height="16" rx="2" fill="#38BDF8"/>
+        </svg>
+        <span>clavonia</span>
+      </div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-.03em;margin-top:12px">Tu página, lista en minutos.<span class="caret"></span></div>
+      <div class="muted" style="font-size:15px;margin-top:6px">Landing pages y sitios web para emprendedores</div>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

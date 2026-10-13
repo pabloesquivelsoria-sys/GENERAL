@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vista previa de redes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=Figtree:wght@500..800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1B1464;--pink:#FF5C8A;--butter:#FFE66D;--mint:#2BD4A3;--white:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;background:#fff}
+.root{position:relative;overflow:hidden;width:1500px;height:1150px;background:var(--butter);color:var(--ink);font-family:Figtree,system-ui,sans-serif}
+.abs{position:absolute}
+.bri{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;letter-spacing:-.03em}
+.note{background:var(--white);border:3px solid var(--ink);border-radius:999px;padding:7px 18px;font-size:16px;font-weight:700;box-shadow:4px 4px 0 var(--ink);transform:rotate(-1.5deg)}
+
+/* Facebook */
+.fb{left:48px;top:120px;width:900px;height:996px;background:var(--white);border:3px solid var(--ink);border-radius:22px;box-shadow:10px 10px 0 var(--ink);overflow:hidden}
+.fb .cover{display:block;width:894px;height:340px;border-bottom:3px solid var(--ink)}
+.fb .pp{position:absolute;left:34px;top:236px;width:172px;height:172px;border-radius:50%;border:6px solid var(--white);box-shadow:0 0 0 3px var(--ink);overflow:hidden;background:var(--butter)}
+.fb .pp img{display:block;width:100%;height:100%}
+.fb .name{position:absolute;left:228px;top:356px}
+.fb .name h2{font-size:38px;line-height:1}
+.fb .name p{font-size:16px;font-weight:600;margin-top:6px}
+.fb .acts{position:absolute;right:28px;top:362px;display:flex;gap:12px}
+.b{display:inline-flex;align-items:center;height:44px;padding:0 20px;border:3px solid var(--ink);border-radius:999px;font-size:16px;font-weight:800;box-shadow:3px 3px 0 var(--ink)}
+.fb .tabs{position:absolute;left:0;right:0;top:438px;height:54px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);display:flex;gap:34px;padding:0 34px;align-items:stretch}
+.fb .tabs span{display:flex;align-items:center;font-size:17px;font-weight:700}
+.fb .tabs .on{font-weight:800;box-shadow:inset 0 -5px 0 var(--pink)}
+.fb .info{position:absolute;left:28px;top:516px;width:312px;background:var(--white);border:3px solid var(--ink);border-radius:18px;padding:20px 20px}
+.fb .info h3{font-size:24px;line-height:1;margin-bottom:12px}
+.fb .info p{font-size:15px;font-weight:500;line-height:1.45}
+.irow{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;margin-top:14px}
+.ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center}
+.fb .post{position:absolute;left:362px;top:516px;width:506px;background:var(--white);border:3px solid var(--ink);border-radius:18px;overflow:hidden}
+.post .ph{display:flex;align-items:center;gap:12px;padding:14px 16px 10px}
+.post .ph img{width:46px;height:46px;border-radius:50%;border:2.5px solid var(--ink);display:block}
+.post .ph b{display:block;font-size:16px;font-weight:800}
+.post .ph small{display:block;font-size:13px;font-weight:600;margin-top:2px}
+.pin{display:inline-block;background:var(--butter);border:2px solid var(--ink);border-radius:999px;padding:1px 8px;font-size:12px;font-weight:800;margin-right:6px}
+.post .txt{font-size:15px;font-weight:600;padding:0 16px 12px}
+.post .shot{display:block;width:500px;height:262.5px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.post .pa{display:flex;justify-content:space-around;height:52px;align-items:center;font-size:15px;font-weight:800}
+.post .pa span{display:flex;align-items:center;gap:8px}
+
+/* Instagram */
+.phone{left:1010px;top:120px;width:442px;height:996px;background:var(--ink);border-radius:58px;padding:12px;box-shadow:10px 10px 0 var(--pink)}
+.screen{position:relative;width:418px;height:972px;background:var(--white);border-radius:46px;overflow:hidden}
+.notch{position:absolute;left:50%;top:12px;width:110px;height:28px;margin-left:-55px;background:var(--ink);border-radius:999px}
+.ig{position:absolute;left:0;right:0;top:52px;padding:0 16px}
+.ig .handle{display:flex;align-items:center;justify-content:space-between;height:40px}
+.ig .handle b{font-size:21px;font-weight:800}
+.ig .top{display:flex;align-items:center;gap:14px;margin-top:10px}
+.ig .av{width:92px;height:92px;border-radius:50%;border:3px solid var(--ink);overflow:hidden;flex:0 0 auto}
+.ig .av img{display:block;width:100%;height:100%}
+.stats{flex:1;display:flex;justify-content:space-between;text-align:center}
+.stats b{display:block;font-size:18px;font-weight:800}
+.stats span{display:block;font-size:13px;font-weight:600;margin-top:2px}
+.ig .dn{font-size:15px;font-weight:800;margin-top:12px}
+.ig .cat{font-size:14px;font-weight:600;margin-top:2px}
+.ig .bio{font-size:14px;font-weight:500;line-height:1.4;margin-top:4px}
+.ig .lnk{font-size:14px;font-weight:800;text-decoration:underline;margin-top:2px}
+.ig .btns{display:flex;gap:8px;margin-top:14px}
+.ig .btns span{flex:1;display:flex;align-items:center;justify-content:center;height:36px;border:2.5px solid var(--ink);border-radius:12px;font-size:14px;font-weight:800}
+.hls{display:flex;justify-content:space-between;margin-top:18px;padding:0 2px}
+.hl{width:72px;text-align:center}
+.hl .c{width:66px;height:66px;margin:0 auto;border-radius:50%;border:2.5px solid var(--ink);box-shadow:0 0 0 3px var(--white),0 0 0 5px var(--ink);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hl .c img{display:block;width:100%;height:100%}
+.hl span{display:block;font-size:12px;font-weight:700;margin-top:9px;white-space:nowrap;margin-left:-6px;margin-right:-6px}
+.gtabs{position:absolute;left:0;right:0;top:484px;height:44px;display:flex;border-top:2px solid var(--ink)}
+.gtabs div{flex:1;display:flex;align-items:center;justify-content:center}
+.gtabs .on{box-shadow:inset 0 3px 0 var(--ink)}
+.gridig{position:absolute;left:0;right:0;top:528px;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:var(--ink);border-top:3px solid var(--ink)}
+.t{position:relative;height:128px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 10px}
+.t img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.t .k{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:17px;line-height:1.02;letter-spacing:-.02em;position:relative}
+.t .s{font-size:12px;font-weight:700;margin-top:3px;position:relative}
+.pinb{position:absolute;right:8px;top:8px;width:24px;height:24px;border-radius:50%;background:var(--white);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<div class="root">
+  <h1 class="abs bri" style="left:48px;top:36px;font-size:46px;line-height:1">Vista previa de redes</h1>
+  <div class="abs note" style="right:50px;top:42px">Maqueta simplificada · datos por confirmar entre [corchetes]</div>
+
+  <!-- Página de Facebook -->
+  <div class="abs fb">
+    <img class="cover" src="facebook-cover-1640x624.png" alt="Portada de Facebook">
+    <div class="pp"><img src="avatar-1080x1080.png" alt="Foto de perfil"></div>
+    <div class="name">
+      <h2 class="bri">Clavonia</h2>
+      <p>Software · Diseño web</p>
+    </div>
+    <div class="acts">
+      <span class="b" style="background:var(--white)">Enviar mensaje</span>
+      <span class="b" style="background:var(--pink)">Registrarte</span>
+    </div>
+    <div class="tabs">
+      <span class="on">Publicaciones</span><span>Información</span><span>Fotos</span><span>Reseñas</span>
+    </div>
+
+    <div class="info">
+      <h3 class="bri">Información</h3>
+      <p>Landing pages y sitios web para emprendedores. Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+      <div class="irow"><span class="ico" style="background:var(--mint)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="#1B1464" stroke-width="2"/><path d="M2 8h12M8 2c2.5 3 2.5 9 0 12M8 2c-2.5 3-2.5 9 0 12" fill="none" stroke="#1B1464" stroke-width="1.6"/></svg></span>[sitio web]</div>
+      <div class="irow"><span class="ico" style="background:var(--butter)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3.5" width="13" height="9" rx="2" fill="none" stroke="#1B1464" stroke-width="2"/><path d="M2 4.5l6 4.5 6-4.5" fill="none" stroke="#1B1464" stroke-width="1.8"/></svg></span>[correo]</div>
+      <div class="irow"><span class="ico" style="background:var(--pink)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="4" rx="1.5" fill="#1B1464"/><rect x="2" y="2" width="4" height="12" rx="1.5" fill="#1B1464"/><rect x="2" y="10" width="12" height="4" rx="1.5" fill="#1B1464"/></svg></span>Software · Diseño web</div>
+    </div>
+
+    <div class="post">
+      <div class="ph">
+        <img src="avatar-1080x1080.png" alt="">
+        <div><b>Clavonia</b><small><span class="pin">Publicación fijada</span>[fecha]</small></div>
+      </div>
+      <p class="txt">Tu página, lista en minutos.</p>
+      <img class="shot" src="facebook-post-1200x630.png" alt="Imagen de enlace: Tu página, lista en minutos">
+      <div class="pa">
+        <span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 9v8H3V9zM6 9l4-7c1.6 0 2.4 1 2 2.6L11.4 8H16c1 0 1.8 1 1.5 2l-1.4 5.6c-.2.9-1 1.4-1.9 1.4H6" fill="none" stroke="#1B1464" stroke-width="2" stroke-linejoin="round"/></svg>Me gusta</span>
+        <span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v9H8l-4 3v-3H3z" fill="none" stroke="#1B1464" stroke-width="2" stroke-linejoin="round"/></svg>Comentar</span>
+        <span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M11 3l6 6-6 6v-3.5C7 11.5 4.5 13 3 16c.5-5 3-8 8-8.5z" fill="none" stroke="#1B1464" stroke-width="2" stroke-linejoin="round"/></svg>Compartir</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Perfil de Instagram -->
+  <div class="abs phone">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="ig">
+        <div class="handle">
+          <b>[usuario]</b>
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#1B1464" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="top">
+          <div class="av"><img src="avatar-1080x1080.png" alt="Foto de perfil"></div>
+          <div class="stats">
+            <div><b>[0]</b><span>publicaciones</span></div>
+            <div><b>[0]</b><span>seguidores</span></div>
+            <div><b>[0]</b><span>seguidos</span></div>
+          </div>
+        </div>
+        <p class="dn">Clavonia | Páginas para emprendedores</p>
+        <p class="cat">Software</p>
+        <p class="bio">Tu página, lista en minutos.<br>Elige una plantilla y edítala por bloques.</p>
+        <p class="lnk">[enlace]</p>
+        <div class="btns"><span style="background:var(--ink);color:var(--white)">Seguir</span><span>Mensaje</span><span>Contacto</span></div>
+
+        <div class="hls">
+          <div class="hl"><div class="c"><img src="highlight-1-1080x1080.png" alt=""></div><span>Planes</span></div>
+          <div class="hl"><div class="c"><img src="highlight-2-1080x1080.png" alt=""></div><span>Cómo funciona</span></div>
+          <div class="hl"><div class="c" style="background:var(--mint)">
+            <svg width="34" height="30" viewBox="0 0 34 30" aria-hidden="true"><rect x="2" y="2" width="30" height="26" rx="5" fill="#FFFFFF" stroke="#1B1464" stroke-width="3"/><path d="M2 9h30" stroke="#1B1464" stroke-width="3"/><rect x="7" y="13" width="20" height="6" rx="2" fill="#1B1464"/></svg>
+          </div><span>Ejemplos</span></div>
+          <div class="hl"><div class="c" style="background:var(--pink)">
+            <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M4 6v10l14 14 12-12L16 4H6z" fill="#FFFFFF" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/><circle cx="11" cy="11" r="2.8" fill="#1B1464"/></svg>
+          </div><span>Precios</span></div>
+          <div class="hl"><div class="c bri" style="background:var(--ink);color:var(--white);font-size:36px;line-height:1">?</div><span>Ayuda</span></div>
+        </div>
+      </div>
+
+      <div class="gtabs">
+        <div class="on"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="2" fill="none" stroke="#1B1464" stroke-width="2.2"/><path d="M8 2v18M14 2v18M2 8h18M2 14h18" stroke="#1B1464" stroke-width="2"/></svg></div>
+        <div><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="4" fill="none" stroke="#1B1464" stroke-width="2.2"/><circle cx="11" cy="9" r="3" fill="none" stroke="#1B1464" stroke-width="2"/><path d="M5.5 18c1-3 3-4.5 5.5-4.5s4.5 1.5 5.5 4.5" fill="none" stroke="#1B1464" stroke-width="2"/></svg></div>
+      </div>
+
+      <div class="gridig">
+        <div class="t"><img src="instagram-square-1080x1080.png" alt="Post fijado: Tu página, lista en minutos">
+          <span class="pinb"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 1h4l-.6 3.5L9.5 7H6.6L6 11l-.6-4H2.5l2.1-2.5z" fill="#1B1464"/></svg></span>
+        </div>
+        <div class="t" style="background:var(--butter)">
+          <div style="position:absolute;left:14px;top:14px;width:62px;height:50px;background:var(--white);border:2.5px solid var(--ink);border-radius:8px;transform:rotate(-6deg);box-shadow:3px 3px 0 var(--ink);overflow:hidden"><div style="height:10px;border-bottom:2.5px solid var(--ink)"></div><div style="margin:5px;height:16px;background:var(--pink);border:2px solid var(--ink);border-radius:4px"></div></div>
+          <span class="k">Plantillas</span>
+        </div>
+        <div class="t" style="background:var(--ink);color:var(--white)">
+          <div style="position:absolute;left:12px;top:14px;display:flex;gap:5px">
+            <span class="bri" style="width:30px;height:30px;border-radius:50%;background:var(--white);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:17px">1</span>
+            <span class="bri" style="width:30px;height:30px;border-radius:50%;background:var(--white);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:17px">2</span>
+            <span class="bri" style="width:30px;height:30px;border-radius:50%;background:var(--white);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:17px">3</span>
+          </div>
+          <span class="k">Cómo funciona</span>
+        </div>
+        <div class="t" style="background:var(--mint)">
+          <div style="position:absolute;left:12px;top:14px;display:flex;gap:8px;align-items:center">
+            <span style="width:40px;height:44px;border:2.5px dashed var(--ink);border-radius:7px"></span>
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h9M7 3l4 4-4 4" fill="none" stroke="#1B1464" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span style="width:40px;height:44px;background:var(--white);border:2.5px solid var(--ink);border-radius:7px;box-shadow:3px 3px 0 var(--ink)"></span>
+          </div>
+          <span class="k">Antes y después</span>
+        </div>
+        <div class="t" style="background:var(--white)">
+          <span class="bri" style="position:absolute;left:12px;top:12px;background:var(--pink);border:2.5px solid var(--ink);border-radius:10px;padding:2px 8px 0;font-size:15px;transform:rotate(-5deg)">Consejo</span>
+          <span class="k">Consejo del día</span>
+        </div>
+        <div class="t" style="background:var(--pink)">
+          <svg style="position:absolute;left:14px;top:14px" width="46" height="42" viewBox="0 0 46 42" aria-hidden="true"><path d="M5 10h28v14a12 12 0 0 1-12 12h-4A12 12 0 0 1 5 24z" fill="#FFFFFF" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/><path d="M33 14h3a5 5 0 0 1 0 10h-3" fill="none" stroke="#1B1464" stroke-width="3"/></svg>
+          <span class="k">Ejemplo: cafetería</span>
+        </div>
+        <div class="t" style="background:var(--butter)">
+          <span class="bri" style="position:absolute;left:12px;top:14px;background:var(--white);border:2.5px solid var(--ink);border-radius:999px;padding:3px 10px 1px;font-size:15px">[precio]</span>
+          <span class="k">Precios</span>
+        </div>
+        <div class="t" style="background:var(--ink);color:var(--white)">
+          <span class="bri" style="position:absolute;left:12px;top:4px;font-size:64px;line-height:1;color:var(--pink)">“</span>
+          <span class="k">Testimonio</span><span class="s">[cliente]</span>
+        </div>
+        <div class="t" style="background:var(--mint)">
+          <span style="position:absolute;left:14px;top:14px;display:inline-flex;align-items:center;height:30px;padding:0 12px;background:var(--ink);color:var(--white);border-radius:999px;font-size:13px;font-weight:800">Publicar</span>
+          <span class="k">Publica hoy</span>
+        </div>
+      </div>
+      <div style="position:absolute;left:50%;bottom:14px;width:130px;height:6px;margin-left:-65px;border-radius:3px;background:var(--ink)"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

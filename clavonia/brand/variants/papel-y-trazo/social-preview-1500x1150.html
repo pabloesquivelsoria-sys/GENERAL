@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia vista previa de redes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#2E4A3E;width:1500px;height:1150px;overflow:hidden}
+.root{position:relative;width:1500px;height:1150px;overflow:hidden;background:#2E4A3E;color:#1D2B24;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.35}
+.a{position:absolute}
+.grain{position:absolute;left:0;top:0;width:1500px;height:1150px;opacity:.08;mix-blend-mode:multiply;pointer-events:none;z-index:60}
+.hand{font-family:'Caveat',cursive;font-weight:700}
+.ttl{left:40px;top:30px;color:#F7F7F2;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.note{left:40px;top:80px;color:#A7C4B5;font-size:16px;font-weight:500}
+/* Facebook */
+.fb{left:40px;top:120px;width:900px;height:1000px;background:#F7F7F2;border-radius:14px;overflow:hidden}
+.fb .cover{display:block;width:900px;height:342px}
+.fb .pp{position:absolute;left:28px;top:262px;width:160px;height:160px;border-radius:50%;border:5px solid #F7F7F2;display:block}
+.fb .nm{position:absolute;left:206px;top:356px}
+.fb .nm b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.fb .nm span{font-size:15px;color:#2E4A3E;font-weight:500}
+.btns{position:absolute;right:28px;top:366px;display:flex;gap:10px}
+.btn{padding:10px 18px;border-radius:8px;font-weight:700;font-size:15px;line-height:1.2}
+.b-s{background:#A7C4B5;color:#1D2B24}
+.b-p{background:#2E4A3E;color:#F7F7F2}
+.tabs{position:absolute;left:0;top:446px;width:900px;height:52px;border-top:1px solid rgba(29,43,36,.18);display:flex;gap:30px;padding:0 28px;align-items:stretch}
+.tabs span{display:flex;align-items:center;font-weight:700;font-size:15px;color:#2E4A3E;border-bottom:3px solid transparent}
+.tabs span.on{color:#1D2B24;border-bottom-color:#2E4A3E}
+.fbody{position:absolute;left:0;top:498px;width:900px;height:502px;background:#E9ECE3;padding:20px 24px;display:flex;gap:20px;align-items:flex-start}
+.card{background:#F7F7F2;border-radius:10px;border:1px solid rgba(29,43,36,.14)}
+.info{width:318px;padding:18px 20px}
+.info h3,.post h3{font-size:18px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+.row{display:flex;align-items:center;gap:10px;font-size:15px;margin-top:12px}
+.row svg{flex:none}
+.post{width:514px;overflow:hidden}
+.ph{display:flex;align-items:center;gap:10px;padding:14px 16px 10px}
+.ph img{width:42px;height:42px;border-radius:50%;display:block}
+.ph b{display:block;font-size:15px}
+.ph small{font-size:13px;color:#2E4A3E}
+.post p{padding:0 16px 12px;font-size:15px}
+.post .pimg{display:block;width:514px;height:270px}
+.acts{display:flex;justify-content:space-around;padding:12px 8px;border-top:1px solid rgba(29,43,36,.14);font-weight:700;font-size:14px;color:#2E4A3E}
+.acts span{display:flex;align-items:center;gap:7px}
+/* Instagram phone */
+.phone{left:996px;top:100px;width:448px;height:1034px;background:#1D2B24;border-radius:52px;padding:14px}
+.scr{position:relative;width:420px;height:1006px;background:#F7F7F2;border-radius:40px;overflow:hidden;padding:0 16px}
+.sb{display:flex;justify-content:space-between;align-items:center;height:42px;padding:6px 14px 0;font-weight:700;font-size:14px}
+.ih{display:flex;justify-content:space-between;align-items:center;height:40px}
+.ih b{font-size:19px;font-weight:800;letter-spacing:-.01em}
+.prof{display:flex;align-items:center;gap:18px;margin-top:8px}
+.prof img{width:88px;height:88px;border-radius:50%;display:block;flex:none}
+.stats{display:flex;flex:1;justify-content:space-between;text-align:center}
+.stats b{display:block;font-size:17px;font-weight:800}
+.stats span{font-size:13px}
+.bio{margin-top:12px;font-size:14px;line-height:1.4}
+.bio .dn{font-weight:800}
+.bio .ct{color:#2E4A3E}
+.bio .lk{color:#2E4A3E;font-weight:700}
+.ibtn{display:flex;gap:6px;margin-top:12px}
+.ibtn span{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px}
+.hl{display:flex;justify-content:space-between;margin-top:16px}
+.hl div{width:74px;text-align:center;font-size:12px;font-weight:500;line-height:1.2}
+.hl .c{width:66px;height:66px;margin:0 auto 6px;border-radius:50%;border:2px solid rgba(29,43,36,.3);padding:3px}
+.hl .c>*{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hl img{display:block}
+.gt{display:flex;margin:14px -16px 0;border-bottom:1px solid rgba(29,43,36,.14)}
+.gt span{flex:1;display:flex;justify-content:center;padding:10px 0;border-bottom:2px solid transparent}
+.gt span.on{border-bottom-color:#1D2B24}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:2px -16px 0}
+.t{position:relative;height:138px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:10px}
+.t img{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.t .lb{font-weight:800;font-size:15px;line-height:1.15;letter-spacing:-.01em}
+.t .sm{font-size:13px;font-weight:500}
+.pin{position:absolute;right:6px;top:6px;width:24px;height:24px;border-radius:50%;background:#F7F7F2;display:flex;align-items:center;justify-content:center;z-index:2}
+</style>
+</head>
+<body>
+<div class="root">
+  <div class="a ttl">Vista previa de redes</div>
+  <div class="a note">Maqueta simplificada · datos por confirmar entre [corchetes]</div>
+
+  <!-- Facebook -->
+  <div class="a fb">
+    <img class="cover" src="facebook-cover-1640x624.png" alt="Portada de Facebook de Clavonia">
+    <img class="pp" src="avatar-1080x1080.png" alt="Foto de perfil de Clavonia">
+    <div class="nm"><b>Clavonia</b><span>Software · Diseño web</span></div>
+    <div class="btns"><span class="btn b-s">Enviar mensaje</span><span class="btn b-p">Registrarte</span></div>
+    <div class="tabs"><span class="on">Publicaciones</span><span>Información</span><span>Fotos</span><span>Reseñas</span></div>
+    <div class="fbody">
+      <div class="card info">
+        <h3>Información</h3>
+        <p>Landing pages y sitios web para emprendedores. Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+        <div class="row"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#2E4A3E" stroke-width="2"/><path d="M2 10H18M10 2C6 6 6 14 10 18M10 2C14 6 14 14 10 18" fill="none" stroke="#2E4A3E" stroke-width="1.6"/></svg>[sitio web]</div>
+        <div class="row"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2" fill="none" stroke="#2E4A3E" stroke-width="2"/><path d="M3 5L10 11L17 5" fill="none" stroke="#2E4A3E" stroke-width="2" stroke-linejoin="round"/></svg>[correo]</div>
+        <div class="row"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#2E4A3E" stroke-width="2"/><path d="M7 8H13M7 12H11" stroke="#2E4A3E" stroke-width="2" stroke-linecap="round"/></svg>Software · Diseño web</div>
+      </div>
+      <div class="card post">
+        <div class="ph"><img src="avatar-1080x1080.png" alt=""><div><b>Clavonia</b><small>Publicación fijada · [fecha]</small></div></div>
+        <p>Tu página, lista en minutos. Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+        <img class="pimg" src="facebook-post-1200x630.png" alt="Imagen de la publicación: Tu página, lista en minutos">
+        <div class="acts">
+          <span><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 9L9 2C11 2 12 3 12 5V8H17C18 8 18.6 9 18.4 10L17 16C16.8 17 16 17.5 15 17.5H6Z M2 9H6V17.5H2Z" fill="none" stroke="#2E4A3E" stroke-width="1.8" stroke-linejoin="round"/></svg>Me gusta</span>
+          <span><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4H17V14H8L4 17.5V14H3Z" fill="none" stroke="#2E4A3E" stroke-width="1.8" stroke-linejoin="round"/></svg>Comentar</span>
+          <span><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M11 3L18 9.5L11 16V12C6 12 3.5 14 2 17C2.5 11 5.5 7.5 11 7Z" fill="none" stroke="#2E4A3E" stroke-width="1.8" stroke-linejoin="round"/></svg>Compartir</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram -->
+  <div class="a phone">
+    <div class="scr">
+      <div class="sb"><span>9:41</span><svg width="54" height="12" viewBox="0 0 54 12" aria-hidden="true"><rect x="0" y="6" width="3" height="6" rx="1" fill="#1D2B24"/><rect x="5" y="4" width="3" height="8" rx="1" fill="#1D2B24"/><rect x="10" y="2" width="3" height="10" rx="1" fill="#1D2B24"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#1D2B24"/><rect x="28" y="1" width="22" height="10" rx="3" fill="none" stroke="#1D2B24" stroke-width="1.5"/><rect x="30" y="3" width="15" height="6" rx="1.5" fill="#1D2B24"/></svg></div>
+      <div class="ih"><b>[usuario] <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1L6 6L11 1" fill="none" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/></svg></b>
+        <svg width="64" height="24" viewBox="0 0 64 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="#1D2B24" stroke-width="2"/><path d="M12 7V17M7 12H17" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/><path d="M40 6H60M40 12H60M40 18H60" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="prof">
+        <img src="avatar-1080x1080.png" alt="Foto de perfil de Clavonia">
+        <div class="stats">
+          <div><b>[0]</b><span>publicaciones</span></div>
+          <div><b>[0]</b><span>seguidores</span></div>
+          <div><b>[0]</b><span>seguidos</span></div>
+        </div>
+      </div>
+      <div class="bio">
+        <div class="dn">Clavonia | Páginas para emprendedores</div>
+        <div class="ct">Software</div>
+        <div>Tu página, lista en minutos.<br>Elige una plantilla, edita por bloques y publica.</div>
+        <div class="lk">[enlace]</div>
+      </div>
+      <div class="ibtn"><span class="b-p">Seguir</span><span class="b-s">Mensaje</span><span class="b-s">Contacto</span></div>
+      <div class="hl">
+        <div><div class="c"><img src="highlight-1-1080x1080.png" alt="" width="56" height="56"></div>Planes</div>
+        <div><div class="c"><img src="highlight-2-1080x1080.png" alt="" width="56" height="56"></div>Cómo funciona</div>
+        <div><div class="c"><span style="background:#A7C4B5"><svg width="30" height="34" viewBox="0 0 30 34" aria-hidden="true"><path d="M3 3C10 2 20 3 27 2.5C27.5 12 27 22 27.5 31C19 31.5 11 31 2.5 31.5C3 22 2.5 12 3 3Z" fill="#F7F7F2" stroke="#1D2B24" stroke-width="2" stroke-linejoin="round"/><rect x="7" y="8" width="16" height="7" rx="2" fill="#2E4A3E"/><path d="M7 20H23M7 25H17" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/></svg></span></div>Ejemplos</div>
+        <div><div class="c"><span style="background:#2E4A3E"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 16L16 4H27V15L15 27Z" fill="none" stroke="#F7F7F2" stroke-width="2.4" stroke-linejoin="round"/><circle cx="21.5" cy="9.5" r="2.4" fill="#E8B04B"/></svg></span></div>Precios</div>
+        <div><div class="c"><span style="background:#A7C4B5"><span class="hand" style="font-size:40px;line-height:1;color:#1D2B24;background:none;width:auto;height:auto">?</span></span></div>Ayuda</div>
+      </div>
+      <div class="gt">
+        <span class="on"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="2" fill="none" stroke="#1D2B24" stroke-width="2"/><path d="M8 2V20M14 2V20M2 8H20M2 14H20" stroke="#1D2B24" stroke-width="2"/></svg></span>
+        <span><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="3" fill="none" stroke="#2E4A3E" stroke-width="2"/><circle cx="11" cy="9" r="3" fill="none" stroke="#2E4A3E" stroke-width="2"/><path d="M5 18C6 14.5 8.5 13 11 13S16 14.5 17 18" fill="none" stroke="#2E4A3E" stroke-width="2"/></svg></span>
+      </div>
+      <div class="grid">
+        <div class="t"><img src="instagram-square-1080x1080.png" alt="Publicación fijada: Tu página, lista en minutos"><span class="pin"><svg width="12" height="14" viewBox="0 0 12 14" aria-hidden="true"><path d="M3 1H9L8 6L10.5 8.5H1.5L4 6Z M6 8.5V13" fill="#1D2B24" stroke="#1D2B24" stroke-width="1.4" stroke-linejoin="round"/></svg></span></div>
+        <div class="t" style="background:#F7F7F2;border:1px solid rgba(29,43,36,.12)">
+          <svg width="84" height="50" viewBox="0 0 84 50" aria-hidden="true"><rect x="3" y="10" width="24" height="36" rx="4" fill="#A7C4B5" stroke="#1D2B24" stroke-width="2"/><rect x="30" y="3" width="24" height="43" rx="4" fill="#F7F7F2" stroke="#1D2B24" stroke-width="2"/><rect x="57" y="10" width="24" height="36" rx="4" fill="#A7C4B5" stroke="#1D2B24" stroke-width="2"/><rect x="34" y="8" width="16" height="6" rx="2" fill="#2E4A3E"/></svg>
+          <span class="lb">Plantillas</span></div>
+        <div class="t" style="background:#2E4A3E;color:#F7F7F2">
+          <span class="hand" style="font-size:28px;line-height:1;white-space:nowrap">1 → 2 → 3</span>
+          <span class="lb">Cómo funciona</span></div>
+        <div class="t" style="background:#A7C4B5">
+          <svg width="96" height="46" viewBox="0 0 96 46" aria-hidden="true"><rect x="2" y="2" width="40" height="42" rx="4" fill="none" stroke="#1D2B24" stroke-width="2" stroke-dasharray="4 4"/><path d="M8 14C16 10 22 20 34 12M8 26C18 22 24 32 34 24" fill="none" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/><path d="M45 23H51" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/><rect x="54" y="2" width="40" height="42" rx="4" fill="#F7F7F2" stroke="#1D2B24" stroke-width="2"/><rect x="59" y="8" width="30" height="8" rx="2" fill="#2E4A3E"/><path d="M59 24H85M59 32H77" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="lb">Antes y después</span></div>
+        <div class="t" style="background:#F7F7F2;border:1px solid rgba(29,43,36,.12)">
+          <span style="position:relative;background:#A7C4B5;padding:12px 10px 10px;transform:rotate(-4deg);box-shadow:4px 5px 0 rgba(29,43,36,.14)"><span style="position:absolute;left:50%;top:-7px;width:40px;height:13px;margin-left:-20px;background:#E8B04B;transform:rotate(-3deg)"></span><span class="hand" style="font-size:24px;line-height:1;display:block">Consejo<br>del día</span></span></div>
+        <div class="t" style="background:#A7C4B5">
+          <svg width="56" height="48" viewBox="0 0 56 48" aria-hidden="true"><path d="M8 16H40C40 30 34 42 24 42C14 42 8 30 8 16Z" fill="#F7F7F2" stroke="#1D2B24" stroke-width="2.4" stroke-linejoin="round"/><path d="M40 20C48 20 50 30 40 32" fill="none" stroke="#1D2B24" stroke-width="2.4" stroke-linecap="round"/><path d="M18 4C15 7 21 9 18 12M28 4C25 7 31 9 28 12" fill="none" stroke="#2E4A3E" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="lb">Ejemplo:<br>cafetería</span></div>
+        <div class="t" style="background:#2E4A3E;color:#F7F7F2">
+          <span class="lb" style="font-size:18px">Precios</span>
+          <span class="sm" style="color:#A7C4B5">[precio]</span></div>
+        <div class="t" style="background:#F7F7F2;border:1px solid rgba(29,43,36,.12)">
+          <span class="hand" style="font-size:56px;line-height:.6;color:#2E4A3E;margin-top:14px">“</span>
+          <span class="lb">Testimonio</span>
+          <span class="sm" style="color:#2E4A3E">[cliente]</span></div>
+        <div class="t" style="background:#A7C4B5">
+          <span class="lb" style="font-size:20px;position:relative">Publica hoy<svg style="position:absolute;left:0;bottom:-10px" width="104" height="10" viewBox="0 0 104 10" aria-hidden="true"><path d="M2 6C30 2 60 8 80 4S98 6 102 3" fill="none" stroke="#1D2B24" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+          <svg width="8" height="26" viewBox="0 0 8 26" aria-hidden="true" style="margin-top:10px"><rect x="0" y="0" width="8" height="26" rx="3" fill="#E8B04B"/></svg></div>
+      </div>
+      <div style="position:absolute;left:0;bottom:0;width:420px;height:70px;border-top:1px solid rgba(29,43,36,.14);background:#F7F7F2;display:flex;justify-content:space-around;align-items:flex-start;padding-top:14px">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11L12 3L21 11V21H3Z" fill="none" stroke="#1D2B24" stroke-width="2" stroke-linejoin="round"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="#1D2B24" stroke-width="2"/><path d="M16 16L21 21" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#1D2B24" stroke-width="2"/><path d="M12 8V16M8 12H16" stroke="#1D2B24" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#1D2B24" stroke-width="2"/><path d="M10 8.5L15.5 12L10 15.5Z" fill="#1D2B24"/></svg>
+        <img src="avatar-1080x1080.png" alt="" width="26" height="26" style="border-radius:50%;display:block;outline:2px solid #1D2B24;outline-offset:1px">
+      </div>
+    </div>
+  </div>
+
+  <svg class="grain" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+</div>
+</body>
+</html>

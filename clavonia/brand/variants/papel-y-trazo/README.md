@@ -65,5 +65,7 @@ Cada PNG tiene su HTML fuente con el mismo nombre. El HTML es autosuficiente
 | `instagram-story-1080x1920.png` / `.html` | 1080 × 1920 | Historia (texto dentro de 250 px arriba y abajo) |
 | `highlight-1-1080x1080.png` / `.html` | 1080 × 1080 | Destacado "Planes" |
 | `highlight-2-1080x1080.png` / `.html` | 1080 × 1080 | Destacado "Cómo funciona" |
+| `brand-guide-1600x1200.png` / `.html` | 1600 × 1200 | Lámina de guía de marca (8 secciones) |
+| `social-preview-1500x1150.png` / `.html` | 1500 × 1150 | Vista previa de Facebook e Instagram (maqueta) |
 
 Render: `node <helper>/shot.mjs file://<ruta>/<archivo>.html <ruta>/<archivo>.png <ancho> <alto>` (usa Playwright con Chromium, sin instalar nada nuevo).
