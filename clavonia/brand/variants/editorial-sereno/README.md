@@ -60,5 +60,7 @@ Nota: el gris propuesto `#8A8F98` da 2.9:1 sobre Papel, por debajo de 4.5:1 para
 | `instagram-story-1080x1920` | 1080 × 1920 | Story, texto dentro de la zona segura de 250 px |
 | `highlight-1-1080x1080` | 1080 × 1080 | Destacado "Planes" (fondo azul) |
 | `highlight-2-1080x1080` | 1080 × 1080 | Destacado "Cómo funciona" (fondo Papel) |
+| `brand-guide-1600x1200` | 1600 × 1200 | Lámina de guía de marca (8 secciones) |
+| `social-preview-1500x1150` | 1500 × 1150 | Vista previa de Facebook e Instagram (usa los PNG anteriores) |
 
 Cada HTML es autocontenido (fuentes desde Google Fonts, sin imágenes externas) y tiene un contenedor de tamaño fijo. Para regenerar un PNG, abre el HTML con una captura a la misma medida (viewport igual al tamaño, escala 1).
