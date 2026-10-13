@@ -1,4 +1,4 @@
-import { BlockEditor } from "@clavonia/editor";
+import { EditorCanvas } from "@clavonia/editor";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProject } from "../../../../../lib/projects";
@@ -29,7 +29,7 @@ export default async function EditorPage({ params }: EditorPageProps) {
         <h1 className="text-xl font-semibold text-stone-900">{project.name}</h1>
         <p className="text-sm text-stone-500">Editando: {page.title}</p>
       </header>
-      <BlockEditor page={page} />
+      <EditorCanvas doc={page} />
     </div>
   );
 }
