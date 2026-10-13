@@ -1,0 +1,23 @@
+# Local development database for Clavonia.
+# Usage: docker compose -f infra/docker-compose.yml up -d
+# Placeholder credentials for local use only.
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: clavonia
+      POSTGRES_PASSWORD: clavonia_dev
+      POSTGRES_DB: clavonia
+    ports:
+      - "5432:5432"
+    volumes:
+      - clavonia_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clavonia -d clavonia"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  clavonia_pgdata:

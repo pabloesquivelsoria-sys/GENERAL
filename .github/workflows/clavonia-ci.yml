@@ -1,0 +1,50 @@
+# CI for the Clavonia monorepo (lives in clavonia/, repo root is one level up).
+name: Clavonia CI
+
+on:
+  push:
+    paths:
+      - "clavonia/**"
+  pull_request:
+    paths:
+      - "clavonia/**"
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Typecheck and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: clavonia/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: clavonia
+        # TODO: switch to --frozen-lockfile once pnpm-lock.yaml is committed.
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Generate Prisma client
+        working-directory: clavonia
+        run: pnpm db:generate
+
+      - name: Typecheck
+        working-directory: clavonia
+        run: pnpm typecheck
+
+      - name: Test
+        working-directory: clavonia
+        run: pnpm test
