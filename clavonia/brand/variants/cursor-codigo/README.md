@@ -55,6 +55,8 @@ Texto sobre cian: usa `#0B0F14` (8.9:1). No uses cian para texto pequeño sobre 
 | `instagram-story-1080x1920.png` | 1080 × 1920 | Historia (zona segura de 250 px) |
 | `highlight-1-1080x1080.png` | 1080 × 1080 | Destacado "Planes" |
 | `highlight-2-1080x1080.png` | 1080 × 1080 | Destacado "Cómo funciona" |
+| `brand-guide-1600x1200.png` | 1600 × 1200 | Lámina de guía de marca (8 secciones) |
+| `social-preview-1500x1150.png` | 1500 × 1150 | Vista previa de Facebook e Instagram |
 
 Cada PNG tiene su fuente HTML con el mismo nombre (`.html`). Para regenerar un PNG:
 

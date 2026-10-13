@@ -65,11 +65,8 @@ Todos están en esta carpeta. Cada PNG tiene su HTML fuente con el mismo nombre.
 | `instagram-story-1080x1920.png` | 1080 × 1920 | Historia |
 | `highlight-1-1080x1080.png` | 1080 × 1080 | Destacado "Planes" |
 | `highlight-2-1080x1080.png` | 1080 × 1080 | Destacado "Cómo funciona" |
-
-Los HTML fuente son `avatar-1080x1080.html`, `facebook-cover-1640x624.html`,
-`facebook-post-1200x630.html`, `instagram-post-1080x1350.html`,
-`instagram-square-1080x1080.html`, `instagram-story-1080x1920.html`,
-`highlight-1-1080x1080.html` y `highlight-2-1080x1080.html`.
+| `brand-guide-1600x1200.png` | 1600 × 1200 | Lámina: guía de marca en una página |
+| `social-preview-1500x1150.png` | 1500 × 1150 | Lámina: vista previa de Facebook e Instagram |
 
 ## Regenerar un PNG
 
