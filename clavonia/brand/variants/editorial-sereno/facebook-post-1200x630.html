@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia enlace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Manrope:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111111;--paper:#F4F2EE;--blue:#2F4B7C;--grey:#5F6670;--soft:#D9D5CC}
+html,body{margin:0;padding:0;background:#F4F2EE}
+.root{position:relative;width:1200px;height:630px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Manrope,sans-serif}
+.brand{position:absolute;left:72px;top:58px;display:flex;align-items:center;gap:12px}
+.mark{width:44px;height:44px;display:block}
+.word{font-family:Fraunces,serif;font-weight:500;font-size:34px;letter-spacing:-0.02em;line-height:1}
+.copy{position:absolute;left:72px;top:150px;width:600px}
+h1{font-family:Fraunces,serif;font-weight:400;font-size:92px;line-height:1;letter-spacing:-0.025em;margin:0}
+.cur{display:inline-block;width:.07em;height:.72em;background:var(--blue);margin-left:.06em}
+.sub{margin:26px 0 0;font-size:25px;line-height:1.45;font-weight:500;color:var(--grey);max-width:540px}
+.card{position:absolute;left:752px;top:100px;width:376px;height:420px;box-sizing:border-box;border:1.5px solid var(--ink);background:var(--paper)}
+.card .h{position:absolute;left:30px;top:34px;width:210px;height:26px;background:var(--ink)}
+.card .l{position:absolute;left:30px;height:10px;background:var(--soft)}
+.card .blk{position:absolute;left:30px;top:150px;width:316px;height:128px;box-sizing:border-box;border:1.5px solid var(--blue)}
+.card .caret{position:absolute;left:20px;top:28px;width:5px;height:40px;background:var(--blue)}
+.card .btn{position:absolute;left:30px;top:322px;width:150px;height:46px;background:var(--blue);color:var(--paper);font-weight:700;font-size:17px;line-height:46px;text-align:center}
+</style>
+</head>
+<body>
+<div class="root">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M46.14 15.15A22 22 0 1 0 46.14 48.85" fill="none" stroke="#111111" stroke-width="1.8"/>
+      <rect x="37" y="22" width="4" height="20" fill="#2F4B7C"/>
+    </svg>
+    <span class="word">clavonia</span>
+  </div>
+  <div class="copy">
+    <h1>Tu página,<br>lista en<br>minutos.<span class="cur"></span></h1>
+    <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  </div>
+  <div class="card" aria-hidden="true">
+    <div class="h"></div>
+    <div class="l" style="top:84px;width:316px"></div>
+    <div class="l" style="top:106px;width:296px"></div>
+    <div class="l" style="top:128px;width:250px"></div>
+    <div class="blk">
+      <div class="caret"></div>
+      <div class="l" style="left:40px;top:34px;width:220px"></div>
+      <div class="l" style="left:40px;top:56px;width:170px"></div>
+      <div class="l" style="left:40px;top:78px;width:240px"></div>
+    </div>
+    <div class="btn">Publicar</div>
+  </div>
+</div>
+</body>
+</html>

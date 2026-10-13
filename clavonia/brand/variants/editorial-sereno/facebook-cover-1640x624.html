@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia portada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Manrope:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111111;--paper:#F4F2EE;--blue:#2F4B7C;--grey:#5F6670}
+html,body{margin:0;padding:0;background:#F4F2EE}
+.root{position:relative;width:1640px;height:624px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Manrope,sans-serif}
+.brand{position:absolute;left:96px;top:60px;display:flex;align-items:center;gap:14px}
+.mark{width:46px;height:46px;display:block}
+.word{font-family:Fraunces,serif;font-weight:500;font-size:38px;letter-spacing:-0.02em;line-height:1}
+.rule{position:absolute;left:96px;right:96px;height:0;border-top:1.5px solid var(--ink)}
+.copy{position:absolute;left:410px;top:176px;width:820px}
+h1{font-family:Fraunces,serif;font-weight:400;font-size:88px;line-height:1.02;letter-spacing:-0.02em;margin:0}
+.cur{display:inline-block;width:.07em;height:.72em;background:var(--blue);margin-left:.06em}
+.sub{margin:30px 0 0;font-size:27px;line-height:1.45;font-weight:500;color:var(--grey);max-width:760px}
+.foot{position:absolute;left:96px;top:548px;font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+</style>
+</head>
+<body>
+<div class="root">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M46.14 15.15A22 22 0 1 0 46.14 48.85" fill="none" stroke="#111111" stroke-width="1.8"/>
+      <rect x="37" y="22" width="4" height="20" fill="#2F4B7C"/>
+    </svg>
+    <span class="word">clavonia</span>
+  </div>
+  <div class="rule" style="top:136px"></div>
+  <div class="copy">
+    <h1>Tu página,<br>lista en minutos.<span class="cur"></span></h1>
+    <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  </div>
+  <div class="rule" style="top:528px"></div>
+  <div class="foot">Plantillas para emprendedores</div>
+</div>
+</body>
+</html>

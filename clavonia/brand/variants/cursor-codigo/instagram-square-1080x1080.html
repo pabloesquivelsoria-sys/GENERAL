@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia post cuadrado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0B0F14;--panel:#151B23;--panel2:#10161E;--line:#263142;--cyan:#38BDF8;--lilac:#C4B5FD;--text:#E6EDF3;--muted:#8B98A9}
+html,body{background:#0B0F14;color:#E6EDF3}
+body{overflow:hidden}
+.canvas{position:relative;overflow:hidden;background:var(--bg);font-family:'Sora',system-ui,sans-serif;color:var(--text)}
+.abs{position:absolute}
+.lbl,.bar,.rail{font-family:'JetBrains Mono',ui-monospace,monospace}
+.lbl{color:var(--lilac)}
+.h{font-weight:700;letter-spacing:-.03em;line-height:1.04}
+.sub{color:var(--muted);font-weight:400;line-height:1.45}
+.caret{display:inline-block;width:.09em;height:.86em;background:var(--cyan);margin-left:.05em;vertical-align:-.04em}
+.wm{display:flex;align-items:center;gap:18px;font-weight:700;letter-spacing:-.03em;color:var(--text)}
+.win{position:absolute;background:var(--panel);border:2px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.bar{display:flex;align-items:center;gap:10px;background:var(--panel2);border-bottom:2px solid var(--line);color:var(--muted);white-space:nowrap}
+.dot{display:block;border-radius:50%;background:#3A4658}
+.ws{display:flex;flex:1;min-height:0}
+.rail{background:var(--panel2);border-right:2px solid var(--line);color:var(--muted);white-space:nowrap}
+.rail div{position:relative}
+.rail .on{color:var(--text);background:var(--panel)}
+.rail .on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--cyan)}
+.page{flex:1;position:relative;min-width:0}
+.btn{display:inline-block;background:var(--cyan);color:var(--bg);font-weight:600;border-radius:14px;white-space:nowrap}
+.ph{background:var(--panel2);border-radius:10px}
+</style>
+</head>
+<body>
+<div class="canvas" style="width:1080px;height:1080px">
+
+  <div class="abs" style="left:80px;top:76px">
+    <div class="wm" style="font-size:46px">
+      <svg width="70" height="70" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="14" fill="#151B23" stroke="#263142" stroke-width="2"/>
+        <rect x="14" y="14" width="30" height="8" rx="3" fill="#E6EDF3"/>
+        <rect x="14" y="14" width="8" height="36" rx="3" fill="#E6EDF3"/>
+        <rect x="14" y="42" width="30" height="8" rx="3" fill="#E6EDF3"/>
+        <rect x="44" y="24" width="6" height="16" rx="2" fill="#38BDF8"/>
+      </svg>
+      <span>clavonia</span>
+    </div>
+  </div>
+
+  <div class="abs" style="left:80px;top:200px;width:920px">
+    <h1 class="h" style="font-size:80px">Tu página,<br>lista en minutos.<span class="caret"></span></h1>
+    <p class="sub" style="font-size:30px;margin-top:28px;width:820px">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  </div>
+
+  <div class="win" style="left:80px;top:540px;width:920px;height:460px">
+    <div class="bar" style="height:52px;padding:0 20px;font-size:18px">
+      <i class="dot" style="width:13px;height:13px"></i><i class="dot" style="width:13px;height:13px"></i><i class="dot" style="width:13px;height:13px"></i>
+      <span style="margin-left:10px">editor / inicio</span>
+    </div>
+    <div class="ws">
+      <div class="rail" style="width:200px;font-size:19px;padding-top:6px">
+        <div class="on" style="padding:14px 20px">encabezado</div>
+        <div style="padding:14px 20px">texto</div>
+        <div style="padding:14px 20px">botón</div>
+        <div style="padding:14px 20px">planes</div>
+      </div>
+      <div class="page" style="padding:36px 40px">
+        <div class="lbl" style="font-size:20px">bloque 01 · encabezado</div>
+        <div class="h" style="font-size:50px;margin-top:16px;width:640px">Tu página, lista en minutos.<span class="caret"></span></div>
+        <div class="sub" style="font-size:22px;margin-top:18px;width:600px">Elige una plantilla, edita por bloques y publica cuando quieras.</div>
+        <span class="btn" style="margin-top:24px;padding:15px 26px;font-size:22px">Crear mi página</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia cuadro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2F5BFF;--yellow:#FFD23F;--ink:#111111;--white:#FFFFFF}
+html,body{margin:0;padding:0;background:#111111}
+.frame{width:1080px;height:1080px;position:relative;overflow:hidden;background:var(--ink)}
+.brand{position:absolute;left:76px;top:76px;display:flex;align-items:center;gap:14px}
+.brand svg{width:64px;height:64px;display:block}
+.brand span{font-family:"Archivo Black",Archivo,sans-serif;font-size:42px;color:var(--white);line-height:1;letter-spacing:-0.4px}
+h1{position:absolute;left:72px;top:236px;margin:0;font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;font-size:128px;line-height:0.97;letter-spacing:-2.5px;color:var(--white)}
+h1 em{font-style:normal;color:var(--blue)}
+.block{position:absolute;left:0;top:700px;width:1080px;height:380px;background:var(--blue)}
+.sub{position:absolute;left:76px;top:770px;width:900px;margin:0;font-family:Archivo,sans-serif;font-weight:700;font-size:50px;line-height:1.2;color:var(--white)}
+.cta{position:absolute;left:76px;top:940px;font-family:Archivo,sans-serif;font-weight:800;font-size:30px;letter-spacing:1px;text-transform:uppercase;color:var(--white)}
+.cur{position:absolute;right:76px;top:76px;width:44px;height:90px;background:var(--white)}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" role="img" aria-label="Clavonia">
+      <rect x="4" y="4" width="50" height="14" fill="#2F5BFF"/>
+      <rect x="4" y="4" width="14" height="56" fill="#2F5BFF"/>
+      <rect x="4" y="46" width="50" height="14" fill="#2F5BFF"/>
+      <rect x="46" y="24" width="14" height="16" fill="#FFFFFF"/>
+    </svg>
+    <span>clavonia</span>
+  </div>
+  <h1>Tu página,<br>lista <em>en</em><br><em>minutos.</em></h1>
+  <div class="block"></div>
+  <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  <div class="cta">Plantillas · Bloques · Publica</div>
+</div>
+</body>
+</html>

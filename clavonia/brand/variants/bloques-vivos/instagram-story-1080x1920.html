@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia historia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2F5BFF;--yellow:#FFD23F;--ink:#111111;--white:#FFFFFF}
+html,body{margin:0;padding:0;background:#2F5BFF}
+.frame{width:1080px;height:1920px;position:relative;overflow:hidden;background:var(--blue)}
+/* Zona segura: el contenido clave queda entre 250 y 1670 px */
+.top{position:absolute;left:0;top:0;width:1080px;height:110px;background:var(--ink)}
+.bottom{position:absolute;left:0;top:1800px;width:1080px;height:120px;background:var(--yellow)}
+.brand{position:absolute;left:80px;top:300px;display:flex;align-items:center;gap:18px}
+.brand svg{width:90px;height:90px;display:block}
+.brand span{font-family:"Archivo Black",Archivo,sans-serif;font-size:66px;color:var(--yellow);line-height:1;letter-spacing:-0.6px}
+.card{position:absolute;left:0;top:520px;width:1080px;height:520px;background:var(--yellow)}
+h1{position:absolute;left:80px;top:570px;margin:0;font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;font-size:136px;line-height:0.98;letter-spacing:-2.5px;color:var(--ink)}
+.sub{position:absolute;left:80px;top:1110px;width:920px;margin:0;font-family:Archivo,sans-serif;font-weight:700;font-size:52px;line-height:1.25;color:var(--yellow)}
+.cta{position:absolute;left:80px;top:1370px;width:560px;height:150px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:"Archivo Black",Archivo,sans-serif;font-size:56px;color:var(--yellow);letter-spacing:-0.5px}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="top"></div>
+  <div class="brand">
+    <svg viewBox="0 0 64 64" role="img" aria-label="Clavonia">
+      <rect x="4" y="4" width="50" height="14" fill="#FFD23F"/>
+      <rect x="4" y="4" width="14" height="56" fill="#FFD23F"/>
+      <rect x="4" y="46" width="50" height="14" fill="#FFD23F"/>
+      <rect x="46" y="24" width="14" height="16" fill="#111111"/>
+    </svg>
+    <span>clavonia</span>
+  </div>
+  <div class="card"></div>
+  <h1>Tu página,<br>lista en<br>minutos.</h1>
+  <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  <div class="cta">Empieza ya</div>
+  <div class="bottom"></div>
+</div>
+</body>
+</html>

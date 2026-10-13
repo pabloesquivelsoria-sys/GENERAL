@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia post 4:5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2F5BFF;--yellow:#FFD23F;--ink:#111111;--white:#FFFFFF}
+html,body{margin:0;padding:0;background:#FFFFFF}
+.frame{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--white)}
+.brand{position:absolute;left:80px;top:80px;display:flex;align-items:center;gap:16px}
+.brand svg{width:76px;height:76px;display:block}
+.brand span{font-family:"Archivo Black",Archivo,sans-serif;font-size:50px;color:var(--ink);line-height:1;letter-spacing:-0.5px}
+h1{position:absolute;left:76px;top:300px;margin:0;font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;font-size:142px;line-height:0.96;letter-spacing:-3px;color:var(--ink)}
+.band{position:absolute;left:0;top:860px;width:1080px;height:490px;background:var(--yellow)}
+.sub{position:absolute;left:80px;top:935px;width:920px;margin:0;font-family:Archivo,sans-serif;font-weight:700;font-size:54px;line-height:1.18;color:var(--ink)}
+.steps{position:absolute;left:80px;top:1120px;display:flex;gap:18px}
+.steps div{width:180px;height:120px;background:var(--ink);color:var(--yellow);font-family:"Archivo Black",Archivo,sans-serif;font-size:72px;display:flex;align-items:center;justify-content:center}
+.foot{position:absolute;left:80px;top:1270px;font-family:Archivo,sans-serif;font-weight:800;font-size:30px;letter-spacing:1px;text-transform:uppercase;color:var(--ink)}
+.tick{position:absolute;right:80px;top:1158px;width:0;height:0}
+.sticker{position:absolute;right:70px;top:560px;width:250px;height:250px;background:var(--ink);transform:rotate(-6deg)}
+.sticker span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Archivo Black",Archivo,sans-serif;font-size:40px;line-height:1.05;color:var(--yellow)}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" role="img" aria-label="Clavonia">
+      <rect x="4" y="4" width="50" height="14" fill="#111111"/>
+      <rect x="4" y="4" width="14" height="56" fill="#111111"/>
+      <rect x="4" y="46" width="50" height="14" fill="#111111"/>
+      <rect x="46" y="24" width="14" height="16" fill="#FFD23F"/>
+    </svg>
+    <span>clavonia</span>
+  </div>
+  <h1>Tu página,<br>lista en<br>minutos.</h1>
+  <div class="sticker"><span>Por bloques</span></div>
+  <div class="band"></div>
+  <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  <div class="steps"><div>1</div><div>2</div><div>3</div></div>
+  <div class="foot">Plantillas · Bloques · Publicación</div>
+</div>
+</body>
+</html>
