@@ -20,14 +20,7 @@ Dirección: piezas sociales lúdicas y pensadas para compartir. Pegatinas con co
 | Menta | `#2BD4A3` | Bloques de acento sobre blanco |
 | Blanco | `#FFFFFF` | Texto sobre tinta, tarjetas |
 
-Contraste comprobado (texto pequeño y grande):
-
-- Tinta sobre blanco: 15.8:1
-- Tinta sobre amarillo: 11.6:1
-- Tinta sobre menta: 8.3:1
-- Tinta sobre rosa: 5.4:1 (válido para texto)
-- Rosa sobre tinta: 5.4:1 (solo texto grande o en negrita)
-- Blanco sobre rosa: 2.9:1, no se usa para texto
+Contraste: tinta sobre blanco 15.8:1, sobre amarillo 11.6:1, sobre menta 8.3:1, sobre rosa 5.4:1. Rosa sobre tinta 5.4:1 solo en texto grande o negrita. Blanco sobre rosa (2.9:1) nunca se usa para texto.
 
 ## Tipografía
 
@@ -62,6 +55,12 @@ Cada pieza tiene su HTML fuente (mismo nombre) y su PNG renderizado al tamaño e
 | `highlight-2-1080x1080.png` | 1080 × 1080 | Destacado "Cómo funciona" |
 | `brand-guide-1600x1200.png` | 1600 × 1200 | Lámina de guía de marca (8 secciones) |
 | `social-preview-1500x1150.png` | 1500 × 1150 | Vista previa de Facebook e Instagram |
+| `x-header-1500x500.png` · `x-post-1200x675.png` | 1500 × 500 · 1200 × 675 | X: encabezado y post |
+| `linkedin-banner-1584x396.png` · `linkedin-company-1128x191.png` · `linkedin-post-1200x627.png` | 1584 × 396 · 1128 × 191 · 1200 × 627 | LinkedIn: perfil, empresa y post |
+| `youtube-channel-2560x1440.png` · `youtube-thumbnail-1280x720.png` | 2560 × 1440 · 1280 × 720 | YouTube: canal (texto en 1546 × 423 central) y miniatura |
+| `pinterest-pin-1000x1500.png` · `tiktok-cover-1080x1920.png` | 1000 × 1500 · 1080 × 1920 | Pin y portada de TikTok |
+| `ad-300x250.png` · `ad-336x280.png` · `ad-728x90.png` · `ad-300x600.png` · `ad-320x100.png` | 5 medidas | Anuncios de display de Google |
+| `banners-overview-1600x1200.png` | 1600 × 1200 | Lámina con todos los banners |
 
 Cada `.html` tiene un contenedor de medida fija. Para regenerar un PNG:
 
