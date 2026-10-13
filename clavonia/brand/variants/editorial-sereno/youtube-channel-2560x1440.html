@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia portada YouTube</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
+<style>
+/* All text and the logo sit inside the central safe area 1546x423 (x 507-2053, y 508-931).
+   Everything outside it is decoration that may be cropped. */
+:root{--ink:#111111;--paper:#F4F2EE;--blue:#2F4B7C;--grey:#5F6670;--soft:#D9D5CC}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#F4F2EE}
+.root{position:relative;width:2560px;height:1440px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Manrope,sans-serif}
+.word{font-family:Fraunces,serif;font-weight:500;letter-spacing:-0.02em;line-height:1}
+.hr{position:absolute;left:0;right:0;border-top:1.5px solid var(--ink)}
+.brand{position:absolute;left:587px;top:560px;display:flex;align-items:center;gap:16px}
+.kicker{position:absolute;right:587px;top:578px;font-size:20px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+h1{position:absolute;left:587px;top:652px;font-family:Fraunces,serif;font-weight:400;font-size:110px;line-height:1;letter-spacing:-0.025em;margin:0;white-space:nowrap}
+.cur{display:inline-block;width:.07em;height:.72em;background:var(--blue);margin-left:.06em}
+.sub{position:absolute;left:587px;top:806px;margin:0;font-size:34px;line-height:1.4;font-weight:500;color:var(--grey);white-space:nowrap}
+.mock{position:absolute;border:1.5px solid var(--ink);background:var(--paper)}
+.mh{position:absolute;left:10%;top:6%;width:56%;height:3%;background:var(--ink)}
+.ml{position:absolute;left:10%;height:1.2%;background:var(--soft)}
+.mb{position:absolute;left:10%;right:10%;top:28%;height:16%;border:1.5px solid var(--blue)}
+.mc{position:absolute;left:8%;top:22%;width:8px;height:44%;background:var(--blue)}
+.mbl{position:absolute;left:18%;height:7%;background:var(--soft)}
+.mx{position:absolute;left:10%;top:52%;width:40%;height:5%;background:var(--blue)}
+</style>
+</head>
+<body>
+<div class="root">
+  <!-- decoration (outside safe area) -->
+  <div class="hr" style="top:470px"></div>
+  <div class="hr" style="top:970px"></div>
+  <div class="mock" style="left:110px;top:150px;width:330px;height:1140px" aria-hidden="true">
+    <div class="mh"></div>
+    <div class="ml" style="top:12%;width:80%"></div>
+    <div class="ml" style="top:15%;width:72%"></div>
+    <div class="ml" style="top:18%;width:60%"></div>
+    <div class="mb"><div class="mc"></div><div class="mbl" style="top:24%;width:62%"></div><div class="mbl" style="top:46%;width:50%"></div><div class="mbl" style="top:68%;width:70%"></div></div>
+    <div class="mx"></div>
+    <div class="ml" style="top:64%;width:80%"></div>
+    <div class="ml" style="top:67%;width:66%"></div>
+  </div>
+  <svg style="position:absolute;left:2110px;top:300px" width="840" height="840" viewBox="0 0 64 64" aria-hidden="true"><path d="M46.14 15.15A22 22 0 1 0 46.14 48.85" fill="none" stroke="#111111" stroke-width="0.5"/><rect x="40" y="21" width="2" height="22" fill="#2F4B7C"/></svg>
+
+  <!-- safe area content -->
+  <div class="brand">
+    <svg width="60" height="60" viewBox="0 0 64 64" aria-hidden="true"><path d="M46.14 15.15A22 22 0 1 0 46.14 48.85" fill="none" stroke="#111111" stroke-width="1.8"/><rect x="40" y="21" width="4" height="22" fill="#2F4B7C"/></svg>
+    <span class="word" style="font-size:50px">clavonia</span>
+  </div>
+  <div class="kicker">Plantillas para emprendedores</div>
+  <h1>Tu página, lista en minutos.<span class="cur"></span></h1>
+  <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia encabezado X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
+<style>
+/* Text stays in the central 80% (x 150-1350, y 50-450) and away from the bottom-left avatar. */
+:root{--ink:#111111;--paper:#F4F2EE;--blue:#2F4B7C;--grey:#5F6670;--soft:#D9D5CC}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#F4F2EE}
+.root{position:relative;width:1500px;height:500px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Manrope,sans-serif}
+.word{font-family:Fraunces,serif;font-weight:500;letter-spacing:-0.02em;line-height:1}
+.brand{position:absolute;left:150px;top:66px;display:flex;align-items:center;gap:14px}
+.kicker{position:absolute;right:150px;top:80px;font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+.rule{position:absolute;left:150px;width:1200px;top:136px;border-top:1.5px solid var(--ink)}
+.vr{position:absolute;left:480px;top:176px;height:220px;border-left:1.5px solid var(--ink)}
+.copy{position:absolute;left:520px;top:172px;width:830px}
+h1{font-family:Fraunces,serif;font-weight:400;font-size:82px;line-height:1.02;letter-spacing:-0.02em;margin:0}
+.cur{display:inline-block;width:.07em;height:.72em;background:var(--blue);margin-left:.06em}
+.sub{margin:24px 0 0;font-size:24px;line-height:1.45;font-weight:500;color:var(--grey)}
+</style>
+</head>
+<body>
+<div class="root">
+  <div class="brand">
+    <svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M46.14 15.15A22 22 0 1 0 46.14 48.85" fill="none" stroke="#111111" stroke-width="1.8"/><rect x="40" y="21" width="4" height="22" fill="#2F4B7C"/></svg>
+    <span class="word" style="font-size:38px">clavonia</span>
+  </div>
+  <div class="kicker">Plantillas para emprendedores</div>
+  <div class="rule"></div>
+  <div class="vr"></div>
+  <div class="copy">
+    <h1>Tu página,<br>lista en minutos.<span class="cur"></span></h1>
+    <p class="sub">Elige una plantilla, edita por bloques y publica cuando quieras.</p>
+  </div>
+</div>
+</body>
+</html>

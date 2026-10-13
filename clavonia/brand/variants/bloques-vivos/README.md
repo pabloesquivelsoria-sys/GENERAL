@@ -46,6 +46,7 @@ navegador usa un respaldo sans-serif, así que revisa los PNG antes de publicar.
 - Logo: no lo estires, no cambies sus colores fuera de la paleta y deja libre al
   menos un décimo de su ancho.
 - No agregues handle, dominio ni precios hasta que la marca los defina.
+- Un solo botón por pieza: "Empieza hoy" o "Crear mi página" (mínimo 44 px de alto).
 - Historias: el texto clave se mantiene entre 250 px desde arriba y 250 px desde
   abajo. Lo decorativo puede salir de esa zona.
 - Destacados (highlights): el contenido queda dentro del círculo central, así
@@ -67,9 +68,12 @@ Todos están en esta carpeta. Cada PNG tiene su HTML fuente con el mismo nombre.
 | `highlight-2-1080x1080.png` | 1080 × 1080 | Destacado "Cómo funciona" |
 | `brand-guide-1600x1200.png` | 1600 × 1200 | Lámina: guía de marca en una página |
 | `social-preview-1500x1150.png` | 1500 × 1150 | Lámina: vista previa de Facebook e Instagram |
+| `x-header-1500x500.png`, `x-post-1200x675.png` | 1500 × 500, 1200 × 675 | X: encabezado y publicación |
+| `linkedin-banner-1584x396.png`, `linkedin-company-1128x191.png`, `linkedin-post-1200x627.png` | 1584 × 396, 1128 × 191, 1200 × 627 | LinkedIn: banner personal, portada de empresa y publicación |
+| `youtube-channel-2560x1440.png`, `youtube-thumbnail-1280x720.png` | 2560 × 1440, 1280 × 720 | YouTube: portada del canal (texto en 1546 × 423) y miniatura |
+| `pinterest-pin-1000x1500.png`, `tiktok-cover-1080x1920.png` | 1000 × 1500, 1080 × 1920 | Pin de Pinterest y portada de TikTok |
+| `ad-300x250.png`, `ad-336x280.png`, `ad-728x90.png`, `ad-300x600.png`, `ad-320x100.png` | según el nombre | Anuncios de Google Display |
+| `banners-overview-1600x1200.png` | 1600 × 1200 | Lámina: todos los banners y anuncios |
 
-## Regenerar un PNG
-
-Abre el HTML en un navegador con el tamaño exacto de la pieza y guarda una
-captura de pantalla de página completa (por ejemplo, con Playwright). Por
-ejemplo, para la publicación 4:5 el viewport es de 1080 × 1350 px.
+Para regenerar un PNG, abre su HTML en un navegador con el tamaño exacto de la
+pieza y guarda una captura de página completa (por ejemplo, con Playwright).

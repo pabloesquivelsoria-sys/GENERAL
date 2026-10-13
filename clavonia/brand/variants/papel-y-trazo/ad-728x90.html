@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clavonia anuncio 728x90</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F7F7F2;width:728px;height:90px;overflow:hidden}
+.root{position:relative;width:728px;height:90px;overflow:hidden;background:#F7F7F2;color:#1D2B24;font-family:'DM Sans',sans-serif}
+.a{position:absolute}
+.grain{position:absolute;left:0;top:0;width:100%;height:100%;opacity:.09;mix-blend-mode:multiply;pointer-events:none;z-index:60}
+.hand{font-family:'Caveat',cursive;font-weight:700;letter-spacing:0}
+.u{position:relative;display:inline-block;white-space:nowrap}
+.ul{position:absolute;left:-1%;width:102%;height:auto;bottom:-.16em;overflow:visible}
+.lock{display:flex;align-items:center;gap:.2em;font-weight:700;letter-spacing:-.02em;line-height:1;white-space:nowrap}
+.lock svg{display:block;flex:none}
+h1{font-weight:800;letter-spacing:-.035em;line-height:1.04;white-space:nowrap}
+.sub{line-height:1.4}
+.note{position:absolute;background:#A7C4B5;color:#1D2B24;box-shadow:8px 9px 0 rgba(29,43,36,.14);display:flex;align-items:center;font-weight:700;line-height:1.2}
+.note::before{content:"";position:absolute;left:50%;top:-14px;width:110px;height:30px;margin-left:-55px;background:#E8B04B;transform:rotate(-3deg)}
+.note.sm::before{top:-8px;width:44px;height:15px;margin-left:-22px}
+.note.deep{background:#2E4A3E;color:#F7F7F2}
+.note .n{font-family:'Caveat',cursive;font-weight:700;line-height:1;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:12px;font-weight:700;white-space:nowrap;box-shadow:4px 5px 0 rgba(29,43,36,.18);line-height:1.1}
+.btn-d{background:#2E4A3E;color:#F7F7F2}
+.btn-p{background:#F7F7F2;color:#1D2B24}
+.frame{position:absolute;inset:0;border:1px solid rgba(29,43,36,.28);pointer-events:none;z-index:61}
+</style>
+</head>
+<body>
+<div class="root">
+<div class="a" style="left:0;top:0;width:728px;height:90px;display:flex;align-items:center;justify-content:space-between;padding:0 18px">
+<div class="lock" role="img" aria-label="Clavonia" style="left:0px;top:0px;font-size:24px;color:#1D2B24;position:static"><svg width="29" height="29" viewBox="0 0 120 120" aria-hidden="true"><path d="M94 36C84 20 62 12 44 18C24 25 16 46 18 66C20 88 40 104 66 100C80 98 90 92 98 82" fill="none" stroke="#1D2B24" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 50V72" stroke="#E8B04B" stroke-width="10" stroke-linecap="round"/></svg><span>clavonia</span></div>
+<h1 class="a" style="left:0px;top:0px;font-size:24px;color:#1D2B24;position:static;margin-bottom:4px">Tu página, lista <span class="hand u" style="font-size:1.18em;color:#2E4A3E">en minutos.<svg class="ul" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M6 15C90 6 170 22 260 11S360 17 394 8" fill="none" stroke="#2E4A3E" stroke-width="6" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></span></h1>
+<div class="btn btn-d" style="height:46px;padding:0 18px;font-size:17px">Empieza hoy</div>
+</div>
+<svg class="grain" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+<div class=frame></div>
+</div>
+</body>
+</html>

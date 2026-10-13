@@ -67,5 +67,11 @@ Cada PNG tiene su HTML fuente con el mismo nombre. El HTML es autosuficiente
 | `highlight-2-1080x1080.png` / `.html` | 1080 × 1080 | Destacado "Cómo funciona" |
 | `brand-guide-1600x1200.png` / `.html` | 1600 × 1200 | Lámina de guía de marca (8 secciones) |
 | `social-preview-1500x1150.png` / `.html` | 1500 × 1150 | Vista previa de Facebook e Instagram (maqueta) |
+| `x-header-1500x500`, `x-post-1200x675` | 1500 × 500 · 1200 × 675 | X: encabezado (texto lejos del avatar) y publicación |
+| `linkedin-banner-1584x396`, `linkedin-company-1128x191`, `linkedin-post-1200x627` | 1584 × 396 · 1128 × 191 · 1200 × 627 | LinkedIn: perfil (texto a la derecha de 400 px), empresa y publicación |
+| `youtube-channel-2560x1440`, `youtube-thumbnail-1280x720` | 2560 × 1440 · 1280 × 720 | YouTube: canal (texto en la zona segura 1546 × 423) y miniatura |
+| `pinterest-pin-1000x1500` · `tiktok-cover-1080x1920` | 1000 × 1500 · 1080 × 1920 | Pin 2:3 y portada de TikTok (libres 120 px a la derecha y 400 px abajo) |
+| `ad-300x250`, `ad-336x280`, `ad-728x90`, `ad-300x600`, `ad-320x100` | Medidas en el nombre | Anuncios de display de Google: logo, titular corto y un botón |
+| `banners-overview-1600x1200` | 1600 × 1200 | Lámina con todos los banners y anuncios |
 
 Render: `node <helper>/shot.mjs file://<ruta>/<archivo>.html <ruta>/<archivo>.png <ancho> <alto>` (usa Playwright con Chromium, sin instalar nada nuevo).

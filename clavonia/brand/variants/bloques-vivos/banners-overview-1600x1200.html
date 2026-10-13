@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavonia banners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2F5BFF;--yellow:#FFD23F;--ink:#111111;--white:#FFFFFF}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#FFFFFF}
+.frame{width:1600px;height:1200px;position:relative;overflow:hidden;background:var(--white);font-family:Archivo,sans-serif;color:var(--ink)}
+h1{position:absolute;left:48px;top:40px;margin:0;font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;font-size:44px;line-height:1;letter-spacing:-1px}
+.tag{position:absolute;right:48px;top:46px;background:var(--yellow);padding:8px 12px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;line-height:1}
+.rule{position:absolute;left:48px;right:48px;top:106px;height:2px;background:var(--ink)}
+.row{position:absolute;display:flex;align-items:flex-start}
+.col{position:absolute;display:flex;flex-direction:column}
+figure{margin:0}
+figure img{display:block;object-fit:contain;outline:2px solid var(--ink);outline-offset:0}
+figcaption{margin-top:8px;font-size:14px;font-weight:500;line-height:1.3;white-space:nowrap}
+figcaption b{font-weight:800}
+</style>
+</head>
+<body>
+<div class="frame">
+  <h1>Banners para redes y anuncios</h1>
+  <div class="tag">Bloques vivos · 14 piezas</div>
+  <div class="rule"></div>
+
+  <!-- Fila 1: formatos horizontales 16:9 -->
+  <div class="row" style="left:48px;top:132px;gap:20px">
+    <figure><img src="youtube-channel-2560x1440.png" width="361" height="203" alt="Portada del canal de YouTube"><figcaption><b>YouTube</b> · portada del canal · 2560 × 1440</figcaption></figure>
+    <figure><img src="youtube-thumbnail-1280x720.png" width="361" height="203" alt="Miniatura de YouTube"><figcaption><b>YouTube</b> · miniatura · 1280 × 720</figcaption></figure>
+    <figure><img src="x-post-1200x675.png" width="361" height="203" alt="Publicación de X"><figcaption><b>X</b> · publicación · 1200 × 675</figcaption></figure>
+    <figure><img src="linkedin-post-1200x627.png" width="361" height="189" alt="Publicación de LinkedIn"><figcaption><b>LinkedIn</b> · publicación · 1200 × 627</figcaption></figure>
+  </div>
+
+  <!-- Columna izquierda: franjas anchas -->
+  <div class="col" style="left:48px;top:392px;gap:12px">
+    <figure><img src="x-header-1500x500.png" width="700" height="233" alt="Encabezado de X"><figcaption><b>X</b> · encabezado · 1500 × 500</figcaption></figure>
+    <figure><img src="linkedin-banner-1584x396.png" width="700" height="175" alt="Banner personal de LinkedIn"><figcaption><b>LinkedIn</b> · banner personal · 1584 × 396</figcaption></figure>
+    <figure><img src="linkedin-company-1128x191.png" width="700" height="119" alt="Portada de empresa en LinkedIn"><figcaption><b>LinkedIn</b> · portada de empresa · 1128 × 191</figcaption></figure>
+    <figure><img src="ad-728x90.png" width="700" height="87" alt="Anuncio 728 × 90"><figcaption><b>Google Display</b> · 728 × 90</figcaption></figure>
+  </div>
+
+  <!-- Columna derecha: verticales y anuncios -->
+  <div class="row" style="left:788px;top:392px;gap:19px">
+    <figure><img src="pinterest-pin-1000x1500.png" width="280" height="420" alt="Pin de Pinterest"><figcaption><b>Pinterest</b> · pin<br>1000 × 1500</figcaption></figure>
+    <figure><img src="tiktok-cover-1080x1920.png" width="236" height="420" alt="Portada de TikTok"><figcaption><b>TikTok</b> · portada<br>1080 × 1920</figcaption></figure>
+    <figure><img src="ad-300x600.png" width="210" height="420" alt="Anuncio 300 × 600"><figcaption><b>Google Display</b><br>300 × 600</figcaption></figure>
+  </div>
+  <div class="row" style="left:788px;top:874px;gap:22px">
+    <figure><img src="ad-300x250.png" width="240" height="200" alt="Anuncio 300 × 250"><figcaption><b>Google Display</b> · 300 × 250</figcaption></figure>
+    <figure><img src="ad-336x280.png" width="240" height="200" alt="Anuncio 336 × 280"><figcaption><b>Google Display</b> · 336 × 280</figcaption></figure>
+    <figure><img src="ad-320x100.png" width="240" height="75" alt="Anuncio 320 × 100"><figcaption><b>Google Display</b> · 320 × 100</figcaption></figure>
+  </div>
+</div>
+</body>
+</html>
