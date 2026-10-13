@@ -29,7 +29,7 @@ export default async function EditorPage({ params }: EditorPageProps) {
         <h1 className="text-xl font-semibold text-stone-900">{project.name}</h1>
         <p className="text-sm text-stone-500">Editando: {page.title}</p>
       </header>
-      <EditorCanvas doc={page} />
+      <EditorCanvas doc={page} brand={project.brand} />
     </div>
   );
 }

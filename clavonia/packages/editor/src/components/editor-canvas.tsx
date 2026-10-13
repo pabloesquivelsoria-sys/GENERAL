@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import type { PageDocument } from '@clavonia/core';
+import type { BrandTheme, PageDocument } from '@clavonia/core';
 import { BlockRenderer } from './block-renderer';
 
 export interface EditorCanvasProps {
   doc: PageDocument;
+  brand?: BrandTheme;
   onSelectionChange?: (blockId: string | null) => void;
 }
 
 /** Lienzo que muestra los bloques de la página y mantiene el bloque seleccionado. */
-export function EditorCanvas({ doc, onSelectionChange }: EditorCanvasProps) {
+export function EditorCanvas({ doc, brand, onSelectionChange }: EditorCanvasProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const select = (blockId: string | null) => {
@@ -50,7 +51,7 @@ export function EditorCanvas({ doc, onSelectionChange }: EditorCanvasProps) {
                   : 'cursor-pointer rounded-md outline-none hover:outline hover:outline-1 hover:outline-neutral-300'
               }
             >
-              <BlockRenderer block={block} />
+              <BlockRenderer block={block} brand={brand} />
             </div>
           </li>
         );
