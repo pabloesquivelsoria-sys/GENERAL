@@ -14,7 +14,7 @@ VARIANTS = [
     ("stickers-pop", "Stickers pop"),
 ]
 
-# Orden de páginas: guía, portada, vista previa de redes, posts, story y post de enlace.
+# Orden de páginas: guía, portada, vista previa de redes, posts, story, post de enlace y banners.
 PAGES = [
     "brand-guide-1600x1200.png",
     "facebook-cover-1640x624.png",
@@ -23,6 +23,7 @@ PAGES = [
     "instagram-square-1080x1080.png",
     "instagram-story-1080x1920.png",
     "facebook-post-1200x630.png",
+    "banners-overview-1600x1200.png",
 ]
 
 
