@@ -16,9 +16,11 @@
     "@clavonia/editor": "workspace:*",
     "@clavonia/templates": "workspace:*",
     "@clavonia/ui": "workspace:*",
+    "@hookform/resolvers": "^3",
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
