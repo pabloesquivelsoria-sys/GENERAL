@@ -13,7 +13,7 @@ export class StubDesignProvider implements DesignProvider {
   async generate(brief: DesignBrief): Promise<GenerationResult> {
     // TODO: the AI provider will choose templates and fill copy from the brief.
     const templates = listTemplates({ kind: brief.kind });
-    const pages = templates.map((template) => template.build());
+    const pages = templates.flatMap((template) => template.build());
 
     if (pages.length === 0) {
       throw new Error(`No hay plantillas disponibles para el tipo "${brief.kind}".`);

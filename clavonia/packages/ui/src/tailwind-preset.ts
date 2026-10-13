@@ -21,6 +21,6 @@ const preset = {
       borderRadius: radius,
     },
   },
-} satisfies Config;
+} satisfies Partial<Config>;
 
 export default preset;

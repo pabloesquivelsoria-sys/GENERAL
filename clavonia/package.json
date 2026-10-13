@@ -13,9 +13,9 @@
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "db:generate": "pnpm --filter @clavonia/db run db:generate",
-    "db:migrate": "pnpm --filter @clavonia/db run db:migrate",
-    "db:seed": "pnpm --filter @clavonia/db run db:seed"
+    "db:generate": "pnpm --filter @clavonia/db run generate",
+    "db:migrate": "pnpm --filter @clavonia/db run migrate",
+    "db:seed": "pnpm --filter @clavonia/db run seed"
   },
   "devDependencies": {
     "@eslint/js": "^9",

@@ -103,7 +103,6 @@ export function BlockRenderer({ block }: BlockRendererProps) {
         <Section className="py-8">
           <Container>
             {src ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img src={src} alt={str('alt')} className="w-full rounded-md" />
             ) : (
               <div className="flex aspect-video items-center justify-center rounded-md bg-neutral-200 text-neutral-500">

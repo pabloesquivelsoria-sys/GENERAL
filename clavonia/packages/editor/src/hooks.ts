@@ -1,3 +1,5 @@
+'use client';
+
 import { useReducer, type Dispatch } from 'react';
 import type { PageDocument } from '@clavonia/core';
 import { editorReducer, type EditorAction } from './actions';

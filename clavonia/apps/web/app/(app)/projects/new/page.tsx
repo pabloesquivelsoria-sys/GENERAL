@@ -28,8 +28,8 @@ const INITIAL_STATE: WizardState = {
   kind: "landing",
   businessName: "",
   sector: "",
-  goal: GOALS[0].id,
-  tone: TONES[0].id,
+  goal: GOALS[0]?.id ?? "",
+  tone: TONES[0]?.id ?? "",
 };
 
 const inputClass =
