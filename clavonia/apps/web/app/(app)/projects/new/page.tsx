@@ -11,9 +11,10 @@ const GOALS = [
 ];
 
 const TONES = [
-  { id: "friendly", label: "Cercano" },
-  { id: "professional", label: "Profesional" },
-  { id: "playful", label: "Divertido" },
+  { id: "calido", label: "Cálido y cercano" },
+  { id: "sereno", label: "Sereno y delicado" },
+  { id: "sobrio", label: "Profesional y sobrio" },
+  { id: "vibrante", label: "Vibrante y divertido" },
 ];
 
 interface WizardState {
@@ -51,10 +52,16 @@ export default function NewProjectPage() {
     setSubmitting(true);
 
     try {
-      const response = await fetch("/api/projects", {
+      const response = await fetch("/api/projects/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.businessName.trim(), kind: form.kind }),
+        body: JSON.stringify({
+          businessName: form.businessName,
+          sector: form.sector,
+          goal: form.goal,
+          kind: form.kind,
+          tone: form.tone,
+        }),
       });
       const payload = (await response.json()) as {
         data?: { id: string };
@@ -67,7 +74,6 @@ export default function NewProjectPage() {
         return;
       }
 
-      // TODO: enviar sector, objetivo y tono al design-engine para generar la página inicial.
       router.push(`/projects/${payload.data.id}/editor`);
     } catch {
       setError("Error de conexión. Inténtalo de nuevo.");

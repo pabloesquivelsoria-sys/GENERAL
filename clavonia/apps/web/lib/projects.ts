@@ -20,6 +20,7 @@ export interface CreateProjectInput {
   name: string;
   kind: ProjectKind;
   brand?: Partial<BrandTheme>;
+  pages?: PageDocument[];
 }
 
 export interface UpdateProjectInput {
@@ -70,7 +71,7 @@ export function createProject(input: CreateProjectInput, ownerId: string): Proje
     kind: input.kind,
     ownerId,
     brand: { ...DEFAULT_BRAND, ...input.brand },
-    pages: [createEmptyPage("Inicio")],
+    pages: input.pages?.length ? input.pages : [createEmptyPage("Inicio")],
     status: "draft",
     createdAt: now,
     updatedAt: now,
