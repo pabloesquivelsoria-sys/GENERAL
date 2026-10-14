@@ -40,7 +40,8 @@ NAVY_LT = HexColor("#9AA3B5")
 
 # ── Tipografía ────────────────────────────────────────────────────────────
 for name in ["InstrumentSerif-Regular", "InstrumentSerif-Italic", "InstrumentSans-Regular",
-             "InstrumentSans-Bold", "InstrumentSans-Italic", "DMMono-Regular"]:
+             "InstrumentSans-Bold", "InstrumentSans-Italic", "DMMono-Regular",
+             "WorkSans-Regular", "WorkSans-Bold", "WorkSans-Italic"]:
     pdfmetrics.registerFont(TTFont(name, os.path.join(FONTS, name + ".ttf")))
 SERIF, SERIF_I = "InstrumentSerif-Regular", "InstrumentSerif-Italic"
 SANS, SANS_B, SANS_I = "InstrumentSans-Regular", "InstrumentSans-Bold", "InstrumentSans-Italic"
@@ -929,11 +930,23 @@ def build_pdf():
 PPTX_FONTS = {  # fuente → (familia, negrita, cursiva, ascendente, descendente)
     SERIF: ("Instrument Serif", False, False, 0.99, 0.31),
     SERIF_I: ("Instrument Serif", False, True, 0.99, 0.31),
-    SANS: ("Instrument Sans", False, False, 0.97, 0.25),
-    SANS_B: ("Instrument Sans", True, False, 0.97, 0.25),
-    SANS_I: ("Instrument Sans", False, True, 0.97, 0.25),
+    # Canva no tiene Instrument Sans: en el .pptx se usa Work Sans, ajustando el tamaño para conservar el ancho
+    SANS: ("Work Sans", False, False, 0.93, 0.243),
+    SANS_B: ("Work Sans", True, False, 0.93, 0.243),
+    SANS_I: ("Work Sans", False, True, 0.93, 0.243),
     MONO: ("DM Mono", False, False, 0.992, 0.31),
 }
+
+
+PPTX_SUBST = {SANS: "WorkSans-Regular", SANS_B: "WorkSans-Bold", SANS_I: "WorkSans-Italic"}
+
+
+def pptx_size(font, text, size):
+    """Tamaño para la fuente sustituta que ocupa el mismo ancho que el original."""
+    if font not in PPTX_SUBST:
+        return size
+    ratio = pdfmetrics.stringWidth(text, font, size) / max(pdfmetrics.stringWidth(text, PPTX_SUBST[font], size), 1e-6)
+    return round(size * min(1.0, max(0.8, ratio)), 1)
 
 
 def build_pptx():
@@ -987,13 +1000,14 @@ def build_pptx():
                 slide.shapes.add_picture(r["path"], Pt(r["x"]), Pt(r["y"]), Pt(r["w"]), Pt(r["h"]))
             elif r["kind"] == "text":
                 _, _, _, asc, desc = PPTX_FONTS[r["font"]]
+                size = pptx_size(r["font"], r["s"], r["size"])
                 slack = r["w"] * 0.08 + 6
                 left = {"l": r["x"], "c": r["x"] - slack / 2, "r": r["x"] - slack}[r["anchor"]]
-                p = box(slide, left, r["y"] - asc * r["size"], r["w"] + slack, (asc + desc) * r["size"], False,
+                p = box(slide, left, r["y"] - asc * size, r["w"] + slack, (asc + desc) * size, False,
                         align[r["anchor"]], 1.0)
                 run = p.add_run()
                 run.text = r["s"]
-                style(run, r["font"], r["size"], r["color"], r["cs"])
+                style(run, r["font"], size, r["color"], r["cs"])
             else:
                 font0 = r["font"] if r["kind"] == "para" else r["segs"][0][1]
                 _, _, _, asc, desc = PPTX_FONTS[font0]
@@ -1002,10 +1016,11 @@ def build_pptx():
                 p = box(slide, r["x"], top, r["w"] * 1.03 + 2, lead * r["n"] + 4, True,
                         align[r.get("anchor", "l")], Pt(lead))
                 segs = [(r["s"], r["font"], r["color"])] if r["kind"] == "para" else r["segs"]
+                size = pptx_size(font0, r["s"], r["size"]) if r["kind"] == "para" else r["size"]
                 for txt, font, color in segs:
                     run = p.add_run()
                     run.text = txt
-                    style(run, font, r["size"], color)
+                    style(run, font, size, color)
     prs.save(OUT_PPTX)
     print("PPTX:", OUT_PPTX)
 
