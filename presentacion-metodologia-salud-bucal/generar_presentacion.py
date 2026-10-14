@@ -400,9 +400,15 @@ def slide_cover(s):
     s.para(M, 370, 400, "Disponibilidad de tiempo y hábitos de higiene bucal en estudiantes "
                         "universitarios de 18 a 23 años", SANS, 13, 17.5, INK2)
 
-    cx, cy, R = 738, 202, 138
-    dial(s, cx, cy, R)
-    legend_day(s, cx, 380)
+    render = os.path.join(HERE, "assets", "portada_render.png")
+    if os.path.exists(render):
+        # render 3D (render_portada.py): el suelo es el mismo papel, así que la imagen se funde con la página
+        s.c.drawImage(ImageReader(render), 448, s.Y(405), 490, 405)
+        legend_day(s, 706, 388)
+    else:
+        cx, cy, R = 738, 202, 138
+        dial(s, cx, cy, R)
+        legend_day(s, cx, 380)
 
     s.line(M, 420, W - M, 420, INK, 0.6)
     s.label(M, 442, "Integrantes", VERM)
@@ -419,7 +425,7 @@ def slide_cover(s):
         for i, ln in enumerate(lines):
             s.text(x, 462 + i * 16, ln, SANS, 10.5, INK)
     s.line(M, 508, W - M, 508, RULE, 0.5)
-    s.label(M, 524, "Fig. 00 — Un día de 24 h: el cepillado compite por el tiempo libre", MUTED, size=6)
+    s.label(M, 524, "Fig. 00 — Reloj de sol: la sombra del diente cae sobre el cepillado omitido", MUTED, size=6)
     s.label(W - M, 524, "Modelo ilustrativo", MUTED, size=6, anchor="r")
 
 
