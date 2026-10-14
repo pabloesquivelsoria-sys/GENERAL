@@ -18,6 +18,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "assets", "fonts")
 LOGOS = os.path.join(HERE, "assets", "logos")
 OUT_PDF = os.path.join(HERE, "Justificacion_Hipotesis_Salud_Bucal.pdf")
+OUT_PPTX = os.path.join(HERE, "Justificacion_Hipotesis_Salud_Bucal.pptx")
+BUILD = os.path.join(HERE, "build")
 
 W, H = 960, 540  # 16:9 (13.33 x 7.5 in)
 M = 44           # margen
@@ -49,8 +51,12 @@ N_SLIDES = 13
 
 # ── Utilidades de dibujo (coordenada y medida desde ARRIBA) ───────────────
 class Slide:
-    def __init__(self, c):
+    """Lienzo de una lámina. Con rec (lista), el texto y las imágenes no se dibujan: se registran
+    para convertirlos en cuadros de texto e imágenes editables del .pptx, y solo queda el fondo gráfico."""
+
+    def __init__(self, c, rec=None):
         self.c = c
+        self.rec = rec
 
     @staticmethod
     def Y(y):
@@ -66,6 +72,10 @@ class Slide:
             x -= w / 2
         elif anchor == "r":
             x -= w
+        if self.rec is not None:
+            self.rec.append(dict(kind="text", x=x, y=y, w=w, s=s, font=font, size=size, color=color,
+                                 anchor=anchor, cs=cs))
+            return w
         c.setFillColor(color)
         c.setFillAlpha(alpha)
         c.setFont(font, size)
@@ -92,6 +102,10 @@ class Slide:
     def para(self, x, y, w, s, font, size, lead, color, anchor="l"):
         """Dibuja un párrafo; y es la línea base de la primera línea. Devuelve la base de la última."""
         lines = self.wrap(s, font, size, w)
+        if self.rec is not None:
+            self.rec.append(dict(kind="para", x=x, y=y, w=w, s=s, font=font, size=size, lead=lead,
+                                 color=color, anchor=anchor, n=len(lines)))
+            return y + (len(lines) - 1) * lead
         for i, ln in enumerate(lines):
             ax = x + w / 2 if anchor == "c" else x
             self.text(ax, y + i * lead, ln, font, size, color, anchor)
@@ -136,6 +150,9 @@ class Slide:
             lw += ww
         if line:
             lines.append(line)
+        if self.rec is not None:
+            self.rec.append(dict(kind="rich", x=x, y=y, w=w, segs=segs, size=size, lead=lead, n=len(lines)))
+            return y + (len(lines) - 1) * lead
         for i, ln in enumerate(lines):
             cx = x
             for j, (rs, ww, sp) in enumerate(ln):
@@ -212,8 +229,14 @@ class Slide:
         img = ImageReader(path)
         iw, ih = img.getSize()
         w = h * iw / ih
-        self.c.drawImage(img, x, self.Y(y + h), w, h, mask="auto")
+        self.image(path, x, y, w, h)
         return w
+
+    def image(self, path, x, y, w, h):
+        if self.rec is not None:
+            self.rec.append(dict(kind="image", path=path, x=x, y=y, w=w, h=h))
+            return
+        self.c.drawImage(ImageReader(path), x, self.Y(y + h), w, h, mask="auto")
 
 
 # ── Elementos comunes ─────────────────────────────────────────────────────
@@ -403,7 +426,7 @@ def slide_cover(s):
     render = os.path.join(HERE, "assets", "portada_render.png")
     if os.path.exists(render):
         # render 3D (render_portada.py): el suelo es el mismo papel, así que la imagen se funde con la página
-        s.c.drawImage(ImageReader(render), 448, s.Y(405), 490, 405)
+        s.image(render, 448, 0, 490, 405)
         legend_day(s, 706, 388)
     else:
         cx, cy, R = 738, 202, 138
@@ -877,16 +900,18 @@ def slide_close(s):
     s.logo(os.path.join(LOGOS, "tecnm.png"), W - M - 64 - 14 - 64, y + 8, 28)
 
 
-def main():
+SLIDES = [slide_cover, slide_hypothesis, slide_magnitude, slide_gap, slide_university, slide_stress,
+          slide_void, slide_chain, slide_congruence, slide_verification, slide_relevance, slide_references,
+          slide_close]
+assert len(SLIDES) == N_SLIDES
+
+
+def build_pdf():
     c = canvas.Canvas(OUT_PDF, pagesize=(W, H))
     c.setTitle("Justificación de la hipótesis — Salud bucal")
     c.setAuthor("Romero Elías, Rodríguez Esquivel, Nolasco Mejia, Esquivel Soria, Rodríguez Hernández")
     c.setSubject("Taller de Investigación II · Unidad II · TecNM / ITCJ")
-    slides = [slide_cover, slide_hypothesis, slide_magnitude, slide_gap, slide_university, slide_stress,
-              slide_void, slide_chain, slide_congruence, slide_verification, slide_relevance, slide_references,
-              slide_close]
-    assert len(slides) == N_SLIDES
-    for fn in slides:
+    for fn in SLIDES:
         fn(Slide(c))
         c.showPage()
     c.save()
@@ -898,6 +923,96 @@ def main():
         print("PNG:", out_png)
     except (OSError, subprocess.CalledProcessError) as e:
         print("Sin PNG (pdftoppm no disponible):", e)
+
+
+# ── Versión editable (.pptx): fondo gráfico + cuadros de texto nativos ────
+PPTX_FONTS = {  # fuente → (familia, negrita, cursiva, ascendente, descendente)
+    SERIF: ("Instrument Serif", False, False, 0.99, 0.31),
+    SERIF_I: ("Instrument Serif", False, True, 0.99, 0.31),
+    SANS: ("Instrument Sans", False, False, 0.97, 0.25),
+    SANS_B: ("Instrument Sans", True, False, 0.97, 0.25),
+    SANS_I: ("Instrument Sans", False, True, 0.97, 0.25),
+    MONO: ("DM Mono", False, False, 0.992, 0.31),
+}
+
+
+def build_pptx():
+    from pptx import Presentation
+    from pptx.dml.color import RGBColor
+    from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE, PP_ALIGN
+    from pptx.util import Emu, Pt
+
+    os.makedirs(BUILD, exist_ok=True)
+    bg_pdf = os.path.join(BUILD, "fondos.pdf")
+    c = canvas.Canvas(bg_pdf, pagesize=(W, H))
+    records = []
+    for fn in SLIDES:
+        rec = []
+        fn(Slide(c, rec))
+        c.showPage()
+        records.append(rec)
+    c.save()
+    subprocess.run(["pdftoppm", "-png", "-r", "192", bg_pdf, os.path.join(BUILD, "fondo")], check=True)
+
+    prs = Presentation()
+    prs.slide_width, prs.slide_height = Emu(W * 12700), Emu(H * 12700)
+    align = {"l": PP_ALIGN.LEFT, "c": PP_ALIGN.CENTER, "r": PP_ALIGN.RIGHT}
+
+    def style(run, font, size, color, cs=0.0):
+        fam, bold, italic, _, _ = PPTX_FONTS[font]
+        f = run.font
+        f.name, f.bold, f.italic, f.size = fam, bold, italic, Pt(size)
+        f.color.rgb = RGBColor.from_string(color.hexval()[2:].upper())
+        if cs:
+            run._r.get_or_add_rPr().set("spc", str(int(round(cs * 100))))
+
+    def box(slide, left, top, width, height, wrap, al, line_spacing):
+        tb = slide.shapes.add_textbox(Pt(left), Pt(top), Pt(width), Pt(height))
+        tf = tb.text_frame
+        tf.word_wrap = wrap
+        tf.auto_size = MSO_AUTO_SIZE.NONE
+        tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
+        tf.vertical_anchor = MSO_ANCHOR.TOP
+        p = tf.paragraphs[0]
+        p.alignment = al
+        p.line_spacing = line_spacing
+        return p
+
+    for i, rec in enumerate(records):
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        bg = os.path.join(BUILD, f"fondo-{i + 1:02d}.png")
+        slide.shapes.add_picture(bg, 0, 0, prs.slide_width, prs.slide_height).name = "Fondo"
+        for r in rec:
+            if r["kind"] == "image":
+                slide.shapes.add_picture(r["path"], Pt(r["x"]), Pt(r["y"]), Pt(r["w"]), Pt(r["h"]))
+            elif r["kind"] == "text":
+                _, _, _, asc, desc = PPTX_FONTS[r["font"]]
+                slack = r["w"] * 0.08 + 6
+                left = {"l": r["x"], "c": r["x"] - slack / 2, "r": r["x"] - slack}[r["anchor"]]
+                p = box(slide, left, r["y"] - asc * r["size"], r["w"] + slack, (asc + desc) * r["size"], False,
+                        align[r["anchor"]], 1.0)
+                run = p.add_run()
+                run.text = r["s"]
+                style(run, r["font"], r["size"], r["color"], r["cs"])
+            else:
+                font0 = r["font"] if r["kind"] == "para" else r["segs"][0][1]
+                _, _, _, asc, desc = PPTX_FONTS[font0]
+                lead = r["lead"]
+                top = r["y"] - lead * asc / (asc + desc)
+                p = box(slide, r["x"], top, r["w"] * 1.03 + 2, lead * r["n"] + 4, True,
+                        align[r.get("anchor", "l")], Pt(lead))
+                segs = [(r["s"], r["font"], r["color"])] if r["kind"] == "para" else r["segs"]
+                for txt, font, color in segs:
+                    run = p.add_run()
+                    run.text = txt
+                    style(run, font, r["size"], color)
+    prs.save(OUT_PPTX)
+    print("PPTX:", OUT_PPTX)
+
+
+def main():
+    build_pdf()
+    build_pptx()
 
 
 if __name__ == "__main__":
