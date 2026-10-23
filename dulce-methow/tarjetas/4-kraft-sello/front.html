@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dulce Methow card · Kraft front</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap">
+<style>
+  :root{--cream:#FAF6EB;--lav:#CDBED2;--sage:#AEB594;--plum:#40273B;--sand:#D9C7AE}
+  body{margin:0;background:var(--sand)}
+  .card{position:relative;width:1125px;height:675px;overflow:hidden;background:var(--sand);color:var(--plum)}
+  .grain{position:absolute;inset:0}
+  .stamp{position:absolute;left:0;top:0}
+  .logo{position:absolute;left:135px;top:172px;width:330px;height:330px;object-fit:contain;clip-path:circle(204px at 50% 50%)}
+  .contact{position:absolute;left:585px;top:0;width:465px;height:675px;display:flex;flex-direction:column;justify-content:center}
+  .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:56px;line-height:1.1;margin:0}
+  .role{font-family:'Playfair Display',serif;font-weight:400;font-size:26px;letter-spacing:.38em;text-transform:uppercase;margin:12px 0 0}
+  .sprig{display:block;margin:22px 0 22px}
+  .lines{font-family:'Lora',serif;font-size:32px;line-height:1.5;margin:0;padding:0;list-style:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- very subtle kraft grain -->
+  <svg class="grain" width="1125" height="675" viewBox="0 0 1125 675" aria-hidden="true">
+    <filter id="kraft" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7" result="n"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.25  0 0 0 0 0.15  0 0 0 0 0.23  0 0 0 0.9 -0.38"/>
+    </filter>
+    <rect width="1125" height="675" filter="url(#kraft)" opacity="0.18"/>
+  </svg>
+
+  <!-- stamp: cream disc, inner solid ring, outer dashed ring -->
+  <svg class="stamp" width="1125" height="675" viewBox="0 0 1125 675" aria-hidden="true">
+    <circle cx="300" cy="337.5" r="208" fill="#FAF6EB"/>
+    <circle cx="300" cy="337.5" r="208" fill="none" stroke="#40273B" stroke-width="2.5"/>
+    <circle cx="300" cy="337.5" r="219" fill="none" stroke="#40273B" stroke-width="3" stroke-dasharray="9 7"/>
+  </svg>
+
+  <img class="logo" src="../../logo/dulce-methow-logo.jpg" alt="Dulce Methow logo">
+
+  <div class="contact">
+    <p class="name">[Owner name]</p>
+    <p class="role">Baker &amp; owner</p>
+    <svg class="sprig" width="300" height="26" viewBox="0 0 300 26" aria-hidden="true">
+      <line x1="0" y1="13" x2="118" y2="13" stroke="#40273B" stroke-width="1.6"/>
+      <line x1="182" y1="13" x2="300" y2="13" stroke="#40273B" stroke-width="1.6"/>
+      <path d="M150 20 C142 14 141 6 150 0 C159 6 158 14 150 20Z" fill="#AEB594" stroke="#40273B" stroke-width="1"/>
+      <path d="M148 21 C138 22 131 17 128 10 C137 9 145 13 148 21Z" fill="#AEB594" stroke="#40273B" stroke-width="1"/>
+      <path d="M152 21 C162 22 169 17 172 10 C163 9 155 13 152 21Z" fill="#AEB594" stroke="#40273B" stroke-width="1"/>
+      <circle cx="150" cy="23" r="2" fill="#40273B"/>
+    </svg>
+    <ul class="lines">
+      <li>[phone]</li>
+      <li>[email]</li>
+      <li>@dulcemethow</li>
+      <li>[address] · Winthrop, WA</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

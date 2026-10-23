@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dulce Methow card · Loyalty back</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap">
+<style>
+  :root{--cream:#FAF6EB;--lav:#CDBED2;--sage:#AEB594;--plum:#40273B;--sand:#D9C7AE}
+  body{margin:0;background:var(--cream)}
+  .card{position:relative;width:1125px;height:675px;overflow:hidden;background:var(--cream);color:var(--plum);text-align:center}
+  .title{position:absolute;left:75px;right:75px;top:92px;margin:0;font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:64px;line-height:1}
+  .sub{position:absolute;left:75px;right:75px;top:176px;margin:0;font-family:'Lora',serif;font-size:32px;line-height:1.2}
+  .grid{position:absolute;left:0;top:0}
+  .foot{position:absolute;left:75px;right:75px;top:540px;margin:0;font-family:'Lora',serif;font-size:28px;line-height:1.2;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div class="card">
+  <p class="title">Sweet rewards</p>
+  <p class="sub">Buy 9 shell buns, the 10th is on us</p>
+
+  <svg class="grid" width="1125" height="675" viewBox="0 0 1125 675" aria-hidden="true">
+    <defs>
+      <circle id="slot" r="50" fill="none" stroke="#40273B" stroke-width="2.5"/>
+    </defs>
+    <!-- row 1 -->
+    <use href="#slot" x="282.5" y="318"/>
+    <use href="#slot" x="422.5" y="318"/>
+    <use href="#slot" x="562.5" y="318"/>
+    <use href="#slot" x="702.5" y="318"/>
+    <use href="#slot" x="842.5" y="318"/>
+    <!-- row 2 -->
+    <use href="#slot" x="282.5" y="448"/>
+    <use href="#slot" x="422.5" y="448"/>
+    <use href="#slot" x="562.5" y="448"/>
+    <use href="#slot" x="702.5" y="448"/>
+    <!-- 10th: sage fill + concha line icon -->
+    <g transform="translate(842.5 448)">
+      <circle r="50" fill="#AEB594" stroke="#40273B" stroke-width="2.5"/>
+      <g transform="translate(0 -2) scale(1.12)" fill="none" stroke="#40273B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- bun dome -->
+        <path d="M-30 16 C-32 -8 -18 -26 0 -26 C18 -26 32 -8 30 16 Z" fill="#FAF6EB"/>
+        <!-- scored shell lines fanning from the base -->
+        <path d="M0 16 L0 -26"/>
+        <path d="M-3 16 C-10 2 -14 -12 -12 -23"/>
+        <path d="M3 16 C10 2 14 -12 12 -23"/>
+        <path d="M-6 16 C-17 6 -24 -4 -24 -15"/>
+        <path d="M6 16 C17 6 24 -4 24 -15"/>
+        <path d="M-9 16 C-20 12 -28 6 -30 -2"/>
+        <path d="M9 16 C20 12 28 6 30 -2"/>
+        <!-- plate line -->
+        <path d="M-36 22 L36 22"/>
+      </g>
+    </g>
+  </svg>
+
+  <p class="foot">Pre-order by message · @dulcemethow</p>
+</div>
+</body>
+</html>
