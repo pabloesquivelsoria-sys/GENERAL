@@ -6,33 +6,40 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap">
 <style>
   body{margin:0}
-  .card{position:relative;width:1125px;height:675px;overflow:hidden;background:#FAF6EB;color:#40273B}
-  .logo{position:absolute;left:115px;top:227px;width:220px;height:217px;object-fit:contain}
-  .info{position:absolute;left:440px;top:120px;width:560px;display:grid;grid-template-columns:1fr;row-gap:0}
-  .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:50px;line-height:1.1;margin:0}
-  .role{font-family:'Playfair Display',serif;font-size:26px;letter-spacing:0.32em;text-transform:uppercase;margin:12px 0 0}
-  .rule{height:0;border-top:2px solid #AEB594;width:120px;margin:30px 0 30px}
-  .lines{display:grid;grid-template-columns:1fr;row-gap:12px;font-family:'Lora',serif;font-size:31px;line-height:1.2}
-  .cta{position:absolute;left:440px;bottom:110px;font-family:'Playfair Display',serif;font-style:italic;font-size:32px;line-height:1}
+  .card{position:relative;width:1125px;height:675px;overflow:hidden;background:#40273B;color:#FAF6EB}
+  /* margin: 110 px on every side */
+  .who{position:absolute;left:110px;top:96px}
+  .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:52px;line-height:1.1;margin:0}
+  .role{font-family:'Playfair Display',serif;font-weight:400;font-size:24px;line-height:1;letter-spacing:0.26em;text-transform:uppercase;margin:16px 0 0}
+  .contact{position:absolute;left:110px;bottom:100px;display:grid;grid-template-columns:60px auto;align-items:baseline;
+           font-family:'Lora',serif;font-size:29px;line-height:1.55}
+  .contact dt{font-family:'Playfair Display',serif;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#CDBED2}
+  .contact dd{margin:0}
+  dl{margin:0}
+  .icon{position:absolute;right:110px;bottom:110px;width:90px;height:50px;overflow:visible}
 </style>
 </head>
 <body>
 <div class="card">
-  <img class="logo" src="../../logo/dulce-methow-logo.png" alt="Dulce Methow logo">
-
-  <div class="info">
-    <p class="name">[Owner name]</p>
-    <p class="role">Baker &amp; owner</p>
-    <div class="rule"></div>
-    <div class="lines">
-      <div>[phone]</div>
-      <div>[email]</div>
-      <div>@dulcemethow</div>
-      <div>[address] · Winthrop, WA</div>
-    </div>
+  <div class="who">
+    <p class="name">Owner Name</p>
+    <p class="role">Baker &amp; Owner</p>
   </div>
 
-  <div class="cta">Pre-order by message</div>
+  <dl class="contact">
+    <dt>T</dt><dd>(509) 555-0123</dd>
+    <dt>E</dt><dd>hello@dulcemethow.com</dd>
+    <dt>IG</dt><dd>@dulcemethow</dd>
+    <dt>A</dt><dd>Riverside Ave · Winthrop, WA 98862</dd>
+  </dl>
+
+  <!-- concha-mountain line icon, drawn in pixel units so the stroke is exactly 2 px -->
+  <svg class="icon" viewBox="0 0 90 50" fill="none" stroke="#FAF6EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M2 49 A43 43 0 0 1 88 49"/>
+    <path d="M0 49 H90"/>
+    <path d="M4.6 35 L22 19 L33 29 L45 11 L57 29 L68 19 L85.4 35"/>
+    <path d="M33 29 L30.5 49 M57 29 L59.5 49"/>
+  </svg>
 </div>
 </body>
 </html>

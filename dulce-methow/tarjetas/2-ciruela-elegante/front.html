@@ -7,18 +7,23 @@
 <style>
   body{margin:0}
   .card{position:relative;width:1125px;height:675px;overflow:hidden;background:#40273B}
-  .ring{position:absolute;left:349.5px;top:84px;width:422px;height:422px;box-sizing:border-box;border:2px solid #FAF6EB;border-radius:50%}
-  .disc{position:absolute;left:362.5px;top:97px;width:400px;height:400px;border-radius:50%;background:#FAF6EB;overflow:hidden;display:flex;align-items:center;justify-content:center}
-  .disc img{width:336px;height:336px;object-fit:contain;display:block}
-  .tag{position:absolute;left:75px;right:75px;top:540px;text-align:center;color:#FAF6EB;
-       font-family:'Lora',serif;font-size:32px;font-variant:small-caps;letter-spacing:0.12em;line-height:40px;white-space:nowrap}
+  /* arch outline, 2 px, offset 14 px around the panel */
+  .outline{position:absolute;left:378.5px;top:102px;width:368px;height:471px;box-sizing:border-box;
+           border:2px solid #FAF6EB;border-radius:184px 184px 32px 32px / 184px 184px 32px 32px}
+  /* cream arch panel, same silhouette as the badge */
+  .panel{position:absolute;left:392.5px;top:116px;width:340px;height:443px;background:#FAF6EB;
+         border-radius:170px 170px 18px 18px / 170px 170px 18px 18px}
+  /* logo: badge area 891x1218 of the 1323x1303 file, shown at 280 px wide (383 px tall) */
+  .logo{position:absolute;left:30px;top:30px;width:280px;height:383px;overflow:hidden}
+  .logo img{position:absolute;left:-65.68px;top:-11.63px;width:415.75px;height:409.47px;object-fit:contain;display:block}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="ring"></div>
-  <div class="disc"><img src="../../logo/dulce-methow-logo.png" alt="Dulce Methow logo"></div>
-  <div class="tag">Mexican sweet bread &amp; desserts · Methow Valley</div>
+  <div class="outline"></div>
+  <div class="panel">
+    <div class="logo"><img src="../../logo/dulce-methow-logo.png" alt="Dulce Methow"></div>
+  </div>
 </div>
 </body>
 </html>

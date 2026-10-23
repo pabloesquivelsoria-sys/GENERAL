@@ -7,56 +7,39 @@
 <style>
   body{margin:0}
   .card{position:relative;width:1125px;height:675px;overflow:hidden;background:#FAF6EB;color:#40273B}
-  .band{position:absolute;left:0;top:0;width:375px;height:675px;background:#CDBED2}
-  .band svg{position:absolute;left:57.5px;top:199px;width:260px;height:240px}
-  .info{position:absolute;left:455px;top:100px;width:595px}
-  .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:54px;line-height:64px;margin:0}
-  .role{font-family:'Lora',serif;font-size:26px;letter-spacing:0.3em;text-transform:uppercase;line-height:34px;margin:8px 0 0}
-  .rule{width:64px;height:1.5px;background:#40273B;margin:26px 0 24px}
-  .lines{font-family:'Lora',serif;font-size:32px;line-height:46px;margin:0;padding:0;list-style:none}
-  .cta{position:absolute;left:455px;top:520px;width:595px;font-family:'Lora',serif;font-style:italic;font-size:30px;line-height:40px;
-       padding-top:18px;border-top:1.5px solid #40273B}
+  /* double frame: outer on the 75 px safe line, inner 8 px inside */
+  .frame{position:absolute;box-sizing:border-box;border:2px solid #40273B}
+  .f1{left:75px;top:75px;width:975px;height:525px}
+  .f2{left:85px;top:85px;width:955px;height:505px}
+  .content{position:absolute;left:110px;top:110px;width:905px;height:455px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .dulce{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:64px;line-height:64px;margin:0}
+  .methow{font-family:'Playfair Display',serif;font-weight:400;font-size:26px;line-height:30px;letter-spacing:0.4em;padding-left:0.4em;text-transform:uppercase;margin:6px 0 0}
+  .sprig{display:block;width:44px;height:26px;margin:20px 0 20px}
+  .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:36px;line-height:42px;margin:0}
+  .role{font-family:'Lora',serif;font-size:24px;line-height:30px;letter-spacing:0.26em;padding-left:0.26em;text-transform:uppercase;margin:6px 0 0}
+  .contact{font-family:'Lora',serif;font-size:28px;line-height:1.55;margin:22px 0 0;padding:0;list-style:none}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="band">
-    <svg viewBox="0 0 260 240" fill="none" stroke="#40273B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Concha with mountain peaks">
-      <!-- sun with fine rays -->
-      <circle cx="130" cy="36" r="10"/>
-      <path d="M130 8v12 M108 15l7 9 M152 15l-7 9 M96 32h12 M164 32h-12 M100 46l9 -4 M160 46l-9 -4" stroke-width="1.8"/>
-      <!-- concha outline -->
-      <path d="M18 204 C2 150 38 72 130 68 C222 72 258 150 242 204 Q130 222 18 204 Z"/>
-      <!-- scored lines that become three peaks -->
-      <path d="M28 160 L80 104 L105 134 L130 86 L155 134 L180 104 L232 160"/>
-      <!-- snow notches -->
-      <path d="M72 113 l8 5 l7 -6 M121 99 l9 6 l9 -6 M173 112 l7 6 l8 -5" stroke-width="1.8"/>
-      <!-- fan scoring from peaks to base -->
-      <path d="M28 160 Q30 192 48 208"/>
-      <path d="M80 104 Q62 160 76 211"/>
-      <path d="M105 134 Q96 178 104 213"/>
-      <path d="M130 86 V214"/>
-      <path d="M155 134 Q164 178 156 213"/>
-      <path d="M180 104 Q198 160 184 211"/>
-      <path d="M232 160 Q230 192 212 208"/>
-      <!-- ground line -->
-      <path d="M4 226 H256" stroke-width="1.4"/>
+  <div class="frame f1"></div>
+  <div class="frame f2"></div>
+  <div class="content">
+    <p class="dulce">dulce</p>
+    <p class="methow">Methow</p>
+    <svg class="sprig" viewBox="0 0 44 26" aria-hidden="true">
+      <path fill="#AEB594" d="M22 2 C28 8 28 16 22 22 C16 16 16 8 22 2 Z"/>
+      <path fill="#AEB594" d="M20 22 C14 24 6 22 2 15 C9 12 16 15 20 22 Z"/>
+      <path fill="#AEB594" d="M24 22 C30 24 38 22 42 15 C35 12 28 15 24 22 Z"/>
     </svg>
-  </div>
-
-  <div class="info">
-    <p class="name">[Owner name]</p>
-    <p class="role">Baker &amp; owner</p>
-    <div class="rule"></div>
-    <ul class="lines">
-      <li>[phone]</li>
-      <li>[email]</li>
+    <p class="name">Owner Name</p>
+    <p class="role">Baker &amp; Owner</p>
+    <ul class="contact">
+      <li>(509) 555-0123 · hello@dulcemethow.com</li>
       <li>@dulcemethow</li>
-      <li>[address] · Winthrop, WA</li>
+      <li>Riverside Ave · Winthrop, WA 98862</li>
     </ul>
   </div>
-
-  <div class="cta">Pre-order by message</div>
 </div>
 </body>
 </html>

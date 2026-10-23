@@ -35,6 +35,18 @@ Arch frames with a double thin Deep Plum line; shell-bun (concha) scored lines t
 - Contact block (placeholders stay in brackets, the client fills them): `[Owner name]`, `Baker & owner`, `[phone]`, `[email]`, `@dulcemethow`, `[address] · Winthrop, WA`.
 - Call to action: "Pre-order by message".
 
+## Professional pass (v2) — these rules win over anything above
+The first round looked homemade. A studio-quality card follows these rules:
+- **Grid.** The trim is 1050×600 (inside the 37 px bleed). Use one margin all around: text and logo start at **110 px from the canvas edge** (about 0.25 in from the trim). Every element aligns to that margin or to one shared column line. Never mix centered and left-aligned text on the same side.
+- **Hierarchy: three levels at most.** 1) the name or wordmark; 2) one label line (role or tagline) in tracked caps, 24–26 px, letter-spacing 0.22–0.3em; 3) contact lines in Lora 28–30 px, line-height 1.55. Nothing else competes.
+- **Contact block.** One aligned column. Give each line a short label in Sage-dark small caps (`T`, `E`, `IG`, `A`) in a fixed 60 px column, or use no labels at all. Always use the same treatment on every line.
+- **Sample data, no brackets.** Brackets look unfinished. Use this sample data, which the client will replace: name `Owner Name`, role `Baker & Owner`, phone `(509) 555-0123`, email `hello@dulcemethow.com`, Instagram `@dulcemethow`, address `Riverside Ave · Winthrop, WA 98862`.
+- **Logo.** Use it once per card, never below 300 px tall (its tagline gets unreadable). On the other side use the type wordmark ("dulce" in Playfair italic plus "METHOW" in spaced caps) or a single line icon.
+- **Ornament discipline.** At most one ornament per side (a hairline rule, a leaf sprig, an arch outline or a line icon). It aligns to the grid and has a job. Line weight is 2 px everywhere (about 0.5 pt) and the same on both sides.
+- **White space.** At least 40% of each side stays empty. Nothing floats in a corner without alignment.
+- **Color.** Each side has one dominant color and at most one accent. Allowed tint: Sage dark #66704F for small labels on cream only (4.9:1). On Sand or Lavender, labels are Deep Plum.
+- **Typography details.** Use real typographic apostrophes and middle dots. No faux small caps (`font-variant: small-caps`); use uppercase with tracking. Optical balance: wordmark "METHOW" tracking about 0.4em and visually centered under "dulce".
+
 ## Files and render
 - Write `front.html` and `back.html` in your folder. Each is a full HTML page: `<!doctype html>`, `<meta charset="utf-8">`, the fonts link, `body{margin:0}`, and one root div exactly 1125×675 with `overflow:hidden`.
 - Render each side to PNG to check it yourself:

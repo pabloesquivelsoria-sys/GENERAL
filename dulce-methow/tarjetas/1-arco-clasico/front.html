@@ -12,25 +12,23 @@
     overflow: hidden;
     background: #FAF6EB;
   }
-  /* Logo: 1323x1303 source shown at 432 px tall, badge centered on x 562.5 */
+  /* Logo badge 363 px tall, centered on x 562.5; 34 px of even padding to the frame on every side */
   .logo {
     position: absolute;
-    left: 345.5px; top: 127.5px;
-    width: 438.6px; height: 432px;
+    left: 367.44px; top: 144.97px;
+    width: 394.29px; height: 388.33px;
     object-fit: contain;
   }
-  /* Frame sits above the logo box so its lines are never hidden by the logo's cream margin */
   .frame { position: absolute; left: 0; top: 0; }
 </style>
 </head>
 <body>
 <div class="card">
   <img class="logo" src="../../logo/dulce-methow-logo.png" alt="Dulce Methow logo">
-  <svg class="frame" width="1125" height="675" viewBox="0 0 1125 675" fill="none" stroke="#40273B" stroke-linejoin="round">
-    <!-- outer line: x 342.5–782.5, top 81.5, bottom 593.5 -->
-    <path d="M342.5 593.5 V301.5 A220 220 0 0 1 782.5 301.5 V593.5 Z" stroke-width="2.6"/>
-    <!-- inner line, 11 px inside -->
-    <path d="M353.5 582.5 V301.5 A209 209 0 0 1 771.5 301.5 V582.5 Z" stroke-width="1.4"/>
+  <!-- Arch frame: double 2 px Deep Plum line, outer edge on the 110 px margin (y 110–565), concentric with the badge -->
+  <svg class="frame" width="1125" height="675" viewBox="0 0 1125 675" fill="none" stroke="#40273B" stroke-width="2">
+    <path d="M384.88 288.62 A177.62 177.62 0 0 1 740.12 288.62 V506.00 A58.00 58.00 0 0 1 682.12 564.00 H442.88 A58.00 58.00 0 0 1 384.88 506.00 Z"/>
+    <path d="M394.88 288.62 A167.62 167.62 0 0 1 730.12 288.62 V506.00 A48.00 48.00 0 0 1 682.12 554.00 H442.88 A48.00 48.00 0 0 1 394.88 506.00 Z"/>
   </svg>
 </div>
 </body>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dulce Methow · Card mockup</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap">
+<style>
+  body { margin: 0; }
+  .scene {
+    position: relative; width: 1800px; height: 1100px; overflow: hidden;
+    background: #E9E1D3;
+    font-family: 'Lora', serif; color: #40273B;
+  }
+  /* Linen surface: fine noise plus a soft light falloff. */
+  .surface, .light { position: absolute; inset: 0; }
+  .light { background: radial-gradient(ellipse 70% 60% at 38% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 70%),
+                       radial-gradient(ellipse 90% 80% at 80% 110%, rgba(64,39,59,.16), rgba(64,39,59,0) 60%); }
+  .card {
+    position: absolute; width: 1050px; height: 600px; border-radius: 6px; overflow: hidden;
+    background-size: 1125px 675px; background-position: -37px -37px;
+  }
+  .card::after { /* paper edge highlight */
+    content: ''; position: absolute; inset: 0; border-radius: 6px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), inset 0 -1px 0 rgba(0,0,0,.06);
+  }
+  .back  { left: 700px; top: 380px; transform: rotate(6deg) scale(.8);
+           box-shadow: 0 2px 3px rgba(40,24,36,.22), 0 18px 40px rgba(40,24,36,.20), 0 50px 90px rgba(40,24,36,.12); }
+  .front { left: 90px; top: 90px; transform: rotate(-5deg) scale(.8);
+           box-shadow: 0 2px 3px rgba(40,24,36,.25), 0 22px 46px rgba(40,24,36,.22), 0 60px 110px rgba(40,24,36,.14); }
+  .label {
+    position: absolute; left: 90px; bottom: 70px;
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 40px;
+  }
+  .label small {
+    display: block; font-family: 'Lora', serif; font-style: normal; font-size: 20px;
+    letter-spacing: .28em; text-transform: uppercase; margin-bottom: 10px; color: rgba(64,39,59,.75);
+  }
+</style>
+</head>
+<body>
+<div class="scene">
+  <svg class="surface" width="1800" height="1100" aria-hidden="true">
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .15  0 0 0 0 .23  0 0 0 .09 0"/></filter>
+    <rect width="100%" height="100%" filter="url(#grain)"/>
+  </svg>
+  <div class="light"></div>
+  <div class="card back" id="back"></div>
+  <div class="card front" id="front"></div>
+  <div class="label"><small id="num"></small><span id="name"></span></div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const dir = q.get('dir');
+  document.getElementById('front').style.backgroundImage = `url(${dir}/front.png)`;
+  document.getElementById('back').style.backgroundImage = `url(${dir}/back.png)`;
+  document.getElementById('num').textContent = q.get('num') || '';
+  document.getElementById('name').textContent = q.get('name') || '';
+</script>
+</body>
+</html>
