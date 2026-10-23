@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap">
 <style>
   /* Grid: trim margin 110 px on every side (x 110–1015, y 110–565).
+     The name and contact block sits centered in the space above the tagline.
      Column line at x 447; left column 110–405, right column 489–1015. */
   :root {
     --cream: #FAF6EB;
@@ -26,14 +27,14 @@
   /* left column: name + role */
   .who { position: absolute; left: 110px; top: 0; width: 300px; }
   .name {
-    position: absolute; left: 0; top: var(--name-top, 97px);
+    position: absolute; left: 0; top: var(--name-top, 197px);
     margin: 0; white-space: nowrap;
     font-family: 'Playfair Display', serif;
     font-style: italic; font-weight: 400;
     font-size: 52px; line-height: 64px;
   }
   .role {
-    position: absolute; left: 0; top: var(--role-top, 193px);
+    position: absolute; left: 0; top: var(--role-top, 285px);
     margin: 0; white-space: nowrap;
     font-family: 'Playfair Display', serif;
     font-size: 24px; line-height: 30px;
@@ -44,13 +45,13 @@
   /* the one structural line: 2 px hairline on the column line */
   .rule {
     position: absolute; left: 446px; width: 2px;
-    top: var(--rule-top, 110px); height: var(--rule-h, 151px);
+    top: var(--rule-top, 210px); height: var(--rule-h, 151px);
     background: var(--plum);
   }
 
   /* right column: labelled contact lines */
   .contact {
-    position: absolute; left: 489px; top: var(--contact-top, 100px);
+    position: absolute; left: 489px; top: var(--contact-top, 200px);
     margin: 0; padding: 0; list-style: none;
     font-family: 'Lora', serif;
     font-size: 28px; line-height: var(--lh);
