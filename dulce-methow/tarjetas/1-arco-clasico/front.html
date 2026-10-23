@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dulce Methow card, front</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap">
+<style>
+  body { margin: 0; }
+  .card {
+    position: relative;
+    width: 1125px; height: 675px;
+    overflow: hidden;
+    background: #FAF6EB;
+  }
+  /* Logo: 1323x1303 source shown at 432 px tall, badge centered on x 562.5 */
+  .logo {
+    position: absolute;
+    left: 345.5px; top: 127.5px;
+    width: 438.6px; height: 432px;
+    object-fit: contain;
+  }
+  /* Frame sits above the logo box so its lines are never hidden by the logo's cream margin */
+  .frame { position: absolute; left: 0; top: 0; }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="logo" src="../../logo/dulce-methow-logo.jpg" alt="Dulce Methow logo">
+  <svg class="frame" width="1125" height="675" viewBox="0 0 1125 675" fill="none" stroke="#40273B" stroke-linejoin="round">
+    <!-- outer line: x 342.5–782.5, top 81.5, bottom 593.5 -->
+    <path d="M342.5 593.5 V301.5 A220 220 0 0 1 782.5 301.5 V593.5 Z" stroke-width="2.6"/>
+    <!-- inner line, 11 px inside -->
+    <path d="M353.5 582.5 V301.5 A209 209 0 0 1 771.5 301.5 V582.5 Z" stroke-width="1.4"/>
+  </svg>
+</div>
+</body>
+</html>
