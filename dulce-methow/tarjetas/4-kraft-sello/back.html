@@ -2,59 +2,80 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=1125">
 <title>Dulce Methow card · Loyalty back</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap">
 <style>
-  :root{--cream:#FAF6EB;--lav:#CDBED2;--sage:#AEB594;--plum:#40273B;--sand:#D9C7AE}
+  :root{--cream:#FAF6EB;--sage:#AEB594;--sagedark:#66704F;--plum:#40273B}
   body{margin:0;background:var(--cream)}
-  .card{position:relative;width:1125px;height:675px;overflow:hidden;background:var(--cream);color:var(--plum);text-align:center}
-  .title{position:absolute;left:75px;right:75px;top:92px;margin:0;font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:64px;line-height:1}
-  .sub{position:absolute;left:75px;right:75px;top:176px;margin:0;font-family:'Lora',serif;font-size:32px;line-height:1.2}
-  .grid{position:absolute;left:0;top:0}
-  .foot{position:absolute;left:75px;right:75px;top:540px;margin:0;font-family:'Lora',serif;font-size:28px;line-height:1.2;letter-spacing:.02em}
+  .card{position:relative;width:1125px;height:675px;overflow:hidden;background:var(--cream);color:var(--plum)}
+  .layer{position:absolute;left:0;top:0}
+  /* margins: x 110–1015, y 110–565 */
+  .wordmark{position:absolute;left:110px;top:104px;margin:0;white-space:nowrap;line-height:1}
+  .wordmark .d{font-family:'Playfair Display',serif;font-style:italic;font-size:40px}
+  .wordmark .m{font-family:'Playfair Display',serif;font-size:24px;letter-spacing:.4em;margin-left:12px}
+  .title{position:absolute;left:110px;top:243px;margin:0;font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:58px;line-height:1}
+  .rules{position:absolute;left:110px;top:323px;margin:0;font-family:'Lora',serif;font-size:28px;line-height:1.55}
+  .foot{position:absolute;left:110px;right:110px;bottom:110px;display:flex;justify-content:space-between;align-items:baseline;line-height:1}
+  .name{margin:0;display:flex;align-items:baseline}
+  .name .lab{font-family:'Lora',serif;font-weight:500;font-size:24px;letter-spacing:.22em;text-transform:uppercase;color:var(--sagedark)}
+  .name .blank{display:inline-block;width:330px;height:2px;background:var(--plum);margin-left:16px}
+  .handle{margin:0;font-family:'Lora',serif;font-size:28px;line-height:1}
+  .num{font-family:'Lora',serif;font-size:24px;letter-spacing:.12em;fill:#66704F}
 </style>
 </head>
 <body>
 <div class="card">
-  <p class="title">Sweet rewards</p>
-  <p class="sub">Buy 9 shell buns, the 10th is on us</p>
+  <p class="wordmark"><span class="d">dulce</span><span class="m">METHOW</span></p>
 
-  <svg class="grid" width="1125" height="675" viewBox="0 0 1125 675" aria-hidden="true">
-    <defs>
-      <circle id="slot" r="50" fill="none" stroke="#40273B" stroke-width="2.5"/>
-    </defs>
-    <!-- row 1 -->
-    <use href="#slot" x="282.5" y="318"/>
-    <use href="#slot" x="422.5" y="318"/>
-    <use href="#slot" x="562.5" y="318"/>
-    <use href="#slot" x="702.5" y="318"/>
-    <use href="#slot" x="842.5" y="318"/>
-    <!-- row 2 -->
-    <use href="#slot" x="282.5" y="448"/>
-    <use href="#slot" x="422.5" y="448"/>
-    <use href="#slot" x="562.5" y="448"/>
-    <use href="#slot" x="702.5" y="448"/>
-    <!-- 10th: sage fill + concha line icon -->
-    <g transform="translate(842.5 448)">
-      <circle r="50" fill="#AEB594" stroke="#40273B" stroke-width="2.5"/>
-      <g transform="translate(0 -2) scale(1.12)" fill="none" stroke="#40273B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <!-- bun dome -->
-        <path d="M-30 16 C-32 -8 -18 -26 0 -26 C18 -26 32 -8 30 16 Z" fill="#FAF6EB"/>
-        <!-- scored shell lines fanning from the base -->
-        <path d="M0 16 L0 -26"/>
-        <path d="M-3 16 C-10 2 -14 -12 -12 -23"/>
-        <path d="M3 16 C10 2 14 -12 12 -23"/>
-        <path d="M-6 16 C-17 6 -24 -4 -24 -15"/>
-        <path d="M6 16 C17 6 24 -4 24 -15"/>
-        <path d="M-9 16 C-20 12 -28 6 -30 -2"/>
-        <path d="M9 16 C20 12 28 6 30 -2"/>
-        <!-- plate line -->
-        <path d="M-36 22 L36 22"/>
+  <p class="title">Sweet rewards</p>
+  <p class="rules">Buy 9 shell buns,<br>the 10th is on us.</p>
+
+  <!-- stamp grid: 5 × 2, d = 81, gap 20 × 24, right edge on the 1015 margin -->
+  <svg class="layer" width="1125" height="675" viewBox="0 0 1125 675" aria-hidden="true">
+    <g fill="none" stroke="#40273B" stroke-width="2">
+      <circle cx="570.5" cy="285.5" r="40.5"/>
+      <circle cx="671.5" cy="285.5" r="40.5"/>
+      <circle cx="772.5" cy="285.5" r="40.5"/>
+      <circle cx="873.5" cy="285.5" r="40.5"/>
+      <circle cx="974.5" cy="285.5" r="40.5"/>
+      <circle cx="570.5" cy="390.5" r="40.5"/>
+      <circle cx="671.5" cy="390.5" r="40.5"/>
+      <circle cx="772.5" cy="390.5" r="40.5"/>
+      <circle cx="873.5" cy="390.5" r="40.5"/>
+    </g>
+    <g class="num" text-anchor="middle" dominant-baseline="central">
+      <text x="571.8" y="286.5">1</text>
+      <text x="672.8" y="286.5">2</text>
+      <text x="773.8" y="286.5">3</text>
+      <text x="874.8" y="286.5">4</text>
+      <text x="975.8" y="286.5">5</text>
+      <text x="571.8" y="391.5">6</text>
+      <text x="672.8" y="391.5">7</text>
+      <text x="773.8" y="391.5">8</text>
+      <text x="874.8" y="391.5">9</text>
+    </g>
+    <!-- 10th: Sage, concha line icon -->
+    <g transform="translate(974.5 390.5)">
+      <circle r="40.5" fill="#AEB594" stroke="#40273B" stroke-width="2"/>
+      <g fill="none" stroke="#40273B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M-23 11 C-24.5 -6 -13.5 -20 0 -20 C13.5 -20 24.5 -6 23 11 Z" fill="#FAF6EB"/>
+        <path d="M0 11 L0 -20"/>
+        <path d="M-2.5 11 C-8 0 -11 -10 -9.5 -18"/>
+        <path d="M2.5 11 C8 0 11 -10 9.5 -18"/>
+        <path d="M-5 11 C-13.5 4 -19 -3.5 -19 -11.5"/>
+        <path d="M5 11 C13.5 4 19 -3.5 19 -11.5"/>
+        <path d="M-7.5 11 C-16 8.5 -22 4 -23.5 -2"/>
+        <path d="M7.5 11 C16 8.5 22 4 23.5 -2"/>
+        <path d="M-28 17 L28 17"/>
       </g>
     </g>
   </svg>
 
-  <p class="foot">Pre-order by message · @dulcemethow</p>
+  <div class="foot">
+    <p class="name"><span class="lab">Name</span><span class="blank"></span></p>
+    <p class="handle">@dulcemethow</p>
+  </div>
 </div>
 </body>
 </html>
